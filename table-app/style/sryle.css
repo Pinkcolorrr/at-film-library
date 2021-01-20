@@ -1,0 +1,31 @@
+#film_table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 80%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#film_table td,
+#film_table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#film_table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#film_table tr:hover {
+  background-color: #ddd;
+}
+
+#film_table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4caf50;
+  color: white;
+}
