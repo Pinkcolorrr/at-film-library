@@ -8,10 +8,18 @@
   transform: translate(-50%, -50%);
 }
 
+#film_table caption {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20px;
+}
+
 #film_table td,
 #film_table th {
   border: 1px solid #ddd;
   padding: 8px;
+  margin: 10px;
 }
 
 #film_table tr:nth-child(even) {
