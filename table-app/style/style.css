@@ -1,0 +1,110 @@
+.wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+.buttons li + li {
+  margin-left: 50px;
+}
+
+.buttons button {
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+  font-family: Arial;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
+  outline: none;
+}
+
+.buttons button:hover,
+.buttons button.active {
+  background-color: lightgray;
+}
+
+.buttons button:active {
+  background-color: grey;
+}
+
+.film_table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  margin: 0 auto;
+  width: 80%;
+  table-layout: fixed;
+}
+
+.film_table caption {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.film_table td,
+.film_table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  margin: 10px;
+}
+
+.film_table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.film_table tr:hover {
+  background-color: #ddd;
+}
+
+.film_table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #4caf50;
+  text-align: left;
+
+  position: relative;
+}
+
+.film_table th span {
+  color: white;
+}
+
+.btn_sort {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  background-color: transparent;
+  border: none;
+
+  outline: none;
+  height: 100%;
+  width: 100%;
+}
+
+.btn_sort::after {
+  content: "";
+
+  position: absolute;
+  right: 12px;
+  top: 15px;
+
+  transform: rotate(45deg);
+
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}

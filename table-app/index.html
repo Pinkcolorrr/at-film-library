@@ -3,21 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="style/sryle.css" rel="stylesheet" />
+    <link href="style/style.css" rel="stylesheet" />
     <title>Document</title>
   </head>
   <body>
-    <table class="film_table" id="film_table">
-      <caption>
-        Star Wars films
-      </caption>
-      <tr>
-        <th>title</th>
-        <th>created</th>
-        <th>director</th>
-        <th>producer</th>
-      </tr>
-    </table>
+    <div class="wrapper">
+      <table class="film_table" id="film_table">
+        <caption>
+          Star Wars films
+        </caption>
+        <tr>
+          <th>
+            <span>title</span>
+            <button class="btn_sort" type="button" id="btn-title_sort"></button>
+          </th>
+          <th>
+            <span>date</span>
+            <button class="btn_sort" type="button" id="btn-date_sort"></button>
+          </th>
+          <th>
+            <span>director</span>
+          </th>
+        </tr>
+      </table>
+
+      <ul class="buttons" id="pagination_list"></ul>
+    </div>
+
     <script src="script/index.js"></script>
   </body>
 </html>
