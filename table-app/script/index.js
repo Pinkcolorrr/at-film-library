@@ -3,6 +3,7 @@ const table = document.getElementById('film_table');
 const paginationList = document.getElementById('pagination_list');
 const btnTitleSort = document.getElementById('btn-title_sort');
 const btnDateSort = document.getElementById('btn-date_sort');
+const searchInput = document.getElementById('search_input');
 let currentFilms = [];
 let typeOfSort = 'title';
 let activePage = 1;
@@ -14,6 +15,7 @@ let activePage = 1;
 function INIT() {
   const notesOnPage = 3;
 
+  btnTitleSort.firstChild.classList.add('btn-sort_arrow-active');
   let start = (activePage - 1) * notesOnPage;
   let end = notesOnPage + start;
 
@@ -38,23 +40,19 @@ async function getFilmData(start, end) {
     currentFilms.push(filmData[key]);
   }
 
-  loadFilmList(currentFilms);
+  loadFilmList();
 }
 
 /**
 Load film list in the table
- @param films film array from database
  */
-function loadFilmList(films) {
+function loadFilmList() {
   clearTable();
 
-  if (typeOfSort.indexOf('reverse') != -1) {
-    films.sort((a, b) => (a.fields[typeOfSort.substr(0, typeOfSort.indexOf(' '))] < b.fields[typeOfSort.substr(0, typeOfSort.indexOf(' '))] ? 1 : -1));
-  } else {
-    films.sort((a, b) => (a.fields[typeOfSort] > b.fields[typeOfSort] ? 1 : -1));
-  }
+  let filteredFilms = filterFilms();
+  sortFilms(filteredFilms);
 
-  films.forEach(item => {
+  filteredFilms.forEach(item => {
     table.appendChild(createHTML(item.fields));
   });
 }
@@ -101,7 +99,7 @@ async function setPagination(notesOnPage) {
     let li = document.createElement('li');
     li.innerHTML = `<button type="button" class="pagination_btn">${i}</button>`;
     li.firstChild.addEventListener('click', function () {
-      makeBtnActive(this);
+      makePageBtnActive(this);
 
       let start = (activePage - 1) * notesOnPage;
       let end = notesOnPage + start;
@@ -110,7 +108,7 @@ async function setPagination(notesOnPage) {
     });
 
     if (+li.firstChild.innerHTML === activePage) {
-      makeBtnActive(li.firstChild);
+      makePageBtnActive(li.firstChild);
     }
 
     paginationList.appendChild(li);
@@ -121,7 +119,7 @@ async function setPagination(notesOnPage) {
   Make button, that was click active and other passive
   @param elem DOM element, that was click
  */
-function makeBtnActive(elem) {
+function makePageBtnActive(elem) {
   activePage = elem.innerHTML;
 
   let activeBtn = paginationList.querySelector('.active');
@@ -138,14 +136,65 @@ function makeBtnActive(elem) {
 btnTitleSort.addEventListener('click', () => {
   typeOfSort = typeOfSort === 'title' ? 'title reverse' : 'title';
 
+  toggleSortBtns(btnTitleSort, btnDateSort, 'title reverse');
+
   loadFilmList(currentFilms);
 });
 btnDateSort.addEventListener('click', () => {
   typeOfSort = typeOfSort === 'release_date' ? 'release_date reverse' : 'release_date';
 
+  toggleSortBtns(btnDateSort, btnTitleSort, 'release_date reverse');
+
   loadFilmList(currentFilms);
 });
 
+/**
+  Toggle state of sort buttons.
+  @param activeBtn button, that was click. Toggle state on active
+  @param passiveBtn another button. Toggle state on passive
+  @param checkTypeSortStr string for chcking state of reverse sort.
+ */
+function toggleSortBtns(activeBtn, passiveBtn, checkTypeSortStr) {
+  if (typeOfSort === checkTypeSortStr) {
+    activeBtn.firstChild.classList.add('btn-sort_arrow-reverse');
+  } else {
+    activeBtn.firstChild.classList.remove('btn-sort_arrow-reverse');
+  }
+
+  activeBtn.firstChild.classList.add('btn-sort_arrow-active');
+
+  passiveBtn.firstChild.classList.remove('btn-sort_arrow-reverse');
+  passiveBtn.firstChild.classList.remove('btn-sort_arrow-active');
+}
+
+/**
+  Sorting films array by title or date
+  @param filteredFilms films array after filtration in loadFilmList() func
+ */
+function sortFilms(filteredFilms) {
+  if (typeOfSort.indexOf('reverse') != -1) {
+    filteredFilms.sort((a, b) => (a.fields[typeOfSort.substr(0, typeOfSort.indexOf(' '))] < b.fields[typeOfSort.substr(0, typeOfSort.indexOf(' '))] ? 1 : -1));
+  } else {
+    filteredFilms.sort((a, b) => (a.fields[typeOfSort] > b.fields[typeOfSort] ? 1 : -1));
+  }
+}
+
 // === / Sort ===
+
+// === Search ===
+
+searchInput.addEventListener('input', () => {
+  loadFilmList(currentFilms);
+});
+
+/**
+  Find input value substring in films titles and filtering array
+ */
+function filterFilms() {
+  return currentFilms.filter(item => {
+    if (item.fields.title.toLowerCase().indexOf(searchInput.value.toLowerCase()) != -1) return true;
+  });
+}
+// === / Search ===
 
 INIT();
