@@ -1,6 +1,10 @@
 // === Vars ===
 const table = document.getElementById('film_table');
 const paginationList = document.getElementById('pagination_list');
+const btnTitleSort = document.getElementById('btn-title_sort');
+const btnDateSort = document.getElementById('btn-date_sort');
+let currentFilms = [];
+let typeOfSort = 'title';
 let activePage = 1;
 // === / Vars ===
 
@@ -28,7 +32,13 @@ function INIT() {
 async function getFilmData(start, end) {
   const response = await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films.json?orderBy="$key"&startAt="${start}"&endAt="${end - 1}"&print=pretty`);
   const filmData = await response.json();
-  loadFilmList(filmData);
+
+  currentFilms = [];
+  for (let key in filmData) {
+    currentFilms.push(filmData[key]);
+  }
+
+  loadFilmList(currentFilms);
 }
 
 /**
@@ -36,8 +46,26 @@ Load film list in the table
  @param films film array from database
  */
 function loadFilmList(films) {
-  for (let key in films) {
-    table.appendChild(createHTML(films[key].fields));
+  clearTable();
+
+  if (typeOfSort.indexOf('reverse') != -1) {
+    films.sort((a, b) => (a.fields[typeOfSort.substr(0, typeOfSort.indexOf(' '))] < b.fields[typeOfSort.substr(0, typeOfSort.indexOf(' '))] ? 1 : -1));
+  } else {
+    films.sort((a, b) => (a.fields[typeOfSort] > b.fields[typeOfSort] ? 1 : -1));
+  }
+
+  films.forEach(item => {
+    table.appendChild(createHTML(item.fields));
+  });
+}
+
+/**
+  Remove old notes from table
+ */
+function clearTable() {
+  let length = table.getElementsByClassName('table_child').length;
+  for (let i = 0; i < length; i++) {
+    table.removeChild(table.lastChild);
   }
 }
 
@@ -78,7 +106,6 @@ async function setPagination(notesOnPage) {
       let start = (activePage - 1) * notesOnPage;
       let end = notesOnPage + start;
 
-      clearTable(notesOnPage);
       getFilmData(start, end);
     });
 
@@ -87,16 +114,6 @@ async function setPagination(notesOnPage) {
     }
 
     paginationList.appendChild(li);
-  }
-}
-
-/**
-  Remove old notes from table
-  @param notesOnPage number of film in the table
- */
-function clearTable(notesOnPage) {
-  for (let i = 0; i < notesOnPage; i++) {
-    table.removeChild(table.lastChild);
   }
 }
 
@@ -115,5 +132,20 @@ function makeBtnActive(elem) {
   elem.classList.add('active');
 }
 // === / Pagination ===
+
+// === Sort ===
+
+btnTitleSort.addEventListener('click', () => {
+  typeOfSort = typeOfSort === 'title' ? 'title reverse' : 'title';
+
+  loadFilmList(currentFilms);
+});
+btnDateSort.addEventListener('click', () => {
+  typeOfSort = typeOfSort === 'release_date' ? 'release_date reverse' : 'release_date';
+
+  loadFilmList(currentFilms);
+});
+
+// === / Sort ===
 
 INIT();
