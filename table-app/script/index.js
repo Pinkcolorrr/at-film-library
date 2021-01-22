@@ -1,9 +1,9 @@
 // === Vars ===
-const table = document.getElementById('film_table');
-const paginationList = document.getElementById('pagination_list');
-const btnTitleSort = document.getElementById('btn-title_sort');
-const btnDateSort = document.getElementById('btn-date_sort');
-const searchInput = document.getElementById('search_input');
+const table = document.getElementById('filmTable');
+const paginationList = document.getElementById('paginationList');
+const btnTitleSort = document.getElementById('btnSortTitle');
+const btnDateSort = document.getElementById('btnSortDate');
+const searchInput = document.getElementById('searchInput');
 let currentFilms = [];
 let typeOfSort = 'title';
 let activePage = 1;
@@ -15,7 +15,7 @@ let activePage = 1;
 function INIT() {
   const notesOnPage = 3;
 
-  btnTitleSort.firstChild.classList.add('btn-sort_arrow-active');
+  btnTitleSort.firstChild.classList.add('btnSortArrow-active');
   let start = (activePage - 1) * notesOnPage;
   let end = notesOnPage + start;
 
@@ -27,7 +27,7 @@ function INIT() {
 // === Film loading ===
 
 /**
- Getting data from database by keys.   
+ Gett data from database by keys.   
  @param start start key of object to read data from database
  @param end end key of object to read data from database
  */
@@ -38,6 +38,7 @@ async function getFilmData(start, end) {
   currentFilms = [];
   for (let key in filmData) {
     currentFilms.push(filmData[key]);
+    filmData[key].id = key;
   }
 
   loadFilmList();
@@ -53,7 +54,7 @@ function loadFilmList() {
   sortFilms(filteredFilms);
 
   filteredFilms.forEach(item => {
-    table.appendChild(createHTML(item.fields));
+    table.appendChild(createHtmlFilmList(item));
   });
 }
 
@@ -61,7 +62,7 @@ function loadFilmList() {
   Remove old notes from table
  */
 function clearTable() {
-  let length = table.getElementsByClassName('table_child').length;
+  let length = table.getElementsByClassName('tableChild').length;
   for (let i = 0; i < length; i++) {
     table.removeChild(table.lastChild);
   }
@@ -69,17 +70,21 @@ function clearTable() {
 
 /**
  Create DOM elements for new table items
- @param obj accept obj item and getting some properties from it
+ @param item accept obj item and getting some properties from it
  */
-function createHTML(obj) {
-  let HTML = `
-    <td>${obj.title}</td>
-    <td>${obj.release_date}</td>
-    <td>${obj.director}</td>
+function createHtmlFilmList(item) {
+  const { fields } = item;
+
+  const myURL = new URL(`./html/filmInfo.html?id=${item.id}`, `${window.location.href}`);
+  const HTML = `
+    <td><a href="${myURL}" class="tableItem tableLink">${fields.title}</a></td>
+    <td><div class="tableItem">${fields.release_date}</div></td> 
+    <td><div class="tableItem">${fields.director}</div></td>
   `;
 
-  let row = document.createElement('tr');
-  row.classList.add('table_child');
+  const row = document.createElement('tr');
+  row.classList.add('tableChild');
+  row.classList.add('tableRow');
   row.innerHTML = HTML;
   return row;
 }
@@ -97,7 +102,7 @@ async function setPagination(notesOnPage) {
 
   for (let i = 1; i <= numOfBtns; i++) {
     let li = document.createElement('li');
-    li.innerHTML = `<button type="button" class="pagination_btn">${i}</button>`;
+    li.innerHTML = `<button type="button" class="paginationBtn">${i}</button>`;
     li.firstChild.addEventListener('click', function () {
       makePageBtnActive(this);
 
@@ -156,19 +161,19 @@ btnDateSort.addEventListener('click', () => {
  */
 function toggleSortBtns(activeBtn, passiveBtn, checkTypeSortStr) {
   if (typeOfSort === checkTypeSortStr) {
-    activeBtn.firstChild.classList.add('btn-sort_arrow-reverse');
+    activeBtn.firstChild.classList.add('btnSortArrow-reverse');
   } else {
-    activeBtn.firstChild.classList.remove('btn-sort_arrow-reverse');
+    activeBtn.firstChild.classList.remove('btnSortArrow-reverse');
   }
 
-  activeBtn.firstChild.classList.add('btn-sort_arrow-active');
+  activeBtn.firstChild.classList.add('btnSortArrow-active');
 
-  passiveBtn.firstChild.classList.remove('btn-sort_arrow-reverse');
-  passiveBtn.firstChild.classList.remove('btn-sort_arrow-active');
+  passiveBtn.firstChild.classList.remove('btnSortArrow-reverse');
+  passiveBtn.firstChild.classList.remove('btnSortArrow-active');
 }
 
 /**
-  Sorting films array by title or date
+  Sort films array by title or date
   @param filteredFilms films array after filtration in loadFilmList() func
  */
 function sortFilms(filteredFilms) {

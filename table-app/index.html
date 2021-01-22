@@ -4,35 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style/style.css" rel="stylesheet" />
-    <title>Document</title>
+    <title>Film library</title>
   </head>
   <body>
     <div class="wrapper">
-      <form class="search_form">
-        <input placeholder="Search" class="search_input" id="search_input" />
+      <form class="searchForm">
+        <input placeholder="Search" class="searchInput" id="searchInput" />
       </form>
-      <table class="film_table" id="film_table">
-        <caption>
+      <table class="filmTable" id="filmTable" onsubmit="e.preventDefault()">
+        <caption class="filmTableCaption">
           Star Wars films
         </caption>
-        <tr>
-          <th>
+        <tr class="tableRow">
+          <th class="tableTitle">
             <span>title</span>
-            <button class="btn_sort" type="button" id="btn-title_sort"><span class="btn-sort_arrow"></span></button>
+            <button class="btnSort" type="button" id="btnSortTitle"><span class="btnSortArrow"></span></button>
           </th>
-          <th>
+          <th class="tableTitle">
             <span>date</span>
-            <button class="btn_sort" type="button" id="btn-date_sort"><span class="btn-sort_arrow"></span></button>
+            <button class="btnSort" type="button" id="btnSortDate"><span class="btnSortArrow"></span></button>
           </th>
-          <th>
+          <th class="tableTitle">
             <span>director</span>
           </th>
         </tr>
       </table>
 
-      <ul class="buttons" id="pagination_list"></ul>
+      <ul class="paginationList" id="paginationList"></ul>
     </div>
 
-    <script src="script/index.js"></script>
+    <script src="script/index.js" type="module"></script>
   </body>
 </html>

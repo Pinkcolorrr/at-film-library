@@ -1,12 +1,16 @@
+/* --- Wrapper --- */
 .wrapper {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
+  text-align: center;
 }
+/* --- / Wrapper --- */
 
-.film_table {
+/* --- Table --- */
+.filmTable {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   margin: 0 auto;
@@ -14,42 +18,47 @@
   table-layout: fixed;
 }
 
-.film_table caption {
+.filmTableCaption {
   margin-bottom: 20px;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 20px;
 }
 
-.film_table td,
-.film_table th {
+.tableTitle {
   border: 1px solid #ddd;
-  padding: 8px;
   margin: 10px;
-}
-
-.film_table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.film_table tr:hover {
-  background-color: #ddd;
-}
-
-.film_table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding: 12px 8px;
   background-color: #4caf50;
   text-align: left;
 
+  text-align: center;
   position: relative;
 }
 
-.film_table th span {
-  color: white;
+.tableTitle span {
+  color: #fff;
 }
 
-.btn_sort {
+.tableItem {
+  padding: 8px;
+}
+
+.tableLink {
+  display: block;
+}
+
+.tableRow:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tableRow:hover {
+  background-color: #ddd;
+}
+/* --- Table --- */
+
+/* --- Sort buttons */
+.btnSort {
   cursor: pointer;
   position: absolute;
   right: 0;
@@ -63,38 +72,7 @@
   width: 100%;
 }
 
-.buttons {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-}
-
-.buttons li + li {
-  margin-left: 50px;
-}
-
-.buttons button {
-  border-radius: 5px;
-  display: inline-block;
-  cursor: pointer;
-  font-family: Arial;
-  font-size: 16px;
-  padding: 5px 10px;
-  text-decoration: none;
-  text-shadow: 0px 1px 0px #2f6627;
-  outline: none;
-}
-
-.buttons button:hover,
-.buttons button.active {
-  background-color: lightgray;
-}
-
-.buttons button:active {
-  background-color: grey;
-}
-
-.btn-sort_arrow {
+.btnSortArrow {
   position: absolute;
   right: 12px;
   top: 15px;
@@ -107,21 +85,23 @@
   padding: 3px;
 }
 
-.btn-sort_arrow-active {
+.btnSortArrow-active {
   border-color: black;
 }
 
-.btn-sort_arrow-reverse {
+.btnSortArrow-reverse {
   border-width: 3px 0 0 3px;
-  top: 20px;
+  top: 18px;
 }
+/* --- / Sort buttons */
 
-.search_form {
+/* --- Search input --- */
+.searchForm {
   text-align: center;
   margin-bottom: 40px;
 }
 
-.search_input {
+.searchInput {
   width: 50%;
   padding: 15px 20px;
   border: none;
@@ -129,8 +109,62 @@
   outline: none;
   transition: 0.2s;
 }
+/* --- / Search input --- */
 
-.search_input:focus {
+.searchInput:focus {
   border-color: #4caf50;
   transition: 0.2s;
+}
+
+/* --- Page buttons --- */
+.paginationList {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+.paginationList li + li {
+  margin-left: 50px;
+}
+
+.paginationBtn {
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+  font-family: Arial;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
+  outline: none;
+}
+
+.paginationBtn:hover,
+.paginationBtn.active {
+  background-color: lightgray;
+}
+
+.paginationBtn:active {
+  background-color: grey;
+}
+/* --- / Page buttons --- */
+
+.linkBack {
+  display: inline-block;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-decoration: none;
+  outline: none;
+  border: 1px solid black;
+  color: black;
+}
+
+.linkBack:hover {
+  background-color: lightgray;
 }
