@@ -41,20 +41,20 @@ async function getFilmData(start, end) {
     filmData[key].id = key;
   }
 
-  loadFilmList();
+  fillFilmsTable();
 }
 
 /**
 Load film list in the table
  */
-function loadFilmList() {
+function fillFilmsTable() {
   clearTable();
 
   let filteredFilms = filterFilms();
   sortFilms(filteredFilms);
 
   filteredFilms.forEach(item => {
-    table.appendChild(createHtmlFilmList(item));
+    table.querySelector('.tableBody').appendChild(createHtmlFilmList(item));
   });
 }
 
@@ -62,9 +62,9 @@ function loadFilmList() {
   Remove old notes from table
  */
 function clearTable() {
-  let length = table.getElementsByClassName('tableChild').length;
-  for (let i = 0; i < length; i++) {
-    table.removeChild(table.lastChild);
+  const tbody = table.querySelector('.tableBody');
+  while (tbody.lastChild) {
+    tbody.removeChild(tbody.lastChild);
   }
 }
 
@@ -83,7 +83,6 @@ function createHtmlFilmList(item) {
   `;
 
   const row = document.createElement('tr');
-  row.classList.add('tableChild');
   row.classList.add('tableRow');
   row.innerHTML = HTML;
   return row;
@@ -112,7 +111,7 @@ async function setPagination(notesOnPage) {
       getFilmData(start, end);
     });
 
-    if (+li.firstChild.innerHTML === activePage) {
+    if (parseInt(li.firstChild.innerHTML) === activePage) {
       makePageBtnActive(li.firstChild);
     }
 
@@ -143,14 +142,14 @@ btnTitleSort.addEventListener('click', () => {
 
   toggleSortBtns(btnTitleSort, btnDateSort, 'title reverse');
 
-  loadFilmList(currentFilms);
+  fillFilmsTable(currentFilms);
 });
 btnDateSort.addEventListener('click', () => {
   typeOfSort = typeOfSort === 'release_date' ? 'release_date reverse' : 'release_date';
 
   toggleSortBtns(btnDateSort, btnTitleSort, 'release_date reverse');
 
-  loadFilmList(currentFilms);
+  fillFilmsTable(currentFilms);
 });
 
 /**
@@ -189,7 +188,7 @@ function sortFilms(filteredFilms) {
 // === Search ===
 
 searchInput.addEventListener('input', () => {
-  loadFilmList(currentFilms);
+  fillFilmsTable(currentFilms);
 });
 
 /**
