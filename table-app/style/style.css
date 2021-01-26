@@ -11,7 +11,7 @@
 
 /* --- Table --- */
 .filmTable {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   border-collapse: collapse;
   margin: 0 auto;
   width: 80%;
@@ -31,7 +31,6 @@
   padding: 12px 8px;
   background-color: #4caf50;
   text-align: left;
-
   text-align: center;
   position: relative;
 }
@@ -63,11 +62,8 @@
   position: absolute;
   right: 0;
   top: 0;
-
   background-color: transparent;
   border: none;
-
-  outline: none;
   height: 100%;
   width: 100%;
 }
@@ -76,17 +72,15 @@
   position: absolute;
   right: 12px;
   top: 15px;
-
   transform: rotate(45deg);
-
-  border: solid white;
+  border: solid #fff;
   border-width: 0 3px 3px 0;
   display: inline-block;
   padding: 3px;
 }
 
 .btnSortArrow-active {
-  border-color: black;
+  border-color: #000;
 }
 
 .btnSortArrow-reverse {
@@ -106,7 +100,6 @@
   padding: 15px 20px;
   border: none;
   border-bottom: 2px solid black;
-  outline: none;
   transition: 0.2s;
 }
 /* --- / Search input --- */
@@ -131,12 +124,10 @@
   border-radius: 5px;
   display: inline-block;
   cursor: pointer;
-  font-family: Arial;
+  font-family: Helvetica, Arial, sans-serif;
   font-size: 16px;
   padding: 5px 10px;
   text-decoration: none;
-  text-shadow: 0px 1px 0px #2f6627;
-  outline: none;
 }
 
 .paginationBtn:hover,
@@ -160,7 +151,6 @@
   font-size: 16px;
   padding: 5px 10px;
   text-decoration: none;
-  outline: none;
   border: 1px solid black;
   color: black;
 }

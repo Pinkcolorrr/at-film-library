@@ -12,7 +12,7 @@ let activePage = 1;
 /**
  Entry point in the app   
  */
-function INIT() {
+function init() {
   const notesOnPage = 3;
 
   btnTitleSort.firstChild.classList.add('btnSortArrow-active');
@@ -75,9 +75,9 @@ function clearTable() {
 function createHtmlFilmList(item) {
   const { fields } = item;
 
-  const myURL = new URL(`./html/filmInfo.html?id=${item.id}`, `${window.location.href}`);
+  const filmInfoUrl = new URL(`./html/filmInfo.html?id=${item.id}`, `${window.location.href}`);
   const HTML = `
-    <td><a href="${myURL}" class="tableItem tableLink">${fields.title}</a></td>
+    <td><a href="${filmInfoUrl}" class="tableItem tableLink">${fields.title}</a></td>
     <td><div class="tableItem">${fields.release_date}</div></td> 
     <td><div class="tableItem">${fields.director}</div></td>
   `;
@@ -191,6 +191,10 @@ searchInput.addEventListener('input', () => {
   fillFilmsTable(currentFilms);
 });
 
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+});
+
 /**
   Find input value substring in films titles and filtering array
  */
@@ -201,4 +205,4 @@ function filterFilms() {
 }
 // === / Search ===
 
-INIT();
+init();
