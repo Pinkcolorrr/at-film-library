@@ -139,4 +139,8 @@ function getFilmId() {
   return new URL(window.location.href).searchParams.get('id');
 }
 
+document.getElementById('btnRemove').addEventListener('click', () => {
+  console.log('asd');
+});
+
 getFilmData(getFilmId());

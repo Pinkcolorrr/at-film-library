@@ -1,19 +1,22 @@
 /* --- Wrapper --- */
 .wrapper {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  padding: 100px 0;
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 /* --- / Wrapper --- */
 
 /* --- Table --- */
 .filmTable {
+  width: 100%;
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  margin: 0 auto;
-  width: 80%;
   table-layout: fixed;
+  text-align: center;
 }
 
 .filmTableCaption {
@@ -62,7 +65,6 @@
   top: 0;
   background-color: transparent;
   border: none;
-  outline: none;
   height: 100%;
   width: 100%;
 }
@@ -90,16 +92,16 @@
 
 /* --- Search input --- */
 .searchForm {
+  width: 100%;
   text-align: center;
   margin-bottom: 40px;
 }
 
 .searchInput {
-  width: 50%;
+  width: 70%;
   padding: 15px 20px;
   border: none;
   border-bottom: 2px solid black;
-  outline: none;
   transition: 0.2s;
 }
 /* --- / Search input --- */
@@ -114,6 +116,7 @@
   display: flex;
   justify-content: center;
   list-style: none;
+  padding: 0;
 }
 
 .paginationList li + li {
@@ -129,7 +132,6 @@
   padding: 5px 10px;
   text-decoration: none;
   text-shadow: 0px 1px 0px #2f6627;
-  outline: none;
 }
 
 .paginationBtn:hover,
@@ -142,7 +144,7 @@
 }
 /* --- / Page buttons --- */
 
-/*  Related data button */
+/*  --- Related data button --- */
 .relatedDataButton {
   display: block;
   text-align: center;
@@ -151,35 +153,18 @@
   cursor: pointer;
   border: none;
   font-size: 18px;
-  outline: none;
 }
-/* / Related data button */
+/* --- / Related data button --- */
 
-.linkBack {
-  display: inline-block;
-  text-align: center;
+/* --- back buttons --- */
+.listBack {
   margin-top: 20px;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 5px;
-  font-size: 16px;
-  padding: 5px 10px;
-  text-decoration: none;
-  outline: none;
-  border: 1px solid black;
-  color: black;
-  margin-right: 40px;
 }
 
-.linkBack:hover {
-  background-color: lightgray;
-}
-
+.linkBack,
 .btnBack {
   display: inline-block;
   text-align: center;
-  margin-top: 20px;
   text-decoration: none;
   text-transform: uppercase;
   font-weight: bold;
@@ -187,13 +172,49 @@
   font-size: 16px;
   padding: 5px 10px;
   text-decoration: none;
-  outline: none;
   border: 1px solid black;
   color: black;
+}
+
+.btnBack {
   background-color: #fff;
-  cursor: pointer;
+  margin-left: 40px;
 }
 
 .linkBack:hover {
   background-color: lightgray;
 }
+
+.linkBack:hover {
+  background-color: lightgray;
+}
+/* --- / back buttons --- */
+
+/* --- Remove button --- */
+
+.removeWrapper {
+  margin-top: 100px;
+  text-align: end;
+  align-self: flex-end;
+}
+
+.btnRemove {
+  background-color: #d11a2a;
+  width: 150px;
+  padding: 10px 0;
+  border-radius: 5px;
+  border: none;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btnRemove:hover {
+  background-color: #b81624;
+  transform: scale(1.02);
+  transition: 0.2s;
+}
+
+/* --- / Remove button --- */
