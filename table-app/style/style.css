@@ -1,11 +1,9 @@
 /* --- Wrapper --- */
 .wrapper {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
   width: 100%;
+  height: 100%;
   text-align: center;
+  padding: 100px 0;
 }
 /* --- / Wrapper --- */
 
@@ -31,7 +29,6 @@
   padding: 12px 8px;
   background-color: #4caf50;
   text-align: left;
-
   text-align: center;
   position: relative;
 }
@@ -63,10 +60,8 @@
   position: absolute;
   right: 0;
   top: 0;
-
   background-color: transparent;
   border: none;
-
   outline: none;
   height: 100%;
   width: 100%;
@@ -76,9 +71,7 @@
   position: absolute;
   right: 12px;
   top: 15px;
-
   transform: rotate(45deg);
-
   border: solid white;
   border-width: 0 3px 3px 0;
   display: inline-block;
@@ -149,6 +142,19 @@
 }
 /* --- / Page buttons --- */
 
+/*  Related data button */
+.relatedDataButton {
+  display: block;
+  text-align: center;
+  width: 100%;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  font-size: 18px;
+  outline: none;
+}
+/* / Related data button */
+
 .linkBack {
   display: inline-block;
   text-align: center;
@@ -163,6 +169,29 @@
   outline: none;
   border: 1px solid black;
   color: black;
+  margin-right: 40px;
+}
+
+.linkBack:hover {
+  background-color: lightgray;
+}
+
+.btnBack {
+  display: inline-block;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-decoration: none;
+  outline: none;
+  border: 1px solid black;
+  color: black;
+  background-color: #fff;
+  cursor: pointer;
 }
 
 .linkBack:hover {
