@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 /* --- Wrapper --- */
 .wrapper {
   padding: 100px;
@@ -41,6 +45,7 @@
 }
 
 .tableItem {
+  display: block;
   padding: 8px;
 }
 
@@ -90,26 +95,52 @@
 }
 /* --- / Sort buttons */
 
+/* --- Top menu ---*/
+.topMenu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 80px;
+  align-items: center;
+}
+
 /* --- Search input --- */
 .searchForm {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 40px;
+  width: 30%;
 }
 
 .searchInput {
-  width: 70%;
+  width: 100%;
   padding: 15px 20px;
   border: none;
   border-bottom: 2px solid black;
-  transition: 0.2s;
 }
 /* --- / Search input --- */
 
-.searchInput:focus {
-  border-color: #4caf50;
+/* --- Add link ---*/
+.linkAdd {
+  background-color: #4caf50;
+  width: 150px;
+  padding: 10px 0;
+  border-radius: 5px;
+  border: none;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  text-align: center;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.linkAdd:hover {
+  background-color: #3f9442;
   transition: 0.2s;
 }
+/* --- / Add button --- */
+
+/* --- / Top menu --- */
 
 /* --- Page buttons --- */
 .paginationList {
@@ -209,6 +240,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: 0.2s;
+  font-size: 15px;
 }
 
 .btnRemove:hover {
@@ -218,3 +250,57 @@
 }
 
 /* --- / Remove button --- */
+
+/* --- Submit button --- */
+
+.submitWrapper {
+  margin-top: 100px;
+  text-align: end;
+  align-self: flex-end;
+}
+
+.btnSubmit {
+  background-color: #30a3d8;
+  width: 150px;
+  padding: 10px 0;
+  border-radius: 5px;
+  border: none;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 15px;
+}
+
+.btnSubmit:hover {
+  background-color: #2c97c8;
+  transform: scale(1.02);
+  transition: 0.2s;
+}
+
+/* --- / Submit button --- */
+
+/* --- error message --- */
+
+.errorMsg {
+  text-align: center;
+  margin-top: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #d11a2a;
+  display: none;
+}
+
+/* --- / error message --- */
+
+/* --- Add inputs --- */
+.addFilmInput {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 5px 10px;
+  border-bottom: 2px solid black;
+}
+/* --- / Add inputs --- */

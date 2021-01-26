@@ -4,6 +4,7 @@ const paginationList = document.getElementById('paginationList');
 const btnTitleSort = document.getElementById('btnSortTitle');
 const btnDateSort = document.getElementById('btnSortDate');
 const searchInput = document.getElementById('searchInput');
+const notesOnPage = 3;
 let currentFilms = [];
 let typeOfSort = 'title';
 let activePage = 1;
@@ -12,14 +13,10 @@ let activePage = 1;
 /**
  Entry point in the app   
  */
-function INIT() {
-  const notesOnPage = 3;
-
+function init() {
   btnTitleSort.firstChild.classList.add('btnSortArrow-active');
-  let start = (activePage - 1) * notesOnPage;
-  let end = notesOnPage + start;
 
-  getFilmData(start, end).then(() => {
+  getFilmData().then(() => {
     setPagination(notesOnPage);
   });
 }
@@ -32,7 +29,7 @@ function INIT() {
  @param end end key of object to read data from database
  */
 async function getFilmData(start, end) {
-  const response = await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films.json?orderBy="$key"&startAt="${start}"&endAt="${end - 1}"&print=pretty`);
+  const response = await fetch('https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films.json');
   const filmData = await response.json();
 
   currentFilms = [];
@@ -41,7 +38,7 @@ async function getFilmData(start, end) {
     filmData[key].id = key;
   }
 
-  loadFilmList();
+  loadFilmList(start, end);
 }
 
 /**
@@ -50,12 +47,16 @@ Load film list in the table
 function loadFilmList() {
   clearTable();
 
+  let start = (activePage - 1) * notesOnPage;
+  let end = notesOnPage + start;
+
   let filteredFilms = filterFilms();
   sortFilms(filteredFilms);
 
-  filteredFilms.forEach(item => {
-    table.appendChild(createHtmlFilmList(item));
-  });
+  for (let i = start; i < end; i++) {
+    if (!filteredFilms[i]) break;
+    table.appendChild(createHtmlFilmList(filteredFilms[i]));
+  }
 }
 
 /**
@@ -95,10 +96,8 @@ function createHtmlFilmList(item) {
   Create buttons for pagination film list and add listeners on them 
   @param notesOnPage number of film in the table
  */
-async function setPagination(notesOnPage) {
-  const response = await fetch('https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films.json?shallow=true');
-
-  const numOfBtns = Math.ceil(Object.keys(await response.json()).length / notesOnPage);
+function setPagination() {
+  const numOfBtns = Math.ceil(currentFilms.length / notesOnPage);
 
   for (let i = 1; i <= numOfBtns; i++) {
     let li = document.createElement('li');
@@ -109,7 +108,7 @@ async function setPagination(notesOnPage) {
       let start = (activePage - 1) * notesOnPage;
       let end = notesOnPage + start;
 
-      getFilmData(start, end);
+      loadFilmList(start, end);
     });
 
     if (+li.firstChild.innerHTML === activePage) {
@@ -189,7 +188,7 @@ function sortFilms(filteredFilms) {
 // === Search ===
 
 searchInput.addEventListener('input', () => {
-  loadFilmList(currentFilms);
+  loadFilmList();
 });
 
 /**
@@ -202,4 +201,4 @@ function filterFilms() {
 }
 // === / Search ===
 
-INIT();
+init();

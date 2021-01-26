@@ -1,5 +1,7 @@
 const table = document.getElementById('filmTable');
+const filmId = getFilmId();
 let filmDataList = {};
+
 /**
  Get data from database by film id.
  @param id desired movie id
@@ -27,8 +29,13 @@ function loadFilmDataList(filmFields) {
   table.appendChild(getHTMLStringChild('release date', filmFields.release_date));
   table.appendChild(getHTMLStringChild('director', filmFields.director));
   table.appendChild(getHTMLStringChild('producer', filmFields.producer));
-  table.appendChild(getHTMLObjChild('people', filmFields.characters, 'name'));
-  table.appendChild(getHTMLObjChild('planets', filmFields.planets, 'name'));
+  table.appendChild(getHTMLStringChild('episode id', filmFields.episode_id));
+  if (filmFields.characters) {
+    table.appendChild(getHTMLObjChild('people', filmFields.characters, 'name'));
+  }
+  if (filmFields.characters) {
+    table.appendChild(getHTMLObjChild('planets', filmFields.planets, 'name'));
+  }
   table.appendChild(getHTMLStringChild('opening crawl', filmFields.opening_crawl));
 }
 
@@ -132,6 +139,28 @@ async function getRelatedData(title, inDataArr) {
   return outDataArr;
 }
 
+document.getElementById('btnRemove').addEventListener('click', () => {
+  removeFilm();
+});
+
+/** 
+  Remove film from database
+ */
+async function removeFilm() {
+  try {
+    await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films/${filmId}.json`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+    });
+
+    window.location.replace('../');
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 /** 
   Get film id from URL
  */
@@ -139,8 +168,4 @@ function getFilmId() {
   return new URL(window.location.href).searchParams.get('id');
 }
 
-document.getElementById('btnRemove').addEventListener('click', () => {
-  console.log('asd');
-});
-
-getFilmData(getFilmId());
+getFilmData(filmId);
