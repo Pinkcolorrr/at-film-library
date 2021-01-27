@@ -14,7 +14,7 @@
 }
 /* --- / Wrapper --- */
 
-/* --- Table --- */
+/* ====== Table ====== */
 .filmTable {
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
@@ -60,7 +60,205 @@
 .tableRow:hover {
   background-color: #ddd;
 }
-/* --- Table --- */
+/* ====== / Table ====== */
+
+/* --- Top menu ---*/
+.topMenu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 80px;
+  align-items: center;
+}
+/* --- / Top menu --- */
+
+/* --- error message --- */
+.errorMsg {
+  text-align: center;
+  margin-top: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #d11a2a;
+  display: none;
+}
+/* --- / error message --- */
+
+/* ====== Inputs ====== */
+/* --- Search input --- */
+.searchForm {
+  width: 33%;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 15px 20px;
+  border: none;
+  border-bottom: 2px solid black;
+}
+/* --- / Search input --- */
+
+/* --- Add inputs --- */
+.addFilmInput {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 5px 10px;
+  border-bottom: 2px solid black;
+}
+/* --- / Add inputs --- */
+/* ====== / Inputs ====== */
+
+/* ====== Buttons and links ====== */
+/* --- Common --- */
+.button {
+  min-width: 150px;
+  padding: 10px;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 15px;
+}
+
+.btnsWrapper {
+  margin-top: 50px;
+  text-align: end;
+}
+/* --- / Common --- */
+/* --- Remove button --- */
+.btnRemove {
+  background-color: #d11a2a;
+  text-transform: uppercase;
+  margin-left: 20px;
+}
+
+.btnRemove:hover {
+  background-color: #b81624;
+  transition: 0.2s;
+}
+/* --- / Remove button --- */
+
+/* --- Edit button --- */
+.btnEdit {
+  display: inline-block;
+  background-color: #30a3d8;
+  text-transform: uppercase;
+  margin-left: 20px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btnEdit:hover {
+  background-color: #2a8ebd;
+  transition: 0.2s;
+}
+/* --- / Edit button --- */
+
+/* --- Submit button --- */
+.btnSubmit {
+  background-color: #30a3d8;
+  text-transform: uppercase;
+  margin-left: 20px;
+}
+
+.btnSubmit:hover {
+  background-color: #2a8ebd;
+  transition: 0.2s;
+}
+/* --- / Submit button --- */
+
+/* --- Add link ---*/
+.linkAdd {
+  background-color: #4caf50;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+}
+
+.linkAdd:hover {
+  background-color: #3f9442;
+  transition: 0.2s;
+}
+/* --- / Add link --- */
+
+/* --- Back buttons --- */
+.listBack {
+  padding: 0px 20px;
+}
+
+.linkBack,
+.btnBack {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: #f1f1f1;
+}
+
+.btnBack {
+  background-color: #fff;
+  border: 5px solid #f1f1f1;
+  margin-top: 20px;
+}
+
+.btnBack:hover {
+  border-color: #ddd;
+}
+
+.linkBack:hover {
+  background-color: #ddd;
+}
+/* --- / Back buttons --- */
+
+/*  --- Related data button --- */
+.relatedDataButton {
+  display: block;
+  text-align: center;
+  width: 100%;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  font-size: 18px;
+}
+/* --- / Related data button --- */
+
+/* --- Page buttons --- */
+.paginationList {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.paginationList li + li {
+  margin-left: 50px;
+}
+
+.paginationBtn {
+  border-radius: 0;
+  border: none;
+  display: inline-block;
+  cursor: pointer;
+  font-family: Arial;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
+}
+
+.paginationBtn:hover,
+.paginationBtn.active {
+  background-color: #d1d1d1;
+}
+
+.paginationBtn:active {
+  background-color: #7e7e7e;
+}
+/* --- / Page buttons --- */
 
 /* --- Sort buttons */
 .btnSort {
@@ -95,212 +293,4 @@
 }
 /* --- / Sort buttons */
 
-/* --- Top menu ---*/
-.topMenu {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 80px;
-  align-items: center;
-}
-
-/* --- Search input --- */
-.searchForm {
-  width: 30%;
-}
-
-.searchInput {
-  width: 100%;
-  padding: 15px 20px;
-  border: none;
-  border-bottom: 2px solid black;
-}
-/* --- / Search input --- */
-
-/* --- Add link ---*/
-.linkAdd {
-  background-color: #4caf50;
-  width: 150px;
-  padding: 10px 0;
-  border-radius: 5px;
-  border: none;
-  text-transform: uppercase;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-  text-align: center;
-  font-size: 15px;
-  text-decoration: none;
-}
-
-.linkAdd:hover {
-  background-color: #3f9442;
-  transition: 0.2s;
-}
-/* --- / Add button --- */
-
-/* --- / Top menu --- */
-
-/* --- Page buttons --- */
-.paginationList {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-  padding: 0;
-}
-
-.paginationList li + li {
-  margin-left: 50px;
-}
-
-.paginationBtn {
-  border-radius: 5px;
-  display: inline-block;
-  cursor: pointer;
-  font-family: Arial;
-  font-size: 16px;
-  padding: 5px 10px;
-  text-decoration: none;
-  text-shadow: 0px 1px 0px #2f6627;
-}
-
-.paginationBtn:hover,
-.paginationBtn.active {
-  background-color: lightgray;
-}
-
-.paginationBtn:active {
-  background-color: grey;
-}
-/* --- / Page buttons --- */
-
-/*  --- Related data button --- */
-.relatedDataButton {
-  display: block;
-  text-align: center;
-  width: 100%;
-  background-color: transparent;
-  cursor: pointer;
-  border: none;
-  font-size: 18px;
-}
-/* --- / Related data button --- */
-
-/* --- back buttons --- */
-.listBack {
-  margin-top: 20px;
-}
-
-.linkBack,
-.btnBack {
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 5px;
-  font-size: 16px;
-  padding: 5px 10px;
-  text-decoration: none;
-  border: 1px solid black;
-  color: black;
-}
-
-.btnBack {
-  background-color: #fff;
-  margin-left: 40px;
-}
-
-.linkBack:hover {
-  background-color: lightgray;
-}
-
-.linkBack:hover {
-  background-color: lightgray;
-}
-/* --- / back buttons --- */
-
-/* --- Remove button --- */
-
-.removeWrapper {
-  margin-top: 100px;
-  text-align: end;
-  align-self: flex-end;
-}
-
-.btnRemove {
-  background-color: #d11a2a;
-  width: 150px;
-  padding: 10px 0;
-  border-radius: 5px;
-  border: none;
-  text-transform: uppercase;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-  font-size: 15px;
-}
-
-.btnRemove:hover {
-  background-color: #b81624;
-  transform: scale(1.02);
-  transition: 0.2s;
-}
-
-/* --- / Remove button --- */
-
-/* --- Submit button --- */
-
-.submitWrapper {
-  margin-top: 100px;
-  text-align: end;
-  align-self: flex-end;
-}
-
-.btnSubmit {
-  background-color: #30a3d8;
-  width: 150px;
-  padding: 10px 0;
-  border-radius: 5px;
-  border: none;
-  text-transform: uppercase;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-  font-size: 15px;
-}
-
-.btnSubmit:hover {
-  background-color: #2c97c8;
-  transform: scale(1.02);
-  transition: 0.2s;
-}
-
-/* --- / Submit button --- */
-
-/* --- error message --- */
-
-.errorMsg {
-  text-align: center;
-  margin-top: 20px;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: #d11a2a;
-  display: none;
-}
-
-/* --- / error message --- */
-
-/* --- Add inputs --- */
-.addFilmInput {
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  border: none;
-  padding: 5px 10px;
-  border-bottom: 2px solid black;
-}
-/* --- / Add inputs --- */
+/* ====== / Buttons and links ====== */

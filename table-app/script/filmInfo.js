@@ -1,5 +1,6 @@
 const table = document.getElementById('filmTable');
 const filmId = getFilmId();
+
 let filmDataList = {};
 
 /**
@@ -10,8 +11,8 @@ async function getFilmData(id) {
   const response = await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films/${id}.json`);
   const filmData = await response.json();
 
+  document.getElementById('btnEdit').href = `../html/filmForm.html?id=${filmId}`;
   filmDataList = filmData.fields;
-
   loadFilmDataList(filmDataList);
 }
 
@@ -52,7 +53,7 @@ function loadRelatedDataList(title, dataArr, outputFitld) {
     table.appendChild(getHTMLStringChild(index, item[outputFitld]));
   });
   let backBtn = document.createElement('button');
-  backBtn.classList.add('btnBack');
+  backBtn.classList.add('btnBack', 'button');
   backBtn.innerHTML = `Back to "${filmDataList.title}"`;
   backBtn.addEventListener('click', () => {
     loadFilmDataList(filmDataList);
