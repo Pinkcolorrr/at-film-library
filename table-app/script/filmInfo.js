@@ -1,11 +1,12 @@
 const table = document.getElementById('filmTable');
+const tbody = table.querySelector('#tableBody');
 const filmId = getFilmId();
 
 let filmDataList = {};
 
 /**
  Get data from database by film id.
- @param id desired movie id
+ @param {string} id desired movie id
  */
 async function getFilmData(id) {
   const response = await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films/${id}.json`);
@@ -13,50 +14,50 @@ async function getFilmData(id) {
 
   document.getElementById('btnEdit').href = `../html/filmForm.html?type=edit&id=${filmId}`;
   filmDataList = filmData.fields;
-  loadFilmDataList(filmDataList);
+  fillFilmDataTable(filmDataList);
 }
 
 /**
- * Load film list on the page
- @param filmFields start key of object to read data from database
+ * Fill film list on the page
+ @param {Array} filmFields start key of object to read data from database
  */
-function loadFilmDataList(filmFields) {
+function fillFilmDataTable(filmFields) {
   clearTable();
 
   document.getElementById('filmTableCaption').innerHTML = filmFields.title;
   document.title = filmFields.title;
 
-  table.appendChild(getHTMLStringChild('title', filmFields.title));
-  table.appendChild(getHTMLStringChild('release date', filmFields.release_date));
-  table.appendChild(getHTMLStringChild('director', filmFields.director));
-  table.appendChild(getHTMLStringChild('producer', filmFields.producer));
-  table.appendChild(getHTMLStringChild('episode id', filmFields.episode_id));
+  tbody.appendChild(getHTMLStringChild('title', filmFields.title));
+  tbody.appendChild(getHTMLStringChild('release date', filmFields.release_date));
+  tbody.appendChild(getHTMLStringChild('director', filmFields.director));
+  tbody.appendChild(getHTMLStringChild('producer', filmFields.producer));
+  tbody.appendChild(getHTMLStringChild('episode id', filmFields.episode_id));
   if (filmFields.characters) {
-    table.appendChild(getHTMLObjChild('people', filmFields.characters, 'name'));
+    tbody.appendChild(getHTMLObjChild('people', filmFields.characters, 'name'));
   }
   if (filmFields.characters) {
-    table.appendChild(getHTMLObjChild('planets', filmFields.planets, 'name'));
+    tbody.appendChild(getHTMLObjChild('planets', filmFields.planets, 'name'));
   }
-  table.appendChild(getHTMLStringChild('opening crawl', filmFields.opening_crawl));
+  tbody.appendChild(getHTMLStringChild('opening crawl', filmFields.opening_crawl));
 }
 
 /**
  * Add button for load realted data 
- @param title title for button
- @param dataArr arr with id of related data
- @param outputFitld field, that will be load in the table
+ @param {string} title title for button
+ @param {object} dataArr arr with id of related data
+ @param {string} outputField field, that will be load in the table
  */
-function loadRelatedDataList(title, dataArr, outputFitld) {
+function fillRelatedDataTable(title, dataArr, outputField) {
   clearTable();
   document.getElementById('filmTableCaption').innerHTML += ' / ' + title;
   dataArr.forEach((item, index) => {
-    table.appendChild(getHTMLStringChild(index, item[outputFitld]));
+    tbody.appendChild(getHTMLStringChild(index, item[outputField]));
   });
   let backBtn = document.createElement('button');
   backBtn.classList.add('btnBack', 'button');
   backBtn.innerHTML = `Back to "${filmDataList.title}"`;
   backBtn.addEventListener('click', () => {
-    loadFilmDataList(filmDataList);
+    fillFilmDataTable(filmDataList);
     backBtn.remove();
   });
   document.getElementById('listBack').appendChild(backBtn);
@@ -64,28 +65,30 @@ function loadRelatedDataList(title, dataArr, outputFitld) {
 
 /**
  *  Create HTML layout for table rows and table item.
- @param key ket for film field
- @param value value of film field
+ @param {string} key ket for film field
+ @param {string} value value of film field
+ @returns {HTMLElement} return row of the table
  */
 function getHTMLStringChild(key, value) {
-  const domObj = document.createElement('tr');
-  domObj.classList.add('tableChild', 'tableRow');
-  domObj.innerHTML = `
+  const row = document.createElement('tr');
+  row.classList.add('tableRow');
+  row.innerHTML = `
     <td><div class="tableItem">${key}</div></td>
     <td><div class="tableItem">${value}</div></td>
   `;
 
-  return domObj;
+  return row;
 }
 
 /**
  * Return DOM elem of object
- @param title name for finding desired field in database
- @param inDataArr arr with id of related data
- @param outputFitld field, that will be load in the table
+ @param {string} title name for finding desired field in database
+ @param {Array} inDataArr arr with id of related data
+ @param {string} outputField field, that will be load in the table
+ @returns {HTMLElement} return row of the table
  */
-function getHTMLObjChild(title, inDataArr, outputFitld) {
-  const domObj = document.createElement('tr');
+function getHTMLObjChild(title, inDataArr, outputField) {
+  const row = document.createElement('tr');
 
   const td = document.createElement('td');
   const btn = document.createElement('button');
@@ -93,35 +96,35 @@ function getHTMLObjChild(title, inDataArr, outputFitld) {
   btn.innerHTML = `${title} list`;
   td.appendChild(btn);
 
-  domObj.classList.add('tableChild', 'tableRow');
-  domObj.innerHTML = `
+  row.classList.add('tableRow');
+  row.innerHTML = `
   <td><div class="tableItem">${title}</div></td>
   `;
 
   btn.addEventListener('click', () => {
     getRelatedData(title, inDataArr).then(response => {
-      loadRelatedDataList(title, response, outputFitld);
+      fillRelatedDataTable(title, response, outputField);
     });
   });
 
-  domObj.appendChild(td);
-  return domObj;
+  row.appendChild(td);
+  return row;
 }
 
 /**
   Remove old notes from table
  */
 function clearTable() {
-  let length = table.getElementsByClassName('tableChild').length;
-  for (let i = 0; i < length; i++) {
-    table.removeChild(table.lastChild);
+  while (tbody.lastChild) {
+    tbody.removeChild(tbody.lastChild);
   }
 }
 
 /**
- * Find related data in database
- @param title name for finding desired field in database
- @param inDataArr arr with id of related data
+ * Find and load related data in database
+ @param {string} title name for finding desired field in database
+ @param {Array} inDataArr arr with id of related data
+ @returns {Array} return array of object related data
  */
 async function getRelatedData(title, inDataArr) {
   const outDataArr = [];

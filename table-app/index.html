@@ -9,8 +9,9 @@
   <body>
     <div class="wrapper">
       <div class="topMenu">
-        <form class="searchForm">
-          <input placeholder="Search" class="searchInput" id="searchInput" />
+        <form class="searchForm" id="searchForm">
+          <label class="searchInputLabel" for="searchInput">Search</label>
+          <input class="searchInput" id="searchInput" type="search" />
         </form>
 
         <a class="linkAdd button" id="linkAdd" href="./html/filmForm.html?type=add">Add film</a>
@@ -20,19 +21,22 @@
         <caption class="filmTableCaption">
           Star Wars films
         </caption>
-        <tr class="tableRow">
-          <th class="tableTitle">
-            <span>title</span>
-            <button class="btnSort" type="button" id="btnSortTitle"><span class="btnSortArrow"></span></button>
-          </th>
-          <th class="tableTitle">
-            <span>date</span>
-            <button class="btnSort" type="button" id="btnSortDate"><span class="btnSortArrow"></span></button>
-          </th>
-          <th class="tableTitle">
-            <span>director</span>
-          </th>
-        </tr>
+        <thead>
+          <tr class="tableRow">
+            <th class="tableTitle">
+              <span>title</span>
+              <button class="btnSort" type="button" id="btnSortTitle"><span class="btnSortArrow"></span></button>
+            </th>
+            <th class="tableTitle">
+              <span>date</span>
+              <button class="btnSort" type="button" id="btnSortDate"><span class="btnSortArrow"></span></button>
+            </th>
+            <th class="tableTitle">
+              <span>director</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
       </table>
 
       <ul class="paginationList" id="paginationList"></ul>

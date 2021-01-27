@@ -10,14 +10,17 @@
     <div class="wrapper">
       <table class="filmTable" id="filmTable" onsubmit="e.preventDefault()">
         <caption class="filmTableCaption" id="filmTableCaption"></caption>
-        <tr class="tableRow">
-          <th class="tableTitle">
-            <span>key</span>
-          </th>
-          <th class="tableTitle">
-            <span>value</span>
-          </th>
-        </tr>
+        <thead>
+          <tr class="tableRow">
+            <th class="tableTitle">
+              <span>key</span>
+            </th>
+            <th class="tableTitle">
+              <span>value</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
       </table>
       <div class="listBack" id="listBack"></div>
 

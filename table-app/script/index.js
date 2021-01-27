@@ -25,10 +25,8 @@ function init() {
 
 /**
  Gett data from database by keys.   
- @param start start key of object to read data from database
- @param end end key of object to read data from database
  */
-async function getFilmData(start, end) {
+async function getFilmData() {
   const response = await fetch('https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films.json');
   const filmData = await response.json();
 
@@ -38,13 +36,13 @@ async function getFilmData(start, end) {
     filmData[key].id = key;
   }
 
-  loadFilmList(start, end);
+  fillFilmTable();
 }
 
 /**
 Load film list in the table
  */
-function loadFilmList() {
+function fillFilmTable() {
   clearTable();
 
   let start = (activePage - 1) * notesOnPage;
@@ -55,7 +53,7 @@ function loadFilmList() {
 
   for (let i = start; i < end; i++) {
     if (!filteredFilms[i]) break;
-    table.appendChild(createHtmlFilmList(filteredFilms[i]));
+    table.querySelector('#tableBody').appendChild(createHtmlFilmList(filteredFilms[i]));
   }
 }
 
@@ -63,28 +61,28 @@ function loadFilmList() {
   Remove old notes from table
  */
 function clearTable() {
-  let length = table.getElementsByClassName('tableChild').length;
-  for (let i = 0; i < length; i++) {
-    table.removeChild(table.lastChild);
+  const tbody = table.querySelector('#tableBody');
+  while (tbody.lastChild) {
+    tbody.removeChild(tbody.lastChild);
   }
 }
 
 /**
- Create DOM elements for new table items
- @param item accept obj item and getting some properties from it
+ Create DOM elements for new table item
+ @param {object} item accept obj item and getting some properties from it
+ @returns {HTMLElement} return HTML elem, row of the table
  */
 function createHtmlFilmList(item) {
   const { fields } = item;
 
-  const myURL = new URL(`./html/filmInfo.html?id=${item.id}`, `${window.location.href}`);
+  const filmInfoUrl = new URL(`./html/filmInfo.html?id=${item.id}`, `${window.location.href}`);
   const HTML = `
-    <td><a href="${myURL}" class="tableItem tableLink">${fields.title}</a></td>
+    <td><a href="${filmInfoUrl}" class="tableItem tableLink">${fields.title}</a></td>
     <td><div class="tableItem">${fields.release_date}</div></td> 
     <td><div class="tableItem">${fields.director}</div></td>
   `;
 
   const row = document.createElement('tr');
-  row.classList.add('tableChild');
   row.classList.add('tableRow');
   row.innerHTML = HTML;
   return row;
@@ -107,10 +105,10 @@ function setPagination() {
       let start = (activePage - 1) * notesOnPage;
       let end = notesOnPage + start;
 
-      loadFilmList(start, end);
+      fillFilmTable(start, end);
     });
 
-    if (+li.firstChild.innerHTML === activePage) {
+    if (parseInt(li.firstChild.innerHTML) === activePage) {
       makePageBtnActive(li.firstChild);
     }
 
@@ -120,7 +118,7 @@ function setPagination() {
 
 /**
   Make button, that was click active and other passive
-  @param elem DOM element, that was click
+  @param {HTMLElement} elem DOM element, that was click
  */
 function makePageBtnActive(elem) {
   activePage = elem.innerHTML;
@@ -135,27 +133,26 @@ function makePageBtnActive(elem) {
 // === / Pagination ===
 
 // === Sort ===
-
 btnTitleSort.addEventListener('click', () => {
   typeOfSort = typeOfSort === 'title' ? 'title reverse' : 'title';
 
   toggleSortBtns(btnTitleSort, btnDateSort, 'title reverse');
 
-  loadFilmList(currentFilms);
+  fillFilmTable(currentFilms);
 });
 btnDateSort.addEventListener('click', () => {
   typeOfSort = typeOfSort === 'release_date' ? 'release_date reverse' : 'release_date';
 
   toggleSortBtns(btnDateSort, btnTitleSort, 'release_date reverse');
 
-  loadFilmList(currentFilms);
+  fillFilmTable(currentFilms);
 });
 
 /**
   Toggle state of sort buttons.
-  @param activeBtn button, that was click. Toggle state on active
-  @param passiveBtn another button. Toggle state on passive
-  @param checkTypeSortStr string for chcking state of reverse sort.
+  @param {HTMLElement} activeBtn button, that was click. Toggle state on active
+  @param {HTMLElement} passiveBtn another button. Toggle state on passive
+  @param {string} checkTypeSortStr string for chcking state of reverse sort.
  */
 function toggleSortBtns(activeBtn, passiveBtn, checkTypeSortStr) {
   if (typeOfSort === checkTypeSortStr) {
@@ -171,8 +168,8 @@ function toggleSortBtns(activeBtn, passiveBtn, checkTypeSortStr) {
 }
 
 /**
-  Sort films array by title or date
-  @param filteredFilms films array after filtration in loadFilmList() func
+  Sort the array in place. Returns nothing
+  @param {Array} filteredFilms films array after filtration in loadFilmList() func
  */
 function sortFilms(filteredFilms) {
   if (typeOfSort.indexOf('reverse') != -1) {
@@ -181,13 +178,11 @@ function sortFilms(filteredFilms) {
     filteredFilms.sort((a, b) => (a.fields[typeOfSort] > b.fields[typeOfSort] ? 1 : -1));
   }
 }
-
 // === / Sort ===
 
 // === Search ===
-
 searchInput.addEventListener('input', () => {
-  loadFilmList();
+  fillFilmTable();
 });
 
 /**
@@ -199,5 +194,9 @@ function filterFilms() {
   });
 }
 // === / Search ===
+
+document.getElementById('searchForm').addEventListener('submit', e => {
+  e.preventDefault();
+});
 
 init();
