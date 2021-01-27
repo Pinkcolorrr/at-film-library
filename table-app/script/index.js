@@ -94,7 +94,6 @@ function createHtmlFilmList(item) {
 // === Pagination ===
 /**
   Create buttons for pagination film list and add listeners on them 
-  @param notesOnPage number of film in the table
  */
 function setPagination() {
   const numOfBtns = Math.ceil(currentFilms.length / notesOnPage);

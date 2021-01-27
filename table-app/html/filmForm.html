@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="wrapper">
-      <form id="addFilmForm">
+      <form id="filmForm">
         <table class="filmTable" id="filmTable">
           <caption class="filmTableCaption" id="filmTableCaption"></caption>
           <thead>
@@ -65,7 +65,9 @@
             <tr class="tableRow">
               <td><label class="tableItem" for="opening_crawl">opening crawl</label></td>
               <td>
-                <div class="tableItem"><input class="addFilmInput" id="opening_crawl" type="text" /></div>
+                <div class="tableItem">
+                  <textarea class="addFilmInput textArea" id="opening_crawl" rows="8" cols="50"></textarea>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -76,7 +78,7 @@
 
       <div class="btnsWrapper">
         <a class="linkBack button" href="./../index.html">&laquo; Previous</a>
-        <button class="btnSubmit button" id="btnSubbmit" type="submit" form="addFilmForm">submit</button>
+        <button class="btnSubmit button" id="btnSubbmit" type="submit" form="filmForm">submit</button>
       </div>
     </div>
 

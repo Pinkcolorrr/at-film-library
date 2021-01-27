@@ -11,7 +11,7 @@ async function getFilmData(id) {
   const response = await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films/${id}.json`);
   const filmData = await response.json();
 
-  document.getElementById('btnEdit').href = `../html/filmForm.html?id=${filmId}`;
+  document.getElementById('btnEdit').href = `../html/filmForm.html?type=edit&id=${filmId}`;
   filmDataList = filmData.fields;
   loadFilmDataList(filmDataList);
 }
