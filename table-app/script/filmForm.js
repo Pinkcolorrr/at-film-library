@@ -1,6 +1,7 @@
 const addFilmForm = document.getElementById('filmForm');
 const addFilmInputs = document.getElementsByClassName('addFilmInput');
 const errorMsg = document.getElementById('errorMsg');
+const typeOfForm = getTypeOfForm();
 const DEFALUT_NAME = 'Unknown';
 const inputState = {
   title: DEFALUT_NAME,
@@ -13,6 +14,9 @@ const inputState = {
   edited: new Date(),
 };
 
+document.title = typeOfForm[0].toUpperCase() + typeOfForm.slice(1) + ' film';
+document.getElementById('filmTableCaption').innerHTML = document.title;
+
 for (let input of addFilmInputs) {
   input.addEventListener('input', e => {
     inputState[e.target.id] = e.target.value || DEFALUT_NAME;
@@ -22,7 +26,7 @@ for (let input of addFilmInputs) {
 addFilmForm.addEventListener('submit', e => {
   e.preventDefault();
 
-  if (getTypeOfForm() === 'add') {
+  if (typeOfForm === 'add') {
     addNewFilm();
   } else {
     editFilm(getFilmId());
