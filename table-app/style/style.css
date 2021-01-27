@@ -1,0 +1,160 @@
+/* --- Wrapper --- */
+.wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+}
+/* --- / Wrapper --- */
+
+/* --- Table --- */
+.filmTable {
+  font-family: Helvetica, Arial, sans-serif;
+  border-collapse: collapse;
+  margin: 0 auto;
+  width: 80%;
+  table-layout: fixed;
+}
+
+.filmTableCaption {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.tableTitle {
+  border: 1px solid #ddd;
+  margin: 10px;
+  padding: 12px 8px;
+  background-color: #4caf50;
+  text-align: left;
+  text-align: center;
+  position: relative;
+}
+
+.tableTitle span {
+  color: #fff;
+}
+
+.tableItem {
+  padding: 8px;
+}
+
+.tableLink {
+  display: block;
+}
+
+.tableRow:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tableRow:hover {
+  background-color: #ddd;
+}
+/* --- Table --- */
+
+/* --- Sort buttons */
+.btnSort {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  width: 100%;
+}
+
+.btnSortArrow {
+  position: absolute;
+  right: 12px;
+  top: 15px;
+  transform: rotate(45deg);
+  border: solid #fff;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.btnSortArrow-active {
+  border-color: #000;
+}
+
+.btnSortArrow-reverse {
+  border-width: 3px 0 0 3px;
+  top: 18px;
+}
+/* --- / Sort buttons */
+
+/* --- Search input --- */
+.searchForm {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.searchInput {
+  width: 50%;
+  padding: 15px 20px;
+  border: none;
+  border-bottom: 2px solid black;
+  transition: 0.2s;
+}
+/* --- / Search input --- */
+
+.searchInput:focus {
+  border-color: #4caf50;
+  transition: 0.2s;
+}
+
+/* --- Page buttons --- */
+.paginationList {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+.paginationList li + li {
+  margin-left: 50px;
+}
+
+.paginationBtn {
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-decoration: none;
+}
+
+.paginationBtn:hover,
+.paginationBtn.active {
+  background-color: lightgray;
+}
+
+.paginationBtn:active {
+  background-color: grey;
+}
+/* --- / Page buttons --- */
+
+.linkBack {
+  display: inline-block;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-decoration: none;
+  border: 1px solid black;
+  color: black;
+}
+
+.linkBack:hover {
+  background-color: lightgray;
+}
