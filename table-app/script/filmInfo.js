@@ -27,18 +27,18 @@ function fillFilmDataTable(filmFields) {
   document.getElementById('filmTableCaption').innerHTML = filmFields.title;
   document.title = filmFields.title;
 
-  tbody.appendChild(getHTMLStringChild('title', filmFields.title));
-  tbody.appendChild(getHTMLStringChild('release date', filmFields.release_date));
-  tbody.appendChild(getHTMLStringChild('director', filmFields.director));
-  tbody.appendChild(getHTMLStringChild('producer', filmFields.producer));
-  tbody.appendChild(getHTMLStringChild('episode id', filmFields.episode_id));
+  tbody.appendChild(getHTMLStringChild('Title', filmFields.title));
+  tbody.appendChild(getHTMLStringChild('Release date', filmFields.release_date));
+  tbody.appendChild(getHTMLStringChild('Director', filmFields.director));
+  tbody.appendChild(getHTMLStringChild('Producer', filmFields.producer));
+  tbody.appendChild(getHTMLStringChild('Episode id', filmFields.episode_id));
   if (filmFields.characters) {
-    tbody.appendChild(getHTMLObjChild('people', filmFields.characters, 'name'));
+    tbody.appendChild(getHTMLObjChild('People', filmFields.characters, 'name'));
   }
   if (filmFields.characters) {
-    tbody.appendChild(getHTMLObjChild('planets', filmFields.planets, 'name'));
+    tbody.appendChild(getHTMLObjChild('Planets', filmFields.planets, 'name'));
   }
-  tbody.appendChild(getHTMLStringChild('opening crawl', filmFields.opening_crawl));
+  tbody.appendChild(getHTMLStringChild('Opening crawl', filmFields.opening_crawl));
 }
 
 /**
@@ -128,7 +128,7 @@ function clearTable() {
  */
 async function getRelatedData(title, inDataArr) {
   const outDataArr = [];
-  const response = await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/${title}.json`);
+  const response = await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/${title.toLowerCase()}.json`);
   const data = await response.json();
 
   for (let i = 0; i < inDataArr.length; i++) {
