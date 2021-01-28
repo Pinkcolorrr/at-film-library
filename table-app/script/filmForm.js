@@ -1,7 +1,7 @@
 const addFilmForm = document.getElementById('filmForm');
 const addFilmInputs = document.getElementsByClassName('addFilmInput');
 const errorMsg = document.getElementById('errorMsg');
-const typeOfForm = getTypeOfForm();
+const filmID = getFilmId();
 const DEFALUT_NAME = 'Unknown';
 const inputState = {
   title: DEFALUT_NAME,
@@ -14,8 +14,22 @@ const inputState = {
   edited: new Date(),
 };
 
-document.title = typeOfForm[0].toUpperCase() + typeOfForm.slice(1) + ' film';
-document.getElementById('filmTableCaption').innerHTML = document.title;
+/**
+ Set page title and make some form required for adding films 
+ @param {string} id of film in database
+ */
+function pageInit(id) {
+  if (id) {
+    document.title = 'Edit film';
+    document.getElementById('filmTableCaption').innerHTML = document.title;
+  } else {
+    document.title = 'Add film';
+    document.getElementById('filmTableCaption').innerHTML = document.title;
+
+    document.getElementById('episode_id').required = true;
+    document.getElementById('title').required = true;
+  }
+}
 
 for (let input of addFilmInputs) {
   input.addEventListener('input', e => {
@@ -26,33 +40,22 @@ for (let input of addFilmInputs) {
 addFilmForm.addEventListener('submit', e => {
   e.preventDefault();
 
-  if (typeOfForm === 'add') {
-    addNewFilm();
-  } else {
-    editFilm(getFilmId());
-  }
+  saveFilm(getRequest(filmID));
 });
 
 /**
- Add film in database
+ Save film data in database (add new film or edit existed)
+ @param {object} request got request to send it in database
  */
-async function addNewFilm() {
-  inputState.created = new Date();
-  const request = {
-    fields: inputState,
-    model: 'resources.film',
-    // Number for generate id
-    // eslint-disable-next-line no-magic-numbers
-    pk: Math.random().toString(36).substr(2, 9),
-  };
-
+async function saveFilm(request) {
+  const { body, url, method } = request;
   try {
-    await fetch('https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films.json', {
-      method: 'POST',
+    await fetch(url, {
+      method: method,
+      body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
-      body: JSON.stringify(request),
     });
     window.location.replace('../');
   } catch (err) {
@@ -62,30 +65,35 @@ async function addNewFilm() {
 }
 
 /**
- Modifies an existing movie in database
- @param {string} id id of film
+ Get request to save film
+ @param {string} id get id to define type of request
+ @returns {object} return request obj
  */
-async function editFilm(id) {
-  const request = {};
-  for (let key in inputState) {
-    if (inputState[key] != DEFALUT_NAME) {
-      request[key] = inputState[key];
+function getRequest(id) {
+  const request = {
+    body: {},
+  };
+  if (id) {
+    for (let key in inputState) {
+      if (inputState[key] != DEFALUT_NAME) {
+        request.body[key] = inputState[key];
+      }
     }
+    request.url = `https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films/${id}/fields.json`;
+    request.method = 'PATCH';
+  } else {
+    inputState.created = new Date();
+    request.body = {
+      fields: inputState,
+      model: 'resources.film',
+      // eslint-disable-next-line no-magic-numbers
+      pk: Math.random().toString(36).substr(2, 9),
+    };
+    request.url = 'https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films.json';
+    request.method = 'POST';
   }
 
-  try {
-    await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films/${id}/fields.json`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify(request),
-    });
-    window.location.replace('../');
-  } catch (err) {
-    errorMsg.innerHTML = err.message;
-    errorMsg.style.display = 'block';
-  }
+  return request;
 }
 
 /**
@@ -96,12 +104,4 @@ function getFilmId() {
   return new URL(window.location.href).searchParams.get('id');
 }
 
-/**
- Get type of form from url params
- @returns {string} type of form (add or edit)
- */
-function getTypeOfForm() {
-  return new URL(window.location.href).searchParams.get('type');
-}
-
-getFilmId();
+pageInit(filmID);

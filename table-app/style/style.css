@@ -114,7 +114,6 @@ body {
   width: 100%;
   padding: 15px 20px;
   border: none;
-  /* border-bottom: 2px solid var(--black-color); */
   border: 2px solid var(--additional-dark-gray-color);
 }
 
@@ -223,7 +222,7 @@ body {
 .linkBack,
 .btnBack {
   display: inline-block;
-  color: black;
+  color: var(--black-color);
   text-align: center;
   text-decoration: none;
   font-weight: bold;
@@ -284,6 +283,7 @@ body {
 .paginationBtn:hover {
   background-color: var(--additional-gray-color);
 }
+
 .paginationBtn.active {
   background-color: var(--additional-dark-gray-color);
 }
@@ -306,7 +306,7 @@ body {
   right: 12px;
   top: 15px;
   transform: rotate(45deg);
-  border: solid white;
+  border: solid var(--white-color);
   border-width: 0 3px 3px 0;
   display: inline-block;
   padding: 3px;

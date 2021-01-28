@@ -12,7 +12,7 @@ async function getFilmData(id) {
   const response = await fetch(`https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films/${id}.json`);
   const filmData = await response.json();
 
-  document.getElementById('btnEdit').href = `../html/filmForm.html?type=edit&id=${filmId}`;
+  document.getElementById('btnEdit').href = `../html/filmForm.html?id=${filmId}`;
   filmDataList = filmData.fields;
   fillFilmDataTable(filmDataList);
 }
@@ -161,7 +161,7 @@ async function removeFilm() {
 
     window.location.replace('../');
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 }
 
