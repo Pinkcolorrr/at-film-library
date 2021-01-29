@@ -86,14 +86,22 @@ function getRequest(id) {
     request.body = {
       fields: inputState,
       model: 'resources.film',
-      // eslint-disable-next-line no-magic-numbers
-      pk: Math.random().toString(36).substr(2, 9),
+      pk: generatePk(),
     };
     request.url = 'https://js-camp-htmlform-project-default-rtdb.firebaseio.com/swapi/films.json';
     request.method = 'POST';
   }
 
   return request;
+}
+
+/**
+ Generate personal key for database entities
+ @returns {string} string value of key
+ */
+function generatePk() {
+  // eslint-disable-next-line no-magic-numbers
+  return Math.random().toString(36).substr(2, 9);
 }
 
 /**
