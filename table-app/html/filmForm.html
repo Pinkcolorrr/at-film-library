@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./../style/style.css" rel="stylesheet" />
+    <title>Add film</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <form id="filmForm">
+        <table class="filmTable" id="filmTable">
+          <caption class="filmTableCaption" id="filmTableCaption"></caption>
+          <thead>
+            <tr class="tableRow">
+              <th class="tableTitle">
+                <span>key</span>
+              </th>
+              <th class="tableTitle">
+                <span>value</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr class="tableRow">
+              <td><label class="tableItem" for="title">Title</label></td>
+              <td>
+                <div class="tableItem">
+                  <input class="addFilmInput" placeholder="Film title" id="title" type="text" />
+                </div>
+              </td>
+            </tr>
+            <tr class="tableRow">
+              <td><label class="tableItem" for="release_date">Release date</label></td>
+              <td>
+                <div class="tableItem">
+                  <input class="addFilmInput" id="release_date" type="date" />
+                </div>
+              </td>
+            </tr>
+            <tr class="tableRow">
+              <td><label class="tableItem" for="director">Director</label></td>
+              <td>
+                <div class="tableItem">
+                  <input class="addFilmInput" placeholder="Director name" id="director" type="text" />
+                </div>
+              </td>
+            </tr>
+            <tr class="tableRow">
+              <td><label class="tableItem" for="producer">Producer</label></td>
+              <td>
+                <div class="tableItem">
+                  <input class="addFilmInput" placeholder="Producer name" id="producer" type="text" />
+                </div>
+              </td>
+            </tr>
+            <tr class="tableRow">
+              <td><label class="tableItem" for="producer">Episode id</label></td>
+              <td>
+                <div class="tableItem">
+                  <input class="addFilmInput" placeholder="Episonde id" id="episode_id" type="number" />
+                </div>
+              </td>
+            </tr>
+            <tr class="tableRow">
+              <td><label class="tableItem" for="opening_crawl">Opening crawl</label></td>
+              <td>
+                <div class="tableItem">
+                  <textarea class="addFilmInput textArea" placeholder="Opening crawl" id="opening_crawl" rows="8" cols="50"></textarea>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="errorMsg" id="errorMsg"></div>
+      </form>
+      <div class="listBack" id="listBack"></div>
+
+      <div class="btnsWrapper">
+        <a class="linkBack button" href="./../index.html">&laquo; Previous</a>
+        <button class="btnSubmit button" id="btnSubbmit" type="submit" form="filmForm">submit</button>
+      </div>
+    </div>
+
+    <script src="./../script/filmForm.js"></script>
+  </body>
+</html>

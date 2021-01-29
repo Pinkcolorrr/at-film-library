@@ -8,10 +8,16 @@
   </head>
   <body>
     <div class="wrapper">
-      <form class="searchForm" id="form">
-        <input placeholder="Search" type="search" class="searchInput" id="searchInput" />
-      </form>
-      <table class="filmTable" id="filmTable">
+      <div class="topMenu">
+        <form class="searchForm" id="searchForm">
+          <label class="searchInputLabel" for="searchInput">Search</label>
+          <input class="searchInput" id="searchInput" type="search" />
+        </form>
+
+        <a class="linkAdd button" href="./html/filmForm.html">Add film</a>
+      </div>
+
+      <table class="filmTable mainTable" id="filmTable">
         <caption class="filmTableCaption">
           Star Wars films
         </caption>
@@ -30,12 +36,12 @@
             </th>
           </tr>
         </thead>
-        <tbody class="tableBody"></tbody>
+        <tbody id="tableBody"></tbody>
       </table>
 
       <ul class="paginationList" id="paginationList"></ul>
     </div>
 
-    <script src="script/index.js" type="module"></script>
+    <script src="script/index.js"></script>
   </body>
 </html>

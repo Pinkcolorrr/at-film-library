@@ -1,21 +1,42 @@
+:root {
+  --theme-main-color: #4caf50;
+  --theme-additional-color: #f1f1f1;
+  --edit-zone-color: #30a3d8;
+  --dangerous-zone-color: #d11a2a;
+
+  --theme-main-dark-color: #3f9442;
+  --theme-additional-dark-color: #ddd;
+  --theme-additional-darker-color: #bbbbbb;
+  --edit-zone-dark-color: #2a8ebd;
+  --dangerous-zone-dark-color: #b81624;
+
+  --light-color: #ffffff;
+  --dark-color: #000000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
 /* --- Wrapper --- */
 .wrapper {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  text-align: center;
+  max-width: 1170px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 30px;
 }
 /* --- / Wrapper --- */
 
-/* --- Table --- */
+/* ====== Table ====== */
 .filmTable {
-  font-family: Helvetica, Arial, sans-serif;
+  width: 100%;
   border-collapse: collapse;
-  margin: 0 auto;
-  width: 80%;
   table-layout: fixed;
+  text-align: center;
 }
 
 .filmTableCaption {
@@ -26,20 +47,21 @@
 }
 
 .tableTitle {
-  border: 1px solid #ddd;
+  border: 1px solid var(--theme-additional-dark-color);
   margin: 10px;
   padding: 12px 8px;
-  background-color: #4caf50;
+  background-color: var(--theme-main-color);
   text-align: left;
   text-align: center;
   position: relative;
 }
 
 .tableTitle span {
-  color: #fff;
+  color: var(--light-color);
 }
 
 .tableItem {
+  display: block;
   padding: 8px;
 }
 
@@ -48,13 +70,220 @@
 }
 
 .tableRow:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: var(--theme-additional-color);
 }
 
 .tableRow:hover {
-  background-color: #ddd;
+  background-color: var(--theme-additional-dark-color);
 }
-/* --- Table --- */
+/* ====== / Table ====== */
+
+/* --- Top menu ---*/
+.topMenu {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 80px;
+  align-items: center;
+  padding: 30px;
+  border-bottom: 2px solid var(--dark-color);
+}
+/* --- / Top menu --- */
+
+/* --- error message --- */
+.errorMsg {
+  text-align: center;
+  margin-top: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: var(--dangerous-zone-color);
+  display: none;
+}
+/* --- / error message --- */
+
+/* ====== Inputs ====== */
+/* --- Search input --- */
+.searchForm {
+  width: 33%;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 15px 20px;
+  border: none;
+  border: 2px solid var(--theme-additional-darker-color);
+}
+
+.searchInputLabel {
+  display: inline-block;
+  color: var(--theme-additional-darker-color);
+  padding-left: 5px;
+  margin-bottom: 5px;
+}
+/* --- / Search input --- */
+
+/* --- Add inputs --- */
+.addFilmInput {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  padding: 5px 10px;
+  border: 1px solid var(--theme-additional-darker-color);
+}
+.textArea {
+  resize: none;
+}
+/* --- / Add inputs --- */
+/* ====== / Inputs ====== */
+
+/* ====== Buttons and links ====== */
+/* --- Common --- */
+.button {
+  min-width: 150px;
+  padding: 10px;
+  border: none;
+  color: var(--light-color);
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 15px;
+}
+
+.btnsWrapper {
+  margin-top: 50px;
+  text-align: center;
+}
+/* --- / Common --- */
+/* --- Remove button --- */
+.btnRemove {
+  background-color: var(--dangerous-zone-color);
+  text-transform: uppercase;
+  margin-left: 20px;
+}
+
+.btnRemove:hover {
+  background-color: var(--dangerous-zone-dark-color);
+  transition: 0.2s;
+}
+/* --- / Remove button --- */
+
+/* --- Edit button --- */
+.btnEdit {
+  display: inline-block;
+  background-color: var(--edit-zone-color);
+  text-transform: uppercase;
+  margin-left: 20px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btnEdit:hover {
+  background-color: var(--edit-zone-dark-color);
+  transition: 0.2s;
+}
+/* --- / Edit button --- */
+
+/* --- Submit button --- */
+.btnSubmit {
+  background-color: var(--edit-zone-color);
+  text-transform: uppercase;
+  margin-left: 20px;
+}
+
+.btnSubmit:hover {
+  background-color: var(--edit-zone-dark-color);
+  transition: 0.2s;
+}
+/* --- / Submit button --- */
+
+/* --- Add link ---*/
+.linkAdd {
+  background-color: var(--theme-main-color);
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+}
+
+.linkAdd:hover {
+  background-color: var(--theme-main-dark-color);
+  transition: 0.2s;
+}
+/* --- / Add link --- */
+
+/* --- Back buttons --- */
+.listBack {
+  text-align: center;
+}
+
+.linkBack,
+.btnBack {
+  display: inline-block;
+  color: var(--dark-color);
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: var(--theme-additional-color);
+}
+
+.btnBack {
+  background-color: var(--light-color);
+  border: 5px solid var(--theme-additional-color);
+  margin-top: 20px;
+}
+
+.linkBack:hover {
+  background-color: var(--theme-additional-dark-color);
+}
+
+.btnBack:hover {
+  border-color: var(--theme-additional-dark-color);
+}
+
+/* --- / Back buttons --- */
+
+/*  --- Related data button --- */
+.relatedDataButton {
+  display: block;
+  text-align: center;
+  width: 100%;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  font-size: 18px;
+}
+/* --- / Related data button --- */
+
+/* --- Page buttons --- */
+.paginationList {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.paginationList li + li {
+  margin-left: 50px;
+}
+
+.paginationBtn {
+  border-radius: 0;
+  border: none;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px 10px;
+  text-decoration: none;
+}
+
+.paginationBtn:hover {
+  background-color: var(--theme-additional-dark-color);
+}
+
+.paginationBtn.active {
+  background-color: var(--theme-additional-darker-color);
+}
+/* --- / Page buttons --- */
 
 /* --- Sort buttons */
 .btnSort {
@@ -73,14 +302,14 @@
   right: 12px;
   top: 15px;
   transform: rotate(45deg);
-  border: solid #fff;
+  border: solid var(--light-color);
   border-width: 0 3px 3px 0;
   display: inline-block;
   padding: 3px;
 }
 
 .btnSortArrow-active {
-  border-color: #000;
+  border-color: var(--dark-color);
 }
 
 .btnSortArrow-reverse {
@@ -89,72 +318,116 @@
 }
 /* --- / Sort buttons */
 
-/* --- Search input --- */
-.searchForm {
-  text-align: center;
-  margin-bottom: 40px;
+/* ====== / Buttons and links ====== */
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+  /* --- Top menu--- */
+  .topMenu {
+    flex-direction: column-reverse;
+  }
+
+  .linkAdd {
+    margin-bottom: 30px;
+  }
+
+  .searchForm {
+    width: 100%;
+  }
+
+  .linkAdd {
+    align-self: flex-end;
+  }
+  /* --- / Top menu--- */
+  /* --- Table --- */
+  .mainTable thead,
+  .mainTable tbody,
+  .mainTable td,
+  .mainTable tr,
+  .mainTable caption {
+    display: block;
+  }
+
+  .mainTable thead tr {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .mainTable thead tr th {
+    flex-grow: 1;
+  }
+
+  .mainTable thead tr th:last-child {
+    display: none;
+  }
+
+  .mainTable tr {
+    border: 1px solid var(--additional-gray-color);
+  }
+
+  .mainTable td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .mainTable td:before {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  .mainTable td:nth-of-type(1):before {
+    content: 'Title';
+  }
+  .mainTable td:nth-of-type(2):before {
+    content: 'Release date';
+  }
+  .mainTable td:nth-of-type(3):before {
+    content: 'Director';
+  }
+  /* --- / Table --- */
 }
 
-.searchInput {
-  width: 50%;
-  padding: 15px 20px;
-  border: none;
-  border-bottom: 2px solid black;
-  transition: 0.2s;
-}
-/* --- / Search input --- */
+@media (max-width: 576px) {
+  /* --- Common --- */
+  body {
+    font-size: 13px;
+  }
 
-.searchInput:focus {
-  border-color: #4caf50;
-  transition: 0.2s;
-}
+  .wrapper {
+    padding: 0 10px;
+  }
+  /* --- / Common --- */
+  /* --- Buttons --- */
+  .linkAdd {
+    width: 100%;
+  }
 
-/* --- Page buttons --- */
-.paginationList {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-}
+  .relatedDataButton {
+    font-size: 13px;
+  }
 
-.paginationList li + li {
-  margin-left: 50px;
-}
+  .btnsWrapper {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
 
-.paginationBtn {
-  border-radius: 5px;
-  display: inline-block;
-  cursor: pointer;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  padding: 5px 10px;
-  text-decoration: none;
+  .btnEdit,
+  .btnRemove,
+  .btnSubmit,
+  .linkBack,
+  .btnBack {
+    margin-left: 0px;
+    margin-top: 20px;
+    font-size: 13px;
+    width: 100%;
+  }
+  /* --- / Buttons --- */
 }
-
-.paginationBtn:hover,
-.paginationBtn.active {
-  background-color: lightgray;
-}
-
-.paginationBtn:active {
-  background-color: grey;
-}
-/* --- / Page buttons --- */
-
-.linkBack {
-  display: inline-block;
-  text-align: center;
-  margin-top: 20px;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 5px;
-  font-size: 16px;
-  padding: 5px 10px;
-  text-decoration: none;
-  border: 1px solid black;
-  color: black;
-}
-
-.linkBack:hover {
-  background-color: lightgray;
-}
+/* ====== / Responsive ====== */
