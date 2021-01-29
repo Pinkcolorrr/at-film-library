@@ -24,13 +24,10 @@ body {
 
 /* --- Wrapper --- */
 .wrapper {
-  padding: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 1200px;
+  max-width: 1170px;
   margin: 0 auto;
+  height: 100%;
+  padding: 0 30px;
 }
 /* --- / Wrapper --- */
 
@@ -83,7 +80,6 @@ body {
 
 /* --- Top menu ---*/
 .topMenu {
-  width: 120%;
   display: flex;
   justify-content: space-between;
   margin-bottom: 80px;
@@ -155,7 +151,7 @@ body {
 
 .btnsWrapper {
   margin-top: 50px;
-  text-align: end;
+  text-align: center;
 }
 /* --- / Common --- */
 /* --- Remove button --- */
@@ -216,7 +212,7 @@ body {
 
 /* --- Back buttons --- */
 .listBack {
-  padding: 0px 20px;
+  text-align: center;
 }
 
 .linkBack,
@@ -323,3 +319,115 @@ body {
 /* --- / Sort buttons */
 
 /* ====== / Buttons and links ====== */
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+  /* --- Top menu--- */
+  .topMenu {
+    flex-direction: column-reverse;
+  }
+
+  .linkAdd {
+    margin-bottom: 30px;
+  }
+
+  .searchForm {
+    width: 100%;
+  }
+
+  .linkAdd {
+    align-self: flex-end;
+  }
+  /* --- / Top menu--- */
+  /* --- Table --- */
+  .mainTable thead,
+  .mainTable tbody,
+  .mainTable td,
+  .mainTable tr,
+  .mainTable caption {
+    display: block;
+  }
+
+  .mainTable thead tr {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .mainTable thead tr th {
+    flex-grow: 1;
+  }
+
+  .mainTable thead tr th:last-child {
+    display: none;
+  }
+
+  .mainTable tr {
+    border: 1px solid var(--additional-gray-color);
+  }
+
+  .mainTable td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .mainTable td:before {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  .mainTable td:nth-of-type(1):before {
+    content: 'Title';
+  }
+  .mainTable td:nth-of-type(2):before {
+    content: 'Release date';
+  }
+  .mainTable td:nth-of-type(3):before {
+    content: 'Director';
+  }
+  /* --- / Table --- */
+}
+
+@media (max-width: 576px) {
+  /* --- Common --- */
+  body {
+    font-size: 13px;
+  }
+
+  .wrapper {
+    padding: 0 10px;
+  }
+  /* --- / Common --- */
+  /* --- Buttons --- */
+  .linkAdd {
+    width: 100%;
+  }
+
+  .relatedDataButton {
+    font-size: 13px;
+  }
+
+  .btnsWrapper {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+
+  .btnEdit,
+  .btnRemove,
+  .btnSubmit,
+  .linkBack,
+  .btnBack {
+    margin-left: 0px;
+    margin-top: 20px;
+    font-size: 13px;
+    width: 100%;
+  }
+  /* --- / Buttons --- */
+}
+/* ====== / Responsive ====== */
