@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "js-camp-htmlform-project": {
+      "hosting": {
+        "JcAngularApp": [
+          "js-camp-htmlform-project"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+<mat-toolbar>
+  <div class="topMenu">
+    <a routerLink="/" mat-button>Star Wars</a>
+
+    <div class="topMenuWrapper">
+      <a mat-stroked-button routerLink="login" *ngIf="!isLoggedIn">Sign In</a>
+      <a mat-stroked-button routerLink="register" *ngIf="!isLoggedIn">Register</a>
+      <button mat-flat-button color="primary" type="button" (click)="logout()" *ngIf="isLoggedIn">Log Out</button>
+    </div>
+  </div>
+</mat-toolbar>

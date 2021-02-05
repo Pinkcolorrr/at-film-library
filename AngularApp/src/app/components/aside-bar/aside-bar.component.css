@@ -1,0 +1,27 @@
+mat-sidenav-container {
+  height: 100%;
+}
+
+mat-sidenav,
+mat-sidenav-content {
+  padding: 20px;
+  height: 100%;
+}
+
+mat-sidenav {
+  width: 15%;
+}
+
+mat-sidenav-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+
+.mat-icon-button {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}

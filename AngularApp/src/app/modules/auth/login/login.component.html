@@ -1,0 +1,27 @@
+<div class="authFormWrapper">
+  <form class="authForm" (submit)="submitHandler()" [formGroup]="loginForm">
+    <div class="AuthFormTitle">Sign In</div>
+    <div class="inputRow">
+      <mat-form-field class="example-full-width">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Your email" name="email" formControlName="email" type="email" autocomplete="on" />
+      </mat-form-field>
+      <span class="errorMsg" *ngIf="loginForm.get('email').invalid && loginForm.get('email').touched">
+        <span *ngIf="loginForm.get('email').errors['required']"> Email is required </span>
+        <span *ngIf="loginForm.get('email').errors['email']"> Incorrect email </span>
+      </span>
+    </div>
+    <div class="inputRow">
+      <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="******" name="password" formControlName="password" type="password" autocomplete="on" />
+      </mat-form-field>
+      <span class="errorMsg" *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched">
+        <span *ngIf="loginForm.get('password').errors['required']"> Password is required </span>
+        <span *ngIf="loginForm.get('password').errors['minlength']"> Too short password </span>
+      </span>
+    </div>
+    <span class="formError" *ngIf="formError">{{ formError }}</span>
+    <button mat-flat-button color="primary" type="submit" [disabled]="loginForm.invalid">Submit</button>
+  </form>
+</div>

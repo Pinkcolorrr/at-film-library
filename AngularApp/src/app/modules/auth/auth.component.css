@@ -1,0 +1,48 @@
+.authFormWrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.AuthFormTitle {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 60px;
+  text-transform: uppercase;
+  text-align: center;
+  background-color: var(--primary-color);
+
+  padding: 15px 0;
+  color: #fff;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 60px;
+  border: 1px solid var(--basic-color);
+}
+
+.inputRow {
+  display: flex;
+  margin-bottom: 40px;
+  flex-direction: column;
+}
+
+.inputRow label {
+  color: var(--secondary-color);
+  margin-bottom: 5px;
+}
+
+.errorMsg {
+  color: var(--error-color);
+  font-size: 10px;
+}
+
+.formError {
+  color: var(--error-color);
+  text-align: center;
+  margin-bottom: 15px;
+}

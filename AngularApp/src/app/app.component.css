@@ -1,0 +1,9 @@
+main {
+  flex-grow: 1;
+}
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
