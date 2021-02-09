@@ -20,6 +20,12 @@ export class PlanetsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Observer planet data array
    */
   public readonly planetData = new MatTableDataSource<IPlanetDOM>();
+
+  /**
+   * Toggle loading spinner and matNoDataRow
+   */
+  public isLoading = true;
+
   /**
    * Coluns in table header
    */
@@ -44,6 +50,7 @@ export class PlanetsComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnInit(): void {
     this.subscriber = this.serviceAPI.getData$().subscribe((planets: Array<IPlanetDOM>) => {
       this.planetData.data = planets;
+      this.isLoading = false;
     });
 
     this.planetData.filterPredicate = (data: IPlanetDOM, filter: string): boolean => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
 import { IUser } from '../interfaces/user.interface';
@@ -17,11 +17,26 @@ export class AuthService {
    */
   public isLoggedIn$: Observable<boolean>;
 
+  /**
+   * Observable user email
+   */
   public userEmail$: Observable<string>;
 
   constructor(private afAuth: AngularFireAuth) {
     this.isLoggedIn$ = this.afAuth.authState.pipe(
       map(obj => obj === null),
+      shareReplay({
+        refCount: true,
+        bufferSize: 1,
+      })
+    );
+
+    this.userEmail$ = this.afAuth.user.pipe(
+      map(obj => {
+        if (obj) {
+          return obj.email;
+        }
+      }),
       shareReplay({
         refCount: true,
         bufferSize: 1,

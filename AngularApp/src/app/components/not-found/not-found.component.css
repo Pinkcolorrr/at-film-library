@@ -1,0 +1,12 @@
+.notFoundWrapper {
+  text-align: center;
+}
+
+.error {
+  font-size: 150px;
+  margin-bottom: 50px;
+}
+
+.errorMsg {
+  font-size: 30px;
+}

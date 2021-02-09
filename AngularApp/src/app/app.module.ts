@@ -13,12 +13,14 @@ import { AuthGuard } from './core/services/auth-guard.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { MainContentModule } from './modules/main-content/main-content.module';
 import { MaterialModule } from './modules/material/material.module';
+import { HomeComponent } from './components/home/home.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 /**
  * Root app-module
  */
 @NgModule({
-  declarations: [AppComponent, TopMenuComponent, AsideBarComponent],
+  declarations: [AppComponent, TopMenuComponent, AsideBarComponent, HomeComponent, NotFoundComponent],
 
   imports: [
     BrowserModule,

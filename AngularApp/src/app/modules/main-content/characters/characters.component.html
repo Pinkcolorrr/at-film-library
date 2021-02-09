@@ -1,4 +1,8 @@
 <div>
+  <div class="spinner" *ngIf="isLoading">
+    <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+  </div>
+
   <mat-form-field>
     <input (input)="nameFilter($event)" matInput placeholder="Search by title" />
   </mat-form-field>
@@ -33,7 +37,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">No data found</td>
+      <td class="mat-cell" colspan="4" *ngIf="!isLoading">No data found</td>
     </tr>
   </table>
 

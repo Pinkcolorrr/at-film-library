@@ -19,6 +19,12 @@ export class CharactersComponent implements OnInit, AfterViewInit, OnDestroy {
    * Observer characters data array
    */
   public readonly characterData = new MatTableDataSource<ICharacterDOM>();
+
+  /**
+   * Toggle loading spinner and matNoDataRow
+   */
+  public isLoading = true;
+
   /**
    * Coluns in table header
    */
@@ -43,6 +49,7 @@ export class CharactersComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnInit(): void {
     this.subscriber = this.serviceAPI.getData$().subscribe((characters: Array<ICharacterDOM>) => {
       this.characterData.data = characters;
+      this.isLoading = false;
     });
 
     this.characterData.filterPredicate = (data: ICharacterDOM, filter: string): boolean => {

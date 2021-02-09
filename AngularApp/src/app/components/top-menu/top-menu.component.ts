@@ -15,10 +15,18 @@ export class TopMenuComponent {
    * Check if user is logged in and change nav
    */
   public isLoggedIn = false;
+  /**
+   * User email observer
+   */
+  public userEmail;
 
   constructor(private authService: AuthService) {
     authService.isLoggedIn$.subscribe(loggedIn => {
       this.isLoggedIn = !loggedIn;
+    });
+
+    authService.userEmail$.subscribe(email => {
+      this.userEmail = email;
     });
   }
 

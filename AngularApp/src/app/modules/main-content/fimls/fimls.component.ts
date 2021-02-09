@@ -20,6 +20,12 @@ export class FimlsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Observer film data array
    */
   public readonly filmData = new MatTableDataSource<IFilmDOM>();
+
+  /**
+   * Toggle loading spinner and matNoDataRow
+   */
+  public isLoading = true;
+
   /**
    * Coluns in table header
    */
@@ -44,6 +50,7 @@ export class FimlsComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnInit(): void {
     this.subscriber = this.serviceAPI.getData$().subscribe((films: Array<IFilmDOM>) => {
       this.filmData.data = films;
+      this.isLoading = false;
     });
 
     this.filmData.filterPredicate = (data: IFilmDOM, filter: string): boolean => {
