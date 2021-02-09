@@ -8,22 +8,29 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AsideBarComponent } from './components/aside-bar/aside-bar.component';
 import { TopMenuComponent } from './components/top-menu/top-menu.component';
+import { firebaseConfig } from './core/firebaseConfig';
+import { AuthGuard } from './core/services/auth-guard.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { MainContentModule } from './modules/main-content/main-content.module';
 import { MaterialModule } from './modules/material/material.module';
-import { firebaseConfig } from './shared/firebaseConfig';
-import { AuthGuard } from './shared/services/auth-guard.service';
 
 /**
  * Root app-module
  */
 @NgModule({
   declarations: [AppComponent, TopMenuComponent, AsideBarComponent],
-  /**
-   *  Prettier not allow to split line
-   */
-  // tslint:disable-next-line: max-line-length
-  imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule, AuthModule, MaterialModule, AngularFireModule.initializeApp(firebaseConfig), AngularFireAuthModule],
-  providers: [AuthGuard],
+
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AuthModule,
+    MaterialModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule,
+    MainContentModule,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

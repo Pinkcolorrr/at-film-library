@@ -17,6 +17,8 @@ export class AuthService {
    */
   public isLoggedIn$: Observable<boolean>;
 
+  public userEmail$: Observable<string>;
+
   constructor(private afAuth: AngularFireAuth) {
     this.isLoggedIn$ = this.afAuth.authState.pipe(
       map(obj => obj === null),
@@ -29,20 +31,18 @@ export class AuthService {
 
   /**
    * Login user in app
-   *  @param user user object, that have to include email and password fields
-   * @returns promise with information object about user
    */
-  public async login(user: IUser): Promise<object> {
-    return await this.afAuth.signInWithEmailAndPassword(user.email, user.password);
+  public async login(user: IUser): Promise<firebase.default.auth.UserCredential> {
+    const UserCredential = await this.afAuth.signInWithEmailAndPassword(user.email, user.password);
+    return UserCredential;
   }
 
   /**
    * Register user in app
-   * @param user user object, that have to include email and password fields
-   * @returns promise with information object about user
    */
-  public async register(user: IUser): Promise<object> {
-    return await this.afAuth.createUserWithEmailAndPassword(user.email, user.password);
+  public async register(user: IUser): Promise<firebase.default.auth.UserCredential> {
+    const UserCredential = await this.afAuth.createUserWithEmailAndPassword(user.email, user.password);
+    return UserCredential;
   }
 
   /**

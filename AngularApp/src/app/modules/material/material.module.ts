@@ -3,15 +3,27 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-/**
- *  Prettier not allow to split line
- */
-// tslint:disable-next-line: max-line-length
-const MaterialComponents = [BrowserAnimationsModule, MatToolbarModule, MatInputModule, MatButtonModule, MatSidenavModule, MatIconModule, MatFormFieldModule];
+const MaterialComponents = [
+  BrowserAnimationsModule,
+  MatToolbarModule,
+  MatInputModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatFormFieldModule,
+  MatListModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+];
 
 /**
  * Module for import material elements

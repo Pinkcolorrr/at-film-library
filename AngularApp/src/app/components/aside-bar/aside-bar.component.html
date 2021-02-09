@@ -1,5 +1,17 @@
 <mat-sidenav-container>
-  <mat-sidenav mode="side" [(opened)]="opened">Sidenav content</mat-sidenav>
+  <mat-sidenav mode="side" [(opened)]="opened">
+    <mat-list role="list">
+      <mat-list-item role="listitem">
+        <a href="/" mat-stroked-button routerLink="films">Films</a>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <a href="/" mat-stroked-button routerLink="planets">Planets</a>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <a href="/" mat-stroked-button routerLink="characters">Characters</a>
+      </mat-list-item>
+    </mat-list>
+  </mat-sidenav>
   <mat-sidenav-content>
     <button mat-icon-button (click)="opened = !opened">
       <mat-icon>menu</mat-icon>

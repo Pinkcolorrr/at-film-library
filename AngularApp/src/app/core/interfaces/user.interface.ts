@@ -5,9 +5,9 @@ export interface IUser {
   /**
    * User email
    */
-  email: string;
+  readonly email: string;
   /**
    * User password
    */
-  password: string;
+  readonly password: string;
 }

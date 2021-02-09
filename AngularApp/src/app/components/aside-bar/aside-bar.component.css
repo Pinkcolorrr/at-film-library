@@ -25,3 +25,11 @@ mat-sidenav-content {
   left: 10px;
   top: 10px;
 }
+
+.mat-stroked-button {
+  width: 100%;
+}
+
+.mat-flat-button {
+  width: 100%;
+}

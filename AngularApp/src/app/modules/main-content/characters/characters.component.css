@@ -1,0 +1,8 @@
+:host {
+  width: 80%;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
