@@ -1,14 +1,18 @@
 <mat-toolbar>
-  <div class="topMenu">
+  <div class="top-menu">
     <a routerLink="/" mat-button>Star Wars</a>
 
-    <div class="topMenuWrapper">
-      <a mat-stroked-button routerLink="login" *ngIf="!isLoggedIn">Sign In</a>
-      <a mat-stroked-button routerLink="register" *ngIf="!isLoggedIn">Register</a>
+    <div class="top-menu-wrapper">
+      <ng-container *ngIf="!(isLoggedIn$ | async)">
+        <a mat-stroked-button routerLink="login">Sign In</a>
+        <a mat-stroked-button routerLink="register">Register</a>
+      </ng-container>
 
-      <span class="loggedInEmail" *ngIf="isLoggedIn">{{ userEmail }}</span>
+      <ng-container *ngIf="isLoggedIn$ | async">
+        <span class="logged-in-email">{{ userEmail$ | async }}</span>
 
-      <button mat-flat-button color="primary" type="button" (click)="logout()" *ngIf="isLoggedIn">Log Out</button>
+        <button mat-flat-button color="primary" type="button" (click)="logout()">Log Out</button>
+      </ng-container>
     </div>
   </div>
 </mat-toolbar>

@@ -1,9 +1,9 @@
-import { FirebaseDTO } from './firebase-dto.interface';
+import { FirebaseDTO } from './firebase-dto';
 
 /**
  * Interface for film DTO
  */
-export interface IFilmDTO extends FirebaseDTO {
+export interface FilmDTO extends FirebaseDTO {
   /**
    * Main film data
    */
@@ -43,22 +43,22 @@ export interface IFilmDTO extends FirebaseDTO {
     /**
      * Array of related data about planets
      */
-    readonly planets: Array<number>;
+    readonly planets: number[];
     /**
      * Array of related data about species
      */
-    readonly species: Array<number>;
+    readonly species: number[];
     /**
      * Array of related data about starships
      */
-    readonly starships: Array<number>;
+    readonly starships: number[];
     /**
      * Array of related data about characters
      */
-    readonly characters: Array<number>;
+    readonly characters: number[];
     /**
      * Array of related data about vehicles
      */
-    readonly vehicles: Array<number>;
+    readonly vehicles: number[];
   };
 }

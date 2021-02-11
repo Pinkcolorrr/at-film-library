@@ -1,4 +1,4 @@
-.notFoundWrapper {
+.not-found-wrapper {
   text-align: center;
 }
 
@@ -7,6 +7,6 @@
   margin-bottom: 50px;
 }
 
-.errorMsg {
+.error-msg {
   font-size: 30px;
 }

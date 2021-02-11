@@ -1,5 +1,9 @@
-h1 {
+.welcome-text {
+  font-size: 20px;
+}
+.page-name {
   font-size: 80px;
   text-transform: uppercase;
   font-weight: bold;
+  margin-top: 18px;
 }

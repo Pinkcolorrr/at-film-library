@@ -3,29 +3,30 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ICharacterDOM } from '../interfaces/DOMs/characters-dom.interface';
-import { ICharacterDTO } from '../interfaces/DTOs/characters-dto.interface';
+import { CharacterDTO } from '../DTOs/characters-dto';
 import { CharacterMapper } from '../mappers/characters.mapper';
+import { Character } from '../models/characters';
 
 /**
- * Connect character doc from db
+ * Service for work with characters
  */
 @Injectable({
   providedIn: 'root',
 })
-export class FirebaseCharacterService {
+export class CharacterService {
+  private characterMapper = new CharacterMapper();
   constructor(private angularFire: AngularFirestore) {}
 
   /**
    * Getting data about character from db
    */
-  public getData$(): Observable<Array<ICharacterDOM>> {
+  public getCharacter(): Observable<Character[]> {
     return this.angularFire
-      .collection<ICharacterDTO>('people')
+      .collection<CharacterDTO>('people')
       .valueChanges()
       .pipe(
         map(character => {
-          return new CharacterMapper().transformResponse(character);
+          return this.characterMapper.transformArrayResponse(character);
         })
       );
   }

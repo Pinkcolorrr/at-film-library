@@ -3,29 +3,30 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { IFilmDOM } from '../interfaces/DOMs/film-dom.interface';
-import { IFilmDTO } from '../interfaces/DTOs/film-dto.interface';
+import { FilmDTO } from '../DTOs/film-dto';
 import { FilmMapper } from '../mappers/film.mapper';
+import { Film } from '../models/film';
 
 /**
- * Connect film doc from db
+ * Service for work with films
  */
 @Injectable({
   providedIn: 'root',
 })
-export class FirebaseFilmService {
+export class FilmService {
+  private filmMapper = new FilmMapper();
   constructor(private angularFire: AngularFirestore) {}
 
   /**
    * Getting data about films from db
    */
-  public getData$(): Observable<Array<IFilmDOM>> {
+  public getFilms(): Observable<Film[]> {
     return this.angularFire
-      .collection<IFilmDTO>('films')
+      .collection<FilmDTO>('films')
       .valueChanges()
       .pipe(
         map(films => {
-          return new FilmMapper().transformResponse(films);
+          return this.filmMapper.transformArrayResponse(films);
         })
       );
   }

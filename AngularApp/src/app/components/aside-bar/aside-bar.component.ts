@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Aside bar component
@@ -12,7 +13,14 @@ export class AsideBarComponent {
   /**
    * Boolean var for toggle aside bar
    */
-  public opened = false;
+  public readonly opened$ = new BehaviorSubject(false);
+
+  /**
+   * Toggle opened$ state
+   */
+  public toggleSidenav(): void {
+    this.opened$.next(!this.opened$.value);
+  }
 
   constructor() {}
 }

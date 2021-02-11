@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Pipe, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
-import { IFilmDOM } from 'src/app/core/interfaces/DOMs/film-dom.interface';
-import { FirebaseFilmService } from 'src/app/core/services/firebase-film.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { Film } from 'src/app/core/models/film';
+import { FilmService } from 'src/app/core/services/film.service';
 
 /**
  * Displaying table of films
@@ -12,26 +13,28 @@ import { FirebaseFilmService } from 'src/app/core/services/firebase-film.service
 @Component({
   selector: 'app-fimls',
   templateUrl: './fimls.component.html',
-  styleUrls: ['./fimls.component.css'],
-  providers: [FirebaseFilmService],
+  styleUrls: ['./../main-content.css'],
 })
-export class FimlsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FimlsComponent {
   /**
    * Observer film data array
    */
-  public readonly filmData = new MatTableDataSource<IFilmDOM>();
+  public filmData$: Observable<MatTableDataSource<Film>>;
 
   /**
    * Toggle loading spinner and matNoDataRow
    */
-  public isLoading = true;
+  public isLoading$ = new BehaviorSubject(true);
+
+  /**
+   * Value to filter films
+   */
+  public filterValue$ = new BehaviorSubject('');
 
   /**
    * Coluns in table header
    */
-  public readonly displayedColumns: Array<string> = ['episodeId', 'title', 'releaseDate', 'director', 'producer'];
-  private subscriber: Subscription;
-
+  public readonly displayedColumns: string[] = ['episodeId', 'title', 'releaseDate', 'director', 'producer'];
   /**
    * Init sort object for table
    */
@@ -41,43 +44,35 @@ export class FimlsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   @ViewChild(MatPaginator) public readonly paginator: MatPaginator;
 
-  constructor(private readonly serviceAPI: FirebaseFilmService) {}
-
-  /**
-   * Subscribe to observe films data
-   * Override filter method for table
-   */
-  public ngOnInit(): void {
-    this.subscriber = this.serviceAPI.getData$().subscribe((films: Array<IFilmDOM>) => {
-      this.filmData.data = films;
-      this.isLoading = false;
-    });
-
-    this.filmData.filterPredicate = (data: IFilmDOM, filter: string): boolean => {
-      return data.title.trim().toLowerCase().includes(filter.trim().toLowerCase());
-    };
-  }
-
-  /**
-   * Assign sort object for table
-   * Assign paginator object for table
-   */
-  public ngAfterViewInit(): void {
-    this.filmData.sort = this.sort;
-    this.filmData.paginator = this.paginator;
-  }
-
-  /**
-   * Unsubscribe to observe films data
-   */
-  public ngOnDestroy(): void {
-    this.subscriber.unsubscribe();
+  constructor(private readonly filmService: FilmService) {
+    this.filmData$ = this.filmService.getFilms().pipe(
+      map(film => {
+        return this.initMatTable(film);
+      }),
+      tap(() => {
+        return this.isLoading$.next(false);
+      })
+    );
   }
 
   /**
    * Filter table by title
    */
-  public titleFilter(event: Event): void {
-    this.filmData.filter = (event.target as HTMLTextAreaElement).value;
+  public filterData(event: Event): void {
+    this.filterValue$.next((event.target as HTMLTextAreaElement).value);
+  }
+
+  private initMatTable(film: Film[]): MatTableDataSource<Film> {
+    const matTableDataSource = new MatTableDataSource(film);
+
+    matTableDataSource.filterPredicate = this.filterPredicateFunction;
+    matTableDataSource.sort = this.sort;
+    matTableDataSource.paginator = this.paginator;
+
+    return matTableDataSource;
+  }
+
+  private filterPredicateFunction(data: Film, filter: string): boolean {
+    return data.title.trim().toLowerCase().includes(filter.trim().toLowerCase());
   }
 }

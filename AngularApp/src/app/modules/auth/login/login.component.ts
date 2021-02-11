@@ -9,8 +9,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 @Component({
   selector: 'app-login-form',
   templateUrl: './login.component.html',
-  styleUrls: ['./../auth.component.css'],
-  providers: [AuthService],
+  styleUrls: ['./../auth.css'],
 })
 export class LoginComponent {
   /**
@@ -31,7 +30,7 @@ export class LoginComponent {
   /**
    * Login user in app, if success redirect to main page
    */
-  public async submitHandler(): Promise<void> {
+  public async loginUser(): Promise<void> {
     try {
       await this.authService.login(this.loginForm.value);
       this.router.navigateByUrl('/');

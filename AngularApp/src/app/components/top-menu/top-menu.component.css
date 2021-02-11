@@ -2,7 +2,7 @@ mat-toolbar {
   display: block;
 }
 
-.topMenu {
+.top-menu {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 30px;
@@ -16,11 +16,11 @@ mat-toolbar {
   width: 150px;
 }
 
-.topMenuWrapper a:first-child {
+.top-menu-wrapper a:first-child {
   margin-right: 20px;
 }
 
-.loggedInEmail {
+.logged-in-email {
   margin-right: 20px;
   font-size: 16px;
 }

@@ -1,28 +1,35 @@
-import { IPlanetDOM } from '../interfaces/DOMs/planet-dom.interface';
-import { IPlanetDTO } from '../interfaces/DTOs/planet-dto.interface';
+import { PlanetDTO } from '../DTOs/planet-dto';
+import { Planet } from '../models/planet';
 
 /**
  * Mapping planet data before send or accept
  */
 export class PlanetMapper {
   /**
-   * Remove useless data from planetDTO
+   * Transoform planet DTO array to object model array
    */
-  public transformResponse(planetData: Array<IPlanetDTO>): Array<IPlanetDOM> {
+  public transformArrayResponse(planetData: PlanetDTO[]): Planet[] {
     return planetData.map(planet => {
-      return {
-        climate: planet.fields.climate,
-        created: new Date(planet.fields.created),
-        diameter: planet.fields.diameter,
-        edited: new Date(planet.fields.edited),
-        gravity: planet.fields.gravity,
-        title: planet.fields.name,
-        orbitalPeriod: planet.fields.orbital_period,
-        population: planet.fields.population,
-        rotationPeriod: planet.fields.rotation_period,
-        surfaceWater: planet.fields.surface_water,
-        terrain: planet.fields.terrain,
-      };
+      return this.transformResponse(planet);
     });
+  }
+
+  /**
+   * Remove useless data from planetDTO object
+   */
+  public transformResponse(planet: PlanetDTO): Planet {
+    return {
+      climate: planet.fields.climate,
+      created: new Date(planet.fields.created),
+      diameter: planet.fields.diameter,
+      edited: new Date(planet.fields.edited),
+      gravity: planet.fields.gravity,
+      title: planet.fields.name,
+      orbitalPeriod: planet.fields.orbital_period,
+      population: planet.fields.population,
+      rotationPeriod: planet.fields.rotation_period,
+      surfaceWater: planet.fields.surface_water,
+      terrain: planet.fields.terrain,
+    };
   }
 }

@@ -8,27 +8,18 @@ import { AuthService } from 'src/app/core/services/auth.service';
   selector: 'app-top-menu',
   templateUrl: './top-menu.component.html',
   styleUrls: ['./top-menu.component.css'],
-  providers: [AuthService],
 })
 export class TopMenuComponent {
   /**
    * Check if user is logged in and change nav
    */
-  public isLoggedIn = false;
+  public isLoggedIn$ = this.authService.isLoggedIn$;
   /**
    * User email observer
    */
-  public userEmail;
+  public userEmail$ = this.authService.userEmail$;
 
-  constructor(private authService: AuthService) {
-    authService.isLoggedIn$.subscribe(loggedIn => {
-      this.isLoggedIn = !loggedIn;
-    });
-
-    authService.userEmail$.subscribe(email => {
-      this.userEmail = email;
-    });
-  }
+  constructor(private authService: AuthService) {}
 
   /**
    * Logout user from app

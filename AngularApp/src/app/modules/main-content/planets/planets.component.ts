@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
-import { IPlanetDOM } from 'src/app/core/interfaces/DOMs/planet-dom.interface';
-import { FirebasePlanetService } from 'src/app/core/services/firebase-planet.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { Planet } from 'src/app/core/models/planet';
+import { PlanetService } from 'src/app/core/services/planet.service';
 
 /**
  * Displaying table of planets
@@ -12,26 +13,28 @@ import { FirebasePlanetService } from 'src/app/core/services/firebase-planet.ser
 @Component({
   selector: 'app-planets',
   templateUrl: './planets.component.html',
-  styleUrls: ['./planets.component.css'],
-  providers: [FirebasePlanetService],
+  styleUrls: ['./../main-content.css'],
 })
-export class PlanetsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PlanetsComponent {
   /**
-   * Observer planet data array
+   * Observer planets data array
    */
-  public readonly planetData = new MatTableDataSource<IPlanetDOM>();
+  public planetData$: Observable<MatTableDataSource<Planet>>;
 
   /**
    * Toggle loading spinner and matNoDataRow
    */
-  public isLoading = true;
+  public isLoading$ = new BehaviorSubject(true);
+
+  /**
+   * Value to filter planets
+   */
+  public filterValue$ = new BehaviorSubject('');
 
   /**
    * Coluns in table header
    */
-  public readonly displayedColumns: Array<string> = ['title', 'population', 'terrain'];
-  private subscriber: Subscription;
-
+  public readonly displayedColumns: string[] = ['title', 'population', 'terrain'];
   /**
    * Init sort object for table
    */
@@ -41,43 +44,35 @@ export class PlanetsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   @ViewChild(MatPaginator) public readonly paginator: MatPaginator;
 
-  constructor(private readonly serviceAPI: FirebasePlanetService) {}
-
-  /**
-   * Subscribe to observe films data
-   * Override filter method for table
-   */
-  public ngOnInit(): void {
-    this.subscriber = this.serviceAPI.getData$().subscribe((planets: Array<IPlanetDOM>) => {
-      this.planetData.data = planets;
-      this.isLoading = false;
-    });
-
-    this.planetData.filterPredicate = (data: IPlanetDOM, filter: string): boolean => {
-      return data.title.trim().toLowerCase().includes(filter.trim().toLowerCase());
-    };
-  }
-
-  /**
-   * Assign sort object for table
-   * Assign paginator object for table
-   */
-  public ngAfterViewInit(): void {
-    this.planetData.sort = this.sort;
-    this.planetData.paginator = this.paginator;
-  }
-
-  /**
-   * Unsubscribe to observe films data
-   */
-  public ngOnDestroy(): void {
-    this.subscriber.unsubscribe();
+  constructor(private readonly planetService: PlanetService) {
+    this.planetData$ = this.planetService.getPlanets().pipe(
+      map(planet => {
+        return this.initMatTable(planet);
+      }),
+      tap(() => {
+        return this.isLoading$.next(false);
+      })
+    );
   }
 
   /**
    * Filter table by title
    */
-  public titleFilter(event: Event): void {
-    this.planetData.filter = (event.target as HTMLTextAreaElement).value;
+  public filterData(event: Event): void {
+    this.filterValue$.next((event.target as HTMLTextAreaElement).value);
+  }
+
+  private initMatTable(planet: Planet[]): MatTableDataSource<Planet> {
+    const matTableDataSource = new MatTableDataSource(planet);
+
+    matTableDataSource.filterPredicate = this.filterPredicateFunction;
+    matTableDataSource.sort = this.sort;
+    matTableDataSource.paginator = this.paginator;
+
+    return matTableDataSource;
+  }
+
+  private filterPredicateFunction(data: Planet, filter: string): boolean {
+    return data.title.trim().toLowerCase().includes(filter.trim().toLowerCase());
   }
 }

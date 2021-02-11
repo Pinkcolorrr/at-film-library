@@ -1,9 +1,9 @@
-import { FirebaseDTO } from './firebase-dto.interface';
+import { FirebaseDTO } from './firebase-dto';
 
 /**
  * Interface for planet DTO
  */
-export interface IPlanetDTO extends FirebaseDTO {
+export interface PlanetDTO extends FirebaseDTO {
   /**
    * Main object fields
    */

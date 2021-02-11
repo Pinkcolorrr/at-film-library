@@ -1,7 +1,7 @@
 /**
  * Interface for character DOM
  */
-export interface ICharacterDOM {
+export interface Character {
   /**
    * Charater birth year
    */

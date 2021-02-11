@@ -1,7 +1,7 @@
 /**
  * Interface for film DOM
  */
-export interface IFilmDOM {
+export interface Film {
   /**
    * Film title
    */
@@ -37,21 +37,21 @@ export interface IFilmDOM {
   /**
    * Array of related data about characters
    */
-  readonly characters: Array<number>;
+  readonly characters: number[];
   /**
    * Array of related data about planets
    */
-  readonly planets: Array<number>;
+  readonly planets: number[];
   /**
    * Array of related data about species
    */
-  readonly species: Array<number>;
+  readonly species: number[];
   /**
    * Array of related data about starships
    */
-  readonly starships: Array<number>;
+  readonly starships: number[];
   /**
    * Array of related data about vehicles
    */
-  readonly vehicles: Array<number>;
+  readonly vehicles: number[];
 }

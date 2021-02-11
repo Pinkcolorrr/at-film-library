@@ -1,11 +1,11 @@
-.authFormWrapper {
+.auth-form-wrapper {
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.AuthFormTitle {
+.auth-form-title {
   font-size: 30px;
   font-weight: 700;
   margin-bottom: 60px;
@@ -17,7 +17,7 @@
   color: #fff;
 }
 
-.authForm {
+.auth-form {
   display: flex;
   flex-direction: column;
   width: 400px;
@@ -25,23 +25,23 @@
   border: 1px solid var(--basic-color);
 }
 
-.inputRow {
+.input-group {
   display: flex;
   margin-bottom: 40px;
   flex-direction: column;
 }
 
-.inputRow label {
+.input-group label {
   color: var(--secondary-color);
   margin-bottom: 5px;
 }
 
-.errorMsg {
+.error-msg {
   color: var(--error-color);
   font-size: 10px;
 }
 
-.formError {
+.form-error {
   color: var(--error-color);
   text-align: center;
   margin-bottom: 15px;

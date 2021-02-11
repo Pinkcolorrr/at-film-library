@@ -1,9 +1,9 @@
-import { FirebaseDTO } from './firebase-dto.interface';
+import { FirebaseDTO } from './firebase-dto';
 
 /**
  * Interface for character DTO
  */
-export interface ICharacterDTO extends FirebaseDTO {
+export interface CharacterDTO extends FirebaseDTO {
   /**
    * Main object fields
    */

@@ -1,7 +1,7 @@
 /**
  * Interface for planet DOM
  */
-export interface IPlanetDOM {
+export interface Planet {
   /**
    * Planet climate
    */
