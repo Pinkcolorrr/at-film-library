@@ -2,24 +2,24 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { Character } from 'src/app/core/models/characters';
-import { CharacterService } from 'src/app/core/services/character.service';
+import { Planet } from 'src/app/core/models/planet';
+import { PlanetService } from 'src/app/core/services/planet.service';
 
 /**
- * Displaying table of characters
+ * Displaying table of planets
  */
 @Component({
-  selector: 'app-characters',
-  templateUrl: './characters.component.html',
-  styleUrls: ['./../main-content.css'],
+  selector: 'app-planets-list',
+  templateUrl: './planets-list.component.html',
+  styleUrls: ['planets-list.component.css'],
 })
-export class CharactersComponent {
+export class PlanetsListComponent {
   /**
-   * Observer character data array
+   * Observer planets data array
    */
-  public characterData$: Observable<MatTableDataSource<Character>>;
+  public planetData$: Observable<MatTableDataSource<Planet>>;
 
   /**
    * Toggle loading spinner and matNoDataRow
@@ -27,29 +27,27 @@ export class CharactersComponent {
   public isLoading$ = new BehaviorSubject(true);
 
   /**
-   * Value to filter characters
+   * Value to filter planets
    */
   public filterValue$ = new BehaviorSubject('');
 
   /**
-   * Columns in table header
+   * Coluns in table header
    */
-  public readonly displayedColumns: string[] = ['name', 'gender', 'height', 'mass', 'skinColor'];
-
+  public readonly displayedColumns: string[] = ['title', 'population', 'terrain'];
   /**
    * Init sort object for table
    */
   @ViewChild(MatSort) public readonly sort: MatSort;
-
   /**
    * Init paginator object for table
    */
   @ViewChild(MatPaginator) public readonly paginator: MatPaginator;
 
-  constructor(private readonly characterService: CharacterService) {
-    this.characterData$ = this.characterService.getCharacter().pipe(
-      map(character => {
-        return this.initMatTable(character);
+  constructor(private readonly planetService: PlanetService) {
+    this.planetData$ = this.planetService.getPlanets().pipe(
+      map(planet => {
+        return this.initMatTable(planet);
       }),
       tap(() => {
         return this.isLoading$.next(false);
@@ -64,8 +62,8 @@ export class CharactersComponent {
     this.filterValue$.next((event.target as HTMLTextAreaElement).value);
   }
 
-  private initMatTable(character: Character[]): MatTableDataSource<Character> {
-    const matTableDataSource = new MatTableDataSource(character);
+  private initMatTable(planet: Planet[]): MatTableDataSource<Planet> {
+    const matTableDataSource = new MatTableDataSource(planet);
 
     matTableDataSource.filterPredicate = this.filterPredicateFunction;
     matTableDataSource.sort = this.sort;
@@ -74,7 +72,7 @@ export class CharactersComponent {
     return matTableDataSource;
   }
 
-  private filterPredicateFunction(data: Character, filter: string): boolean {
-    return data.name.trim().toLowerCase().includes(filter.trim().toLowerCase());
+  private filterPredicateFunction(data: Planet, filter: string): boolean {
+    return data.title.trim().toLowerCase().includes(filter.trim().toLowerCase());
   }
 }

@@ -1,13 +1,9 @@
 <div>
-  <div class="spinner" *ngIf="isLoading$ | async">
-    <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
-  </div>
-
   <mat-form-field>
     <input (input)="filterData($event)" matInput placeholder="Search by title" />
   </mat-form-field>
 
-  <table mat-table [dataSource]="filmData$ | async | filter: (filterValue$ | async)" matSort>
+  <table mat-table [dataSource]="filmData$ | async | filterMatTableData: (filterValue$ | async)" matSort>
     <ng-container matColumnDef="episodeId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Episode Id</th>
       <td mat-cell *matCellDef="let element">{{ element.episodeId }}</td>
@@ -33,6 +29,13 @@
       <td mat-cell *matCellDef="let element">{{ element.producer }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="filmLink">
+      <th mat-header-cell *matHeaderCellDef>View details</th>
+      <td mat-cell *matCellDef="let element">
+        <a mat-flat-button color="primary"> {{ element.pk }}</a>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
@@ -41,5 +44,13 @@
     </tr>
   </table>
 
+  <div class="spinner" *ngIf="isLoading$ | async">
+    <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+  </div>
+
   <mat-paginator [pageSizeOptions]="[2, 3]" showFirstLastButtons></mat-paginator>
+
+  <div class="add-btn-wrapper">
+    <a mat-flat-button color="primary">Add new film</a>
+  </div>
 </div>

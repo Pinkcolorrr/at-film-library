@@ -13,7 +13,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { TopMenuComponent } from './components/top-menu/top-menu.component';
 import { firebaseConfig } from './core/firebaseConfig';
 import { AuthModule } from './modules/auth/auth.module';
-import { MainContentModule } from './modules/main-content/main-content.module';
+import { CharactersModule } from './modules/characters/characters.module';
+import { FilmsModule } from './modules/films/films.module';
 import { MaterialModule } from './modules/material/material.module';
 
 /**
@@ -31,8 +32,9 @@ import { MaterialModule } from './modules/material/material.module';
     MaterialModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
-    MainContentModule,
     BrowserAnimationsModule,
+    FilmsModule,
+    CharactersModule,
   ],
   bootstrap: [AppComponent],
 })

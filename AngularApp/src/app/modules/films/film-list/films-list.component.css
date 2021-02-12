@@ -1,0 +1,20 @@
+:host {
+  width: 80%;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0;
+}
+
+.add-btn-wrapper {
+  margin-top: 50px;
+  text-align: center;
+}

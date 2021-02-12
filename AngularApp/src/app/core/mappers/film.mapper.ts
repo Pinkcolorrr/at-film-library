@@ -19,6 +19,7 @@ export class FilmMapper {
    */
   public transformResponse(film: FilmDTO): Film {
     return {
+      pk: film.pk,
       title: film.fields.title,
       episodeId: film.fields.episode_id,
       releaseDate: film.fields.release_date,

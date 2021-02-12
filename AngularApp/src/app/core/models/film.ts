@@ -3,6 +3,10 @@
  */
 export interface Film {
   /**
+   * Personal key
+   */
+  readonly pk: number;
+  /**
    * Film title
    */
   readonly title: string;

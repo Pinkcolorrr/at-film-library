@@ -6,16 +6,13 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AuthGuard } from './core/services/auth-guard.service';
 import { LoginComponent } from './modules/auth/login/login.component';
 import { RegisterComponent } from './modules/auth/register/register.component';
-import { CharactersComponent } from './modules/main-content/characters/characters.component';
-import { FimlsComponent } from './modules/main-content/fimls/fimls.component';
-import { PlanetsComponent } from './modules/main-content/planets/planets.component';
+import { CharactersModule } from './modules/characters/characters.module';
+import { FilmsModule } from './modules/films/films.module';
+import { PlanetsModule } from './modules/planets/planets.module';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'notfound', component: NotFoundComponent },
-  { path: 'characters', component: CharactersComponent },
-  { path: 'planets', component: PlanetsComponent },
-  { path: 'films', component: FimlsComponent },
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -26,7 +23,7 @@ const routes: Routes = [
  * Routing module
  */
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes), FilmsModule, CharactersModule, PlanetsModule],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

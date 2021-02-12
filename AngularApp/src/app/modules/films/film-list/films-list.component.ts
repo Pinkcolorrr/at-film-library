@@ -2,24 +2,24 @@ import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { Planet } from 'src/app/core/models/planet';
-import { PlanetService } from 'src/app/core/services/planet.service';
+import { Film } from 'src/app/core/models/film';
+import { FilmService } from 'src/app/core/services/film.service';
 
 /**
- * Displaying table of planets
+ * Films list table displaying
  */
 @Component({
-  selector: 'app-planets',
-  templateUrl: './planets.component.html',
-  styleUrls: ['./../main-content.css'],
+  selector: 'app-fimls-list',
+  templateUrl: './films-list.component.html',
+  styleUrls: ['./films-list.component.css'],
 })
-export class PlanetsComponent {
+export class FimlsListComponent {
   /**
-   * Observer planets data array
+   * Observer film data array
    */
-  public planetData$: Observable<MatTableDataSource<Planet>>;
+  public filmData$: Observable<MatTableDataSource<Film>>;
 
   /**
    * Toggle loading spinner and matNoDataRow
@@ -27,14 +27,14 @@ export class PlanetsComponent {
   public isLoading$ = new BehaviorSubject(true);
 
   /**
-   * Value to filter planets
+   * Value to filter films
    */
   public filterValue$ = new BehaviorSubject('');
 
   /**
    * Coluns in table header
    */
-  public readonly displayedColumns: string[] = ['title', 'population', 'terrain'];
+  public readonly displayedColumns: string[] = ['episodeId', 'title', 'releaseDate', 'director', 'producer', 'filmLink'];
   /**
    * Init sort object for table
    */
@@ -44,10 +44,10 @@ export class PlanetsComponent {
    */
   @ViewChild(MatPaginator) public readonly paginator: MatPaginator;
 
-  constructor(private readonly planetService: PlanetService) {
-    this.planetData$ = this.planetService.getPlanets().pipe(
-      map(planet => {
-        return this.initMatTable(planet);
+  constructor(private readonly filmService: FilmService) {
+    this.filmData$ = this.filmService.getFilms().pipe(
+      map(film => {
+        return this.initMatTable(film);
       }),
       tap(() => {
         return this.isLoading$.next(false);
@@ -62,8 +62,8 @@ export class PlanetsComponent {
     this.filterValue$.next((event.target as HTMLTextAreaElement).value);
   }
 
-  private initMatTable(planet: Planet[]): MatTableDataSource<Planet> {
-    const matTableDataSource = new MatTableDataSource(planet);
+  private initMatTable(film: Film[]): MatTableDataSource<Film> {
+    const matTableDataSource = new MatTableDataSource(film);
 
     matTableDataSource.filterPredicate = this.filterPredicateFunction;
     matTableDataSource.sort = this.sort;
@@ -72,7 +72,7 @@ export class PlanetsComponent {
     return matTableDataSource;
   }
 
-  private filterPredicateFunction(data: Planet, filter: string): boolean {
+  private filterPredicateFunction(data: Film, filter: string): boolean {
     return data.title.trim().toLowerCase().includes(filter.trim().toLowerCase());
   }
 }
