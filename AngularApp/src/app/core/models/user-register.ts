@@ -1,7 +1,7 @@
 /**
  * Interface for user object
  */
-export interface UserNew {
+export interface UserRegister {
   /**
    * User email
    */

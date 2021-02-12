@@ -5,7 +5,7 @@ export interface FirebaseDTO {
   /**
    * Main object fields
    */
-  readonly fields: Record<string, string | Date | number | number[]>;
+  readonly fields: object;
   /**
    * Type of object
    */

@@ -5,7 +5,7 @@ import { map, shareReplay } from 'rxjs/operators';
 
 import { UserMapper } from '../mappers/user.mapper';
 import { UserInfo } from '../models/user-Info';
-import { UserNew } from '../models/user-register';
+import { UserRegister } from '../models/user-register';
 
 /**
  * Service for authorization users
@@ -51,14 +51,14 @@ export class AuthService {
   /**
    * Login user in app
    */
-  public async login(user: UserNew): Promise<UserInfo> {
+  public async login(user: UserRegister): Promise<UserInfo> {
     return this.userMapper.transformResponse(await this.afAuth.signInWithEmailAndPassword(user.email, user.password));
   }
 
   /**
    * Register user in app
    */
-  public async register(user: UserNew): Promise<UserInfo> {
+  public async register(user: UserRegister): Promise<UserInfo> {
     return this.userMapper.transformResponse(await this.afAuth.signInWithEmailAndPassword(user.email, user.password));
   }
 
