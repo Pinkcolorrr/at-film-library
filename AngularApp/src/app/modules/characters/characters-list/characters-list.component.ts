@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+import { Sort } from '@angular/material/sort';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Character } from 'src/app/core/models/characters';
+import { QueryFilterParams } from 'src/app/core/models/query-filter-params';
 import { CharacterService } from 'src/app/core/services/character.service';
 
 /**
@@ -16,65 +16,98 @@ import { CharacterService } from 'src/app/core/services/character.service';
   styleUrls: ['./characters-list.component.css'],
 })
 export class CharactersListComponent {
+  private queryFilter = new QueryFilterParams('people', 10, 'name');
+
   /**
-   * Observer character data array
+   * Form for searching characters
    */
-  public characterData$: Observable<MatTableDataSource<Character>>;
+  public searchForm: FormGroup = new FormGroup({
+    searchValue: new FormControl(null),
+  });
+
+  /**
+   * Observable character data array
+   */
+  public readonly charactersData$: Observable<Character[]>;
 
   /**
    * Toggle loading spinner and matNoDataRow
    */
-  public isLoading$ = new BehaviorSubject(true);
+  public readonly isLoading$ = new BehaviorSubject(true);
 
   /**
-   * Value to filter characters
+   * Observable for toggle next button
    */
-  public filterValue$ = new BehaviorSubject('');
+  public readonly isNextPageAvailable$ = this.characterService.isNextPageAvailable$;
 
   /**
-   * Columns in table header
+   * Observable for toggle prev button
+   */
+  public readonly isPrevPageAvailable$ = this.characterService.isPrevPageAvailable$;
+
+  /**
+   * Colums in table header
    */
   public readonly displayedColumns: string[] = ['name', 'gender', 'height', 'mass', 'skinColor'];
 
-  /**
-   * Init sort object for table
-   */
-  @ViewChild(MatSort) public readonly sort: MatSort;
-
-  /**
-   * Init paginator object for table
-   */
-  @ViewChild(MatPaginator) public readonly paginator: MatPaginator;
-
   constructor(private readonly characterService: CharacterService) {
-    this.characterData$ = this.characterService.getCharacter().pipe(
-      map(character => {
-        return this.initMatTable(character);
-      }),
+    this.charactersData$ = this.characterService.charactersSource$.pipe(
       tap(() => {
-        return this.isLoading$.next(false);
-      })
+        if (this.isLoading$.value) {
+          this.isLoading$.next(false);
+        }
+      }),
     );
   }
 
+  private turnOffPageBtns(): void {
+    this.isPrevPageAvailable$.next(false);
+    this.isNextPageAvailable$.next(false);
+  }
+
   /**
-   * Filter table by title
+   * Add information about, how characters have to be sorted, in queryFilter.
+   * Send request for sorting characters.
    */
-  public filterData(event: Event): void {
-    this.filterValue$.next((event.target as HTMLTextAreaElement).value);
+  public matSort(event: Sort): void {
+    if (event.direction) {
+      this.queryFilter.sortTarget = event.active;
+      this.queryFilter.sortDirection = event.direction as 'asc' | 'desc';
+    } else {
+      this.queryFilter.sortTarget = 'pk';
+      this.queryFilter.sortDirection = 'asc';
+    }
+
+    this.queryFilter.pageDirection = 'initial';
+    this.characterService.setFilter(this.queryFilter);
   }
 
-  private initMatTable(character: Character[]): MatTableDataSource<Character> {
-    const matTableDataSource = new MatTableDataSource(character);
+  /**
+   * Switch table to next page
+   */
+  public nextPage(): void {
+    this.queryFilter.pageDirection = 'next';
+    this.turnOffPageBtns();
 
-    matTableDataSource.filterPredicate = this.filterPredicateFunction;
-    matTableDataSource.sort = this.sort;
-    matTableDataSource.paginator = this.paginator;
-
-    return matTableDataSource;
+    this.characterService.setFilter(this.queryFilter);
   }
 
-  private filterPredicateFunction(data: Character, filter: string): boolean {
-    return data.name.trim().toLowerCase().includes(filter.trim().toLowerCase());
+  /**
+   * Switch table to previous page
+   */
+  public previousPage(): void {
+    this.queryFilter.pageDirection = 'previous';
+    this.turnOffPageBtns();
+
+    this.characterService.setFilter(this.queryFilter);
+  }
+
+  /**
+   * Filtering data by character title
+   */
+  public filterByTitle(): void {
+    this.queryFilter.searchValues = this.searchForm.value.searchValue.trim();
+    this.queryFilter.pageDirection = 'initial';
+    this.characterService.setFilter(this.queryFilter);
   }
 }

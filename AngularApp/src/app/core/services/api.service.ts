@@ -51,7 +51,7 @@ export class ApiService {
 
   private getRef(ref: CollectionReference<DocumentData>, filters: QueryFilterParams): Query<DocumentData> {
     if (filters.searchValues) {
-      return ref.where('fields.title', '==', filters.searchValues).limit(filters.limit);
+      return ref.where(filters.searchTarget, '==', filters.searchValues).limit(filters.limit);
     } else {
       return ref.orderBy(filters.sortTarget, filters.sortDirection).limit(filters.limit);
     }

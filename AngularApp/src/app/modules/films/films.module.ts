@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from 'src/app/shared/shared.module';
 
 import { MaterialModule } from '../material/material.module';
 
@@ -14,7 +13,7 @@ import { FilmsRoutes } from './films.routing';
  */
 @NgModule({
   declarations: [FimlsListComponent, FimlsComponent],
-  imports: [CommonModule, MaterialModule, FilmsRoutes, SharedModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, FilmsRoutes, ReactiveFormsModule],
   exports: [ReactiveFormsModule],
 })
 export class FilmsModule {}

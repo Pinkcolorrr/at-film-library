@@ -1,3 +1,7 @@
+:host {
+  width: 80%;
+}
+
 table {
   table-layout: fixed;
   width: 100%;
@@ -13,4 +17,18 @@ table {
 .add-btn-wrapper {
   margin-top: 50px;
   text-align: center;
+}
+
+.paginator {
+  display: flex;
+  padding: 20px 0;
+  justify-content: center;
+}
+
+.paginator button:first-child {
+  margin-right: 40px;
+}
+
+mat-form-field {
+  margin-right: 40px;
 }

@@ -18,3 +18,17 @@ table {
   margin-top: 50px;
   text-align: center;
 }
+
+.paginator {
+  display: flex;
+  padding: 20px 0;
+  justify-content: center;
+}
+
+.paginator button:first-child {
+  margin-right: 40px;
+}
+
+mat-form-field {
+  margin-right: 40px;
+}

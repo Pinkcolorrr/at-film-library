@@ -1,78 +1,113 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Sort } from '@angular/material/sort';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Planet } from 'src/app/core/models/planet';
+import { QueryFilterParams } from 'src/app/core/models/query-filter-params';
 import { PlanetService } from 'src/app/core/services/planet.service';
 
 /**
- * Displaying table of planets
+ * Wrapper for various planets pagess
  */
 @Component({
-  selector: 'app-planets-list',
+  selector: 'app-planets',
   templateUrl: './planets-list.component.html',
-  styleUrls: ['planets-list.component.css'],
+  styleUrls: ['./planets-list.component.css'],
 })
 export class PlanetsListComponent {
+  private queryFilter = new QueryFilterParams('planets', 10, 'name');
+
   /**
-   * Observer planets data array
+   * Form for searching planets
    */
-  public planetData$: Observable<MatTableDataSource<Planet>>;
+  public searchForm: FormGroup = new FormGroup({
+    searchValue: new FormControl(null),
+  });
+
+  /**
+   * Observable planet data array
+   */
+  public readonly planetsData$: Observable<Planet[]>;
 
   /**
    * Toggle loading spinner and matNoDataRow
    */
-  public isLoading$ = new BehaviorSubject(true);
+  public readonly isLoading$ = new BehaviorSubject(true);
 
   /**
-   * Value to filter planets
+   * Observable for toggle next button
    */
-  public filterValue$ = new BehaviorSubject('');
+  public readonly isNextPageAvailable$ = this.planetService.isNextPageAvailable$;
 
   /**
-   * Coluns in table header
+   * Observable for toggle prev button
+   */
+  public readonly isPrevPageAvailable$ = this.planetService.isPrevPageAvailable$;
+
+  /**
+   * Colums in table header
    */
   public readonly displayedColumns: string[] = ['title', 'population', 'terrain'];
-  /**
-   * Init sort object for table
-   */
-  @ViewChild(MatSort) public readonly sort: MatSort;
-  /**
-   * Init paginator object for table
-   */
-  @ViewChild(MatPaginator) public readonly paginator: MatPaginator;
 
   constructor(private readonly planetService: PlanetService) {
-    this.planetData$ = this.planetService.getPlanets().pipe(
-      map(planet => {
-        return this.initMatTable(planet);
-      }),
+    this.planetsData$ = this.planetService.planetsSource$.pipe(
       tap(() => {
-        return this.isLoading$.next(false);
-      })
+        if (this.isLoading$.value) {
+          this.isLoading$.next(false);
+        }
+      }),
     );
   }
 
+  private turnOffPageBtns(): void {
+    this.isPrevPageAvailable$.next(false);
+    this.isNextPageAvailable$.next(false);
+  }
+
   /**
-   * Filter table by title
+   * Add information about, how planets have to be sorted, in queryFilter.
+   * Send request for sorting planets.
    */
-  public filterData(event: Event): void {
-    this.filterValue$.next((event.target as HTMLTextAreaElement).value);
+  public matSort(event: Sort): void {
+    if (event.direction) {
+      this.queryFilter.sortTarget = event.active;
+      this.queryFilter.sortDirection = event.direction as 'asc' | 'desc';
+    } else {
+      this.queryFilter.sortTarget = 'pk';
+      this.queryFilter.sortDirection = 'asc';
+    }
+
+    this.queryFilter.pageDirection = 'initial';
+    this.planetService.setFilter(this.queryFilter);
   }
 
-  private initMatTable(planet: Planet[]): MatTableDataSource<Planet> {
-    const matTableDataSource = new MatTableDataSource(planet);
+  /**
+   * Switch table to next page
+   */
+  public nextPage(): void {
+    this.queryFilter.pageDirection = 'next';
+    this.turnOffPageBtns();
 
-    matTableDataSource.filterPredicate = this.filterPredicateFunction;
-    matTableDataSource.sort = this.sort;
-    matTableDataSource.paginator = this.paginator;
-
-    return matTableDataSource;
+    this.planetService.setFilter(this.queryFilter);
   }
 
-  private filterPredicateFunction(data: Planet, filter: string): boolean {
-    return data.title.trim().toLowerCase().includes(filter.trim().toLowerCase());
+  /**
+   * Switch table to previous page
+   */
+  public previousPage(): void {
+    this.queryFilter.pageDirection = 'previous';
+    this.turnOffPageBtns();
+
+    this.planetService.setFilter(this.queryFilter);
+  }
+
+  /**
+   * Filtering data by planet title
+   */
+  public filterByTitle(): void {
+    this.queryFilter.searchValues = this.searchForm.value.searchValue.trim();
+    this.queryFilter.pageDirection = 'initial';
+    this.planetService.setFilter(this.queryFilter);
   }
 }

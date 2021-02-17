@@ -16,7 +16,7 @@ import { FilmService } from 'src/app/core/services/film.service';
   styleUrls: ['./films-list.component.css'],
 })
 export class FimlsListComponent {
-  private queryFilter = new QueryFilterParams('films', 2, 'fields.title');
+  private queryFilter = new QueryFilterParams('films', 2, 'title');
 
   /**
    * Form for searching films
@@ -71,7 +71,7 @@ export class FimlsListComponent {
    */
   public matSort(event: Sort): void {
     if (event.direction) {
-      this.queryFilter.sortTarget = 'fields.' + event.active;
+      this.queryFilter.sortTarget = event.active;
       this.queryFilter.sortDirection = event.direction as 'asc' | 'desc';
     } else {
       this.queryFilter.sortTarget = 'pk';

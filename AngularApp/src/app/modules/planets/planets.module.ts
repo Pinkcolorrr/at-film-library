@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../material/material.module';
 
@@ -13,6 +13,7 @@ import { PlanetsRoutes } from './planets.routing';
  */
 @NgModule({
   declarations: [PlanetsListComponent, PlanetsComponent],
-  imports: [[CommonModule, MaterialModule, PlanetsRoutes, SharedModule]],
+  imports: [CommonModule, MaterialModule, PlanetsRoutes, ReactiveFormsModule],
+  exports: [ReactiveFormsModule],
 })
 export class PlanetsModule {}

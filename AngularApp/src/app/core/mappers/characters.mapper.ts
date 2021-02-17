@@ -1,5 +1,6 @@
 import { CharacterDTO } from '../DTOs/characters-dto';
 import { Character } from '../models/characters';
+import { QueryFilterParams } from '../models/query-filter-params';
 
 /**
  * Mapping character data before send or accept
@@ -31,6 +32,42 @@ export class CharacterMapper {
       mass: character.fields.mass,
       name: character.fields.name,
       skinColor: character.fields.skin_color,
+    };
+  }
+
+  /**
+   * Transform titles, that used for table sorting, to server format
+   */
+  public transformTitles(filter: QueryFilterParams): QueryFilterParams {
+    return {
+      limit: filter.limit,
+      pageDirection: filter.pageDirection,
+      get sortTarget(): string {
+        switch (filter.sortTarget) {
+          case 'name': {
+            return 'fields.name';
+          }
+          case 'gender': {
+            return 'fields.gender';
+          }
+          case 'height': {
+            return 'fields.height';
+          }
+          case 'mass': {
+            return 'fields.mass';
+          }
+          case 'pk':
+          default: {
+            return 'pk';
+          }
+        }
+      },
+      get searchTarget(): string {
+        return `fields.${filter.searchTarget}`;
+      },
+      sortDirection: filter.sortDirection,
+      searchValues: filter.searchValues,
+      target: filter.target,
     };
   }
 }

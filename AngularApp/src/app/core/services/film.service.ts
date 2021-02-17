@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DocumentChangeAction } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap, map, switchMap } from 'rxjs/operators';
+import { tap, map, switchMap, filter } from 'rxjs/operators';
 
 import { FilmDTO } from '../DTOs/film-dto';
 import { FilmMapper } from '../mappers/film.mapper';
@@ -50,7 +50,7 @@ export class FilmService {
      * As first and last film on page
      * The first and last element on the page.These docs are used in request on database
      */
-    private readonly paginationControl: PaginationControlService,
+    private readonly paginationControl: PaginationControlService<FilmDTO>,
 
     /**
      * Service for connecting to API

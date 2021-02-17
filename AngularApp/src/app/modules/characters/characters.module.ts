@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../material/material.module';
 
@@ -13,6 +13,7 @@ import { CharactersRoutes } from './characters.routing';
  */
 @NgModule({
   declarations: [CharactersComponent, CharactersListComponent],
-  imports: [CommonModule, MaterialModule, CharactersRoutes, SharedModule],
+  imports: [CommonModule, MaterialModule, CharactersRoutes, ReactiveFormsModule],
+  exports: [ReactiveFormsModule],
 })
 export class CharactersModule {}
