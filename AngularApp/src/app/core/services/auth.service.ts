@@ -32,7 +32,7 @@ export class AuthService {
       shareReplay({
         refCount: true,
         bufferSize: 1,
-      })
+      }),
     );
 
     this.userEmail$ = this.afAuth.user.pipe(
@@ -44,7 +44,7 @@ export class AuthService {
       shareReplay({
         refCount: true,
         bufferSize: 1,
-      })
+      }),
     );
   }
 

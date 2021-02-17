@@ -1,5 +1,6 @@
 import { FilmDTO } from '../DTOs/film-dto';
 import { Film } from '../models/film';
+import { QueryFilterParams } from '../models/query-filter-params';
 
 /**
  * Mapping film data before send or accept
@@ -33,6 +34,45 @@ export class FilmMapper {
       starships: film.fields.starships,
       vehicles: film.fields.vehicles,
       characters: film.fields.characters,
+    };
+  }
+
+  /**
+   * Transform titles, that used for table sorting, to server format
+   */
+  public transformTitles(filters: QueryFilterParams): QueryFilterParams {
+    return {
+      limit: filters.limit,
+      pageDirection: filters.pageDirection,
+      get sortTarget(): string {
+        let title = 'fields.';
+
+        switch (filters.sortTarget) {
+          case 'fields.episodeId': {
+            title += 'episode_id';
+            break;
+          }
+          case 'fields.releaseDate': {
+            title += 'release_date';
+            break;
+          }
+          case 'fields.title': {
+            title += 'title';
+            break;
+          }
+          case 'pk':
+          default: {
+            title = 'pk';
+            break;
+          }
+        }
+
+        return title;
+      },
+      sortDirection: filters.sortDirection,
+      searchValues: filters.searchValues,
+      target: filters.target,
+      searchTarget: filters.searchTarget,
     };
   }
 }

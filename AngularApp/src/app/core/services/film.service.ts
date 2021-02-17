@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { DocumentChangeAction } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap, map, switchMap } from 'rxjs/operators';
 
 import { FilmDTO } from '../DTOs/film-dto';
 import { FilmMapper } from '../mappers/film.mapper';
 import { Film } from '../models/film';
+import { QueryFilterParams } from '../models/query-filter-params';
+
+import { ApiService } from './api.service';
+import { PaginationControlService } from './pagination-control.service';
 
 /**
  * Service for work with films
@@ -14,20 +18,139 @@ import { Film } from '../models/film';
   providedIn: 'root',
 })
 export class FilmService {
-  private filmMapper = new FilmMapper();
-  constructor(private angularFire: AngularFirestore) {}
+  /**
+   * Mapper to convert films data from DTO
+   */
+  private readonly filmMapper = new FilmMapper();
 
   /**
-   * Getting data about films from db
+   * Filters, that define query params
    */
-  public getFilms(): Observable<Film[]> {
-    return this.angularFire
-      .collection<FilmDTO>('films')
-      .valueChanges()
-      .pipe(
-        map(films => {
-          return this.filmMapper.transformArrayResponse(films);
-        })
-      );
+  private readonly filters$ = new BehaviorSubject<QueryFilterParams>(new QueryFilterParams('films', 2, 'fields.title'));
+
+  /**
+   * Main film source.
+   * Will be updated every time, when filter$ updating
+   */
+  public readonly filmsSource$: Observable<Film[]>;
+
+  /**
+   * Observable for toggle next page button
+   */
+  public readonly isNextPageAvailable$ = new BehaviorSubject(true);
+
+  /**
+   * Observable for toggle previous page button
+   */
+  public readonly isPrevPageAvailable$ = new BehaviorSubject(false);
+
+  constructor(
+    /**
+     * Service to control pagination states
+     * As first and last film on page
+     * The first and last element on the page.These docs are used in request on database
+     */
+    private readonly paginationControl: PaginationControlService,
+
+    /**
+     * Service for connecting to API
+     */
+    private readonly apiService: ApiService,
+  ) {
+    this.filmsSource$ = this.filmsSourceInit();
+  }
+
+  /**
+   * Add new object in filter$ source, that trigger new server request
+   */
+  public setFilter(filters: QueryFilterParams): void {
+    this.filters$.next(this.filmMapper.transformTitles(filters));
+  }
+
+  /**
+   * Switch filter$ source from parameters object to source with applied filters
+   * Using mapper for convert DTO
+   */
+  private filmsSourceInit(): Observable<Film[]> {
+    return this.filters$.pipe(
+      switchMap(filters => {
+        return this.applyFilters(filters);
+      }),
+      map(films => {
+        return films.map(item => {
+          return this.filmMapper.transformResponse(item.payload.doc.data());
+        });
+      }),
+    );
+  }
+
+  /**
+   * Apply filters, that was defined in object inside filter$
+   */
+  private applyFilters(filters: QueryFilterParams): Observable<DocumentChangeAction<FilmDTO>[]> {
+    switch (filters.pageDirection) {
+      case 'next': {
+        return this.getNextPage(filters);
+      }
+      case 'previous': {
+        return this.getPrevPage(filters);
+      }
+      case 'initial':
+      default: {
+        return this.getInitialPage(filters);
+      }
+    }
+  }
+
+  /**
+   * Get next page from db
+   */
+  private getNextPage(filters: QueryFilterParams): Observable<DocumentChangeAction<FilmDTO>[]> {
+    return this.apiService.nextPageRequest<FilmDTO>(filters, this.paginationControl.lastDocOnPage).pipe(
+      tap(films => {
+        this.isPrevPageAvailable$.next(true);
+
+        if (!films.length) {
+          this.isNextPageAvailable$.next(false);
+          console.error('no more data available');
+          this.paginationControl.firstDocsOnAllPages.push(this.paginationControl.firstDocOnPage);
+          return;
+        }
+        this.isNextPageAvailable$.next(!(films.length < filters.limit));
+        this.paginationControl.firstDocsOnAllPages.push(this.paginationControl.firstDocOnPage);
+        this.paginationControl.setFirstAndLast(films);
+      }),
+    );
+  }
+
+  /**
+   * Get previous page from db
+   */
+  private getPrevPage(filters: QueryFilterParams): Observable<DocumentChangeAction<FilmDTO>[]> {
+    return this.apiService.prevPageRequest<FilmDTO>(filters, this.paginationControl.prevPageStartAt).pipe(
+      tap(films => {
+        this.isNextPageAvailable$.next(true);
+        this.paginationControl.firstDocsOnAllPages.pop();
+        this.isPrevPageAvailable$.next(!!this.paginationControl.firstDocsOnAllPages.length);
+        this.paginationControl.setFirstAndLast(films);
+      }),
+    );
+  }
+
+  /**
+   * Get first page from db
+   */
+  private getInitialPage(filters: QueryFilterParams): Observable<DocumentChangeAction<FilmDTO>[]> {
+    return this.apiService.initialPageRequest<FilmDTO>(filters).pipe(
+      tap(films => {
+        if (!films.length) {
+          return;
+        }
+        this.isNextPageAvailable$.next(!(films.length < filters.limit));
+        this.isPrevPageAvailable$.next(false);
+        this.paginationControl.firstDocsOnAllPages = [];
+        this.paginationControl.setFirstAndLast(films);
+      }),
+    );
   }
 }

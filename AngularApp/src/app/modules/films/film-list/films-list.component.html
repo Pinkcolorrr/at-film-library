@@ -1,9 +1,14 @@
 <div>
-  <mat-form-field>
-    <input (input)="filterData($event)" matInput placeholder="Search by title" />
-  </mat-form-field>
+  <form [formGroup]="searchForm" (ngSubmit)="filterByTitle()">
+    <mat-form-field>
+      <mat-label>Search by title</mat-label>
+      <input matInput placeholder="Search by title" formControlName="searchValue" type="text" />
+    </mat-form-field>
 
-  <table mat-table [dataSource]="filmData$ | async | filterMatTableData: (filterValue$ | async)" matSort>
+    <button mat-flat-button color="primary">Search</button>
+  </form>
+
+  <table mat-table [dataSource]="filmsData$ | async" matSort (matSortChange)="matSort($event)">
     <ng-container matColumnDef="episodeId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Episode Id</th>
       <td mat-cell *matCellDef="let element">{{ element.episodeId }}</td>
@@ -48,7 +53,10 @@
     <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
   </div>
 
-  <mat-paginator [pageSizeOptions]="[2, 3]" showFirstLastButtons></mat-paginator>
+  <div class="paginator">
+    <button mat-flat-button (click)="previousPage()" [disabled]="!(isPrevPageAvailable$ | async)">Prev</button>
+    <button mat-flat-button (click)="nextPage()" [disabled]="!(isNextPageAvailable$ | async)">Next</button>
+  </div>
 
   <div class="add-btn-wrapper">
     <a mat-flat-button color="primary">Add new film</a>

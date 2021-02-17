@@ -16,6 +16,6 @@ export class PipeFilterMatTableData implements PipeTransform {
       fiterData.filter = filterValue || '';
       return fiterData;
     }
-    return new MatTableDataSource();
+    return fiterData;
   }
 }

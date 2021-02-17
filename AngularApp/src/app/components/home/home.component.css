@@ -1,6 +1,12 @@
+.title-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .welcome-text {
   font-size: 20px;
 }
+
 .page-name {
   font-size: 80px;
   text-transform: uppercase;

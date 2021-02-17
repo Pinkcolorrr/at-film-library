@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Sort } from '@angular/material/sort';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Film } from 'src/app/core/models/film';
+import { QueryFilterParams } from 'src/app/core/models/query-filter-params';
 import { FilmService } from 'src/app/core/services/film.service';
 
 /**
@@ -16,63 +16,98 @@ import { FilmService } from 'src/app/core/services/film.service';
   styleUrls: ['./films-list.component.css'],
 })
 export class FimlsListComponent {
+  private queryFilter = new QueryFilterParams('films', 2, 'fields.title');
+
   /**
-   * Observer film data array
+   * Form for searching films
    */
-  public filmData$: Observable<MatTableDataSource<Film>>;
+  public searchForm: FormGroup = new FormGroup({
+    searchValue: new FormControl(null),
+  });
+
+  /**
+   * Observable film data array
+   */
+  public readonly filmsData$: Observable<Film[]>;
 
   /**
    * Toggle loading spinner and matNoDataRow
    */
-  public isLoading$ = new BehaviorSubject(true);
+  public readonly isLoading$ = new BehaviorSubject(true);
 
   /**
-   * Value to filter films
+   * Observable for toggle next button
    */
-  public filterValue$ = new BehaviorSubject('');
+  public readonly isNextPageAvailable$ = this.filmService.isNextPageAvailable$;
 
   /**
-   * Coluns in table header
+   * Observable for toggle prev button
+   */
+  public readonly isPrevPageAvailable$ = this.filmService.isPrevPageAvailable$;
+
+  /**
+   * Colums in table header
    */
   public readonly displayedColumns: string[] = ['episodeId', 'title', 'releaseDate', 'director', 'producer', 'filmLink'];
-  /**
-   * Init sort object for table
-   */
-  @ViewChild(MatSort) public readonly sort: MatSort;
-  /**
-   * Init paginator object for table
-   */
-  @ViewChild(MatPaginator) public readonly paginator: MatPaginator;
 
   constructor(private readonly filmService: FilmService) {
-    this.filmData$ = this.filmService.getFilms().pipe(
-      map(film => {
-        return this.initMatTable(film);
-      }),
+    this.filmsData$ = this.filmService.filmsSource$.pipe(
       tap(() => {
-        return this.isLoading$.next(false);
-      })
+        if (this.isLoading$.value) {
+          this.isLoading$.next(false);
+        }
+      }),
     );
   }
 
+  private turnOffPageBtns(): void {
+    this.isPrevPageAvailable$.next(false);
+    this.isNextPageAvailable$.next(false);
+  }
+
   /**
-   * Filter table by title
+   * Add information about, how films have to be sorted, in queryFilter.
+   * Send request for sorting films.
    */
-  public filterData(event: Event): void {
-    this.filterValue$.next((event.target as HTMLTextAreaElement).value);
+  public matSort(event: Sort): void {
+    if (event.direction) {
+      this.queryFilter.sortTarget = 'fields.' + event.active;
+      this.queryFilter.sortDirection = event.direction as 'asc' | 'desc';
+    } else {
+      this.queryFilter.sortTarget = 'pk';
+      this.queryFilter.sortDirection = 'asc';
+    }
+
+    this.queryFilter.pageDirection = 'initial';
+    this.filmService.setFilter(this.queryFilter);
   }
 
-  private initMatTable(film: Film[]): MatTableDataSource<Film> {
-    const matTableDataSource = new MatTableDataSource(film);
+  /**
+   * Switch table to next page
+   */
+  public nextPage(): void {
+    this.queryFilter.pageDirection = 'next';
+    this.turnOffPageBtns();
 
-    matTableDataSource.filterPredicate = this.filterPredicateFunction;
-    matTableDataSource.sort = this.sort;
-    matTableDataSource.paginator = this.paginator;
-
-    return matTableDataSource;
+    this.filmService.setFilter(this.queryFilter);
   }
 
-  private filterPredicateFunction(data: Film, filter: string): boolean {
-    return data.title.trim().toLowerCase().includes(filter.trim().toLowerCase());
+  /**
+   * Switch table to previous page
+   */
+  public previousPage(): void {
+    this.queryFilter.pageDirection = 'previous';
+    this.turnOffPageBtns();
+
+    this.filmService.setFilter(this.queryFilter);
+  }
+
+  /**
+   * Filtering data by film title
+   */
+  public filterByTitle(): void {
+    this.queryFilter.searchValues = this.searchForm.value.searchValue.trim();
+    this.queryFilter.pageDirection = 'initial';
+    this.filmService.setFilter(this.queryFilter);
   }
 }
