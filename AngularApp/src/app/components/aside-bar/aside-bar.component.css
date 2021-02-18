@@ -22,6 +22,7 @@ mat-sidenav-content {
 
 .content-wrapper {
   width: 80%;
+  padding-bottom: 100px;
 }
 
 .mat-icon-button {

@@ -37,7 +37,7 @@
     <ng-container matColumnDef="filmLink">
       <th mat-header-cell *matHeaderCellDef>View details</th>
       <td mat-cell *matCellDef="let element">
-        <a mat-flat-button color="primary"> {{ element.pk }}</a>
+        <a mat-flat-button color="primary" [routerLink]="['/films', 'details', element.pk]"> {{ element.pk }}</a>
       </td>
     </ng-container>
 

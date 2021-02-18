@@ -1,3 +1,8 @@
+import { Observable } from 'rxjs';
+import { Character } from './characters';
+
+import { Planet } from './planet';
+
 /**
  * Interface for film DOM
  */
@@ -46,16 +51,14 @@ export interface Film {
    * Array of related data about planets
    */
   readonly planets: number[];
+
   /**
-   * Array of related data about species
+   * Field to keep Observable on related data about planets
    */
-  readonly species: number[];
+  planets$?: Observable<Planet[]>;
+
   /**
-   * Array of related data about starships
+   * Field to keep Observable on related data about characters
    */
-  readonly starships: number[];
-  /**
-   * Array of related data about vehicles
-   */
-  readonly vehicles: number[];
+  characters$?: Observable<Character[]>;
 }

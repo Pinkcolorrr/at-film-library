@@ -30,9 +30,6 @@ export class FilmMapper {
       created: new Date(film.fields.created),
       edited: new Date(film.fields.edited),
       planets: film.fields.planets,
-      species: film.fields.species,
-      starships: film.fields.starships,
-      vehicles: film.fields.vehicles,
       characters: film.fields.characters,
     };
   }

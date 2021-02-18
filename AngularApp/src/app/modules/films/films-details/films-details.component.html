@@ -1,0 +1,99 @@
+<form class="mat-table">
+  <table class="mat-table mat-elevation-z8">
+    <thead>
+      <tr class="mat-header-row">
+        <th class="mat-header-cell">key</th>
+        <th class="mat-header-cell">value</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="filmData">
+      <tr class="mat-row">
+        <td class="mat-cell">title</td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input matInput value="{{ filmData.title }}" readonly />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">episode id</td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input matInput value="{{ filmData.episodeId }}" readonly />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">release date</td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input matInput value="{{ filmData.releaseDate }}" readonly />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">director</td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input matInput value="{{ filmData.director }}" readonly />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">producer</td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input matInput value="{{ filmData.producer }}" readonly />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">opening crawl</td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <textarea matInput value="{{ filmData.openingCrawl }}" readonly></textarea>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">characters</td>
+        <td class="mat-cell">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Characters list </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="" *ngFor="let character of filmData.characters$ | async">
+                <mat-list role="list">
+                  <mat-list-item role="listitem">{{ character.name }}</mat-list-item>
+                </mat-list>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">planets</td>
+        <td class="mat-cell">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Planets list </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="" *ngFor="let planets of filmData.planets$ | async">
+                <mat-list role="list">
+                  <mat-list-item role="listitem">{{ planets.title }}</mat-list-item>
+                </mat-list>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
+<div class="add-btn-wrapper">
+  <a mat-flat-button color="primary" routerLink="/films/list">Back</a>
+  <button mat-flat-button color="primary">Edit</button>
+</div>
