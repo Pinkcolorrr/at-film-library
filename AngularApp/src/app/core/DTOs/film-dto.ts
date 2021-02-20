@@ -43,22 +43,22 @@ export interface FilmDTO extends FirebaseDTO {
     /**
      * Array of related data about planets
      */
-    readonly planets: number[];
+    readonly planets: (number | string)[];
     /**
      * Array of related data about species
      */
-    readonly species: number[];
+    readonly species: (number | string)[];
     /**
      * Array of related data about starships
      */
-    readonly starships: number[];
+    readonly starships: (number | string)[];
     /**
      * Array of related data about characters
      */
-    readonly characters: number[];
+    readonly characters: (number | string)[];
     /**
      * Array of related data about vehicles
      */
-    readonly vehicles: number[];
+    readonly vehicles: (number | string)[];
   };
 }

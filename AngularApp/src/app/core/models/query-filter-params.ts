@@ -6,7 +6,7 @@ export class QueryFilterParams {
     /**
      * Target of filtering
      */
-    public target: 'films' | 'planets' | 'people',
+    public collectionName: 'films' | 'planets' | 'people',
     /**
      * Defite how many items will be load
      */

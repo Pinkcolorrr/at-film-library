@@ -9,18 +9,12 @@
   padding: 50px 0;
 }
 
-.add-btn-wrapper {
+.btn-wrapper {
   margin-top: 50px;
   text-align: center;
 }
 
-.paginator {
-  display: flex;
-  padding: 20px 0;
-  justify-content: center;
-}
-
-.paginator button:first-child {
+.btn-wrapper a:first-child {
   margin-right: 40px;
 }
 

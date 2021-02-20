@@ -18,9 +18,10 @@ export class FilmMapper {
   /**
    * Remove useless data from filmDTO object
    */
-  public transformResponse(film: FilmDTO): Film {
+  public transformResponse(film: FilmDTO, id?: string): Film {
     return {
       pk: film.pk,
+      id: id,
       title: film.fields.title,
       episodeId: film.fields.episode_id,
       releaseDate: film.fields.release_date,
@@ -28,9 +29,36 @@ export class FilmMapper {
       producer: film.fields.producer,
       openingCrawl: film.fields.opening_crawl,
       created: new Date(film.fields.created),
-      edited: new Date(film.fields.edited),
-      planets: film.fields.planets,
-      characters: film.fields.characters,
+      planetsID: film.fields.planets,
+      charactersID: film.fields.characters,
+      vehiclesID: film.fields.vehicles,
+      starshipsID: film.fields.starships,
+      speciesID: film.fields.species,
+    };
+  }
+
+  /**
+   * Transform to DTO before sending on server
+   */
+  public transformRequset(film: Film): FilmDTO {
+    return {
+      fields: {
+        title: film.title,
+        episode_id: film.episodeId,
+        release_date: film.releaseDate,
+        director: film.director,
+        producer: film.producer,
+        opening_crawl: film.openingCrawl,
+        created: film.created.toISOString(),
+        edited: new Date().toISOString(),
+        planets: film.planetsID,
+        characters: film.charactersID,
+        vehicles: film.vehiclesID,
+        starships: film.starshipsID,
+        species: film.starshipsID,
+      },
+      pk: film.pk,
+      model: 'resources.film',
     };
   }
 
@@ -63,7 +91,7 @@ export class FilmMapper {
       },
       sortDirection: filter.sortDirection,
       searchValues: filter.searchValues,
-      target: filter.target,
+      collectionName: filter.collectionName,
     };
   }
 }

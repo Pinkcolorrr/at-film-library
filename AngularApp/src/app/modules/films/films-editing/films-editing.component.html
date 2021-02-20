@@ -1,0 +1,161 @@
+<form [formGroup]="filmInfoForm" (ngSubmit)="editFilm()">
+  <table class="mat-table">
+    <thead>
+      <tr class="mat-header-row">
+        <th class="mat-header-cell">key</th>
+        <th class="mat-header-cell">value</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="!(isLoading$ | async)">
+      <tr class="mat-row">
+        <td class="mat-cell">
+          <label for="title">title</label>
+        </td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="title" matInput formControlName="title" placeholder="title" />
+          </mat-form-field>
+          <span class="error-msg" *ngIf="!filmInfoForm.get('title').valid && filmInfoForm.get('title').touched"> Title is required </span>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">
+          <label for="episodeId">episode id</label>
+        </td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="episodeId" matInput formControlName="episodeId" type="number" placeholder="episodeId" />
+          </mat-form-field>
+          <span class="error-msg" *ngIf="!filmInfoForm.get('episodeId').valid && filmInfoForm.get('episodeId').touched">
+            Episode id is required
+          </span>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell"><label for="releaseDate">release date</label></td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="releaseDate" matInput formControlName="releaseDate" type="date" placeholder="releaseDate" />
+          </mat-form-field>
+          <span class="error-msg" *ngIf="!filmInfoForm.get('releaseDate').valid && filmInfoForm.get('releaseDate').touched">
+            Release date id is required
+          </span>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell"><label for="director">director</label></td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="director" matInput formControlName="director" type="text" placeholder="director" />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell"><label for="producer">producer</label></td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="producer" matInput formControlName="producer" type="text" placeholder="producer" />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell"><label for="openingCrawl">opening crawl</label></td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <textarea id="openingCrawl" matInput formControlName="openingCrawl" type="text" placeholder="openingCrawl"></textarea>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">characters</td>
+        <td class="mat-cell">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Characters list </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div *ngIf="isCharactersChanging$ | async">
+                <mat-selection-list
+                  #characterList
+                  (selectionChange)="updateCharactersList(characterList.selectedOptions.selected)"
+                  onload="lol()"
+                >
+                  <mat-list-option
+                    *ngFor="let character of characters$ | async"
+                    [value]="character"
+                    [selected]="checkPkInCharacters(character.pk)"
+                  >
+                    {{ character.pk }} {{ character.name }}
+                  </mat-list-option>
+                </mat-selection-list>
+              </div>
+
+              <div *ngIf="!(isCharactersChanging$ | async)">
+                <mat-list>
+                  <mat-list-item *ngFor="let character of filmData.charactersList"> {{ character.pk }} {{ character.name }} </mat-list-item>
+                </mat-list>
+              </div>
+              <div *ngIf="isCharactersChanging$ | async; then relatedCharacters; else changeCharacters"></div>
+              <ng-template #changeCharacters>
+                <button class="change-list-btn" type="button" (click)="toggleChangeModeForCharacters()" mat-flat-button color="primary">
+                  Change characters
+                </button>
+              </ng-template>
+              <ng-template #relatedCharacters>
+                <button class="change-list-btn" type="button" (click)="toggleChangeModeForCharacters()" mat-flat-button color="primary">
+                  Save
+                </button>
+              </ng-template>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">planets</td>
+        <td class="mat-cell">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Planets list </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div *ngIf="isPlanetsChanging$ | async">
+                <mat-selection-list #planetList (selectionChange)="updatePlanetsList(planetList.selectedOptions.selected)" onload="lol()">
+                  <mat-list-option *ngFor="let planet of planets$ | async" [value]="planet" [selected]="checkPkInPlanets(planet.pk)">
+                    {{ planet.pk }} {{ planet.title }}
+                  </mat-list-option>
+                </mat-selection-list>
+              </div>
+
+              <div *ngIf="!(isPlanetsChanging$ | async)">
+                <mat-list>
+                  <mat-list-item *ngFor="let planet of filmData.planetsList"> {{ planet.pk }} {{ planet.title }} </mat-list-item>
+                </mat-list>
+              </div>
+              <div *ngIf="isPlanetsChanging$ | async; then relatedPlanets; else changePlanets"></div>
+              <ng-template #changePlanets>
+                <button class="change-list-btn" type="button" (click)="toggleChangeModeForPlanets()" mat-flat-button color="primary">
+                  Change planets
+                </button>
+              </ng-template>
+              <ng-template #relatedPlanets>
+                <button class="change-list-btn" type="button" (click)="toggleChangeModeForPlanets()" mat-flat-button color="primary">
+                  Save
+                </button>
+              </ng-template>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="btn-wrapper">
+    <a routerLink="/films/list" mat-flat-button color="primary" (click)="checkUnsavedData()">Back</a>
+    <button mat-flat-button color="primary" type="submit" [disabled]="!filmInfoForm.valid">Submit</button>
+  </div>
+
+  <div class="remove-button">
+    <button mat-flat-button color="warn" type="button" (click)="removeFilm()">Remove film</button>
+  </div>
+</form>

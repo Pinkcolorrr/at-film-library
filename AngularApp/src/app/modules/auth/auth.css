@@ -36,11 +36,6 @@
   margin-bottom: 5px;
 }
 
-.error-msg {
-  color: var(--error-color);
-  font-size: 10px;
-}
-
 .form-error {
   color: var(--error-color);
   text-align: center;

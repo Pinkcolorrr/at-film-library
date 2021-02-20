@@ -3,6 +3,10 @@
  */
 export interface Character {
   /**
+   * Personal key of character
+   */
+  readonly pk: number | string;
+  /**
    * Charater birth year
    */
   readonly birthYear: string;

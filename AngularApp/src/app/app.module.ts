@@ -16,6 +16,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CharactersModule } from './modules/characters/characters.module';
 import { FilmsModule } from './modules/films/films.module';
 import { MaterialModule } from './modules/material/material.module';
+import { SharedModule } from './shared/shared.module';
 
 /**
  * Root app-module
@@ -35,6 +36,7 @@ import { MaterialModule } from './modules/material/material.module';
     BrowserAnimationsModule,
     FilmsModule,
     CharactersModule,
+    SharedModule,
   ],
   bootstrap: [AppComponent],
 })

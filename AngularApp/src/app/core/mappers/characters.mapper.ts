@@ -32,6 +32,7 @@ export class CharacterMapper {
       mass: character.fields.mass,
       name: character.fields.name,
       skinColor: character.fields.skin_color,
+      pk: character.pk,
     };
   }
 
@@ -67,7 +68,7 @@ export class CharacterMapper {
       },
       sortDirection: filter.sortDirection,
       searchValues: filter.searchValues,
-      target: filter.target,
+      collectionName: filter.collectionName,
     };
   }
 }

@@ -13,5 +13,5 @@ export interface FirebaseDTO {
   /**
    * Personal key
    */
-  readonly pk: number;
+  readonly pk: number | string;
 }

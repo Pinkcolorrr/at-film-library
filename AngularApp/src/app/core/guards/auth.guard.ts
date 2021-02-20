@@ -3,28 +3,28 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTr
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 /**
- * Service for guard routes, if user is not authorizated
+ * Service for guard routes, if user is authorizated
  */
 @Injectable({
   providedIn: 'root',
 })
-export class NotAuthGuardService {
+export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   /**
-   * If user not authorized, he can't enter the page
+   * If user authorized, he can't enter the page
    */
   public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return this.authService.isLoggedIn$.pipe(
       take(1),
       map(isLoggedIn => {
-        if (!isLoggedIn) {
+        if (isLoggedIn) {
           return this.router.createUrlTree(['/home']);
         }
-        return isLoggedIn;
+        return !isLoggedIn;
       }),
     );
   }

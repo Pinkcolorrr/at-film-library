@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { Character } from './characters';
 
+import { Character } from './characters';
 import { Planet } from './planet';
 
 /**
@@ -8,57 +8,82 @@ import { Planet } from './planet';
  */
 export interface Film {
   /**
+   * Film id
+   */
+  readonly id?: string;
+
+  /**
    * Personal key
    */
-  readonly pk: number;
+  readonly pk: number | string;
+
   /**
    * Film title
    */
   readonly title: string;
+
   /**
    * Film director
    */
   readonly director: string;
+
   /**
    * Film release date
    */
   readonly releaseDate: Date;
+
   /**
    * Film episode Id
    */
   readonly episodeId: number;
+
   /**
    * Film producer
    */
   readonly producer: string;
+
   /**
    * Film opening crawl
    */
   readonly openingCrawl: string;
+
   /**
    * When note about film was created
    */
   readonly created: Date;
-  /**
-   * When note was last time edited
-   */
-  readonly edited: Date;
-  /**
-   * Array of related data about characters
-   */
-  readonly characters: number[];
-  /**
-   * Array of related data about planets
-   */
-  readonly planets: number[];
 
   /**
-   * Field to keep Observable on related data about planets
+   * Array of IDs related characters
    */
-  planets$?: Observable<Planet[]>;
+  readonly charactersID: (number | string)[];
 
   /**
-   * Field to keep Observable on related data about characters
+   * Array of IDs related planets
    */
-  characters$?: Observable<Character[]>;
+  readonly planetsID: (number | string)[];
+
+  /**
+   * Array of IDs related species
+   */
+  readonly speciesID: (number | string)[];
+
+  /**
+   * Array of IDs related starships
+   */
+  readonly starshipsID: (number | string)[];
+
+  /**
+   * Array of IDs related vehicles
+   */
+  readonly vehiclesID: (number | string)[];
+
+  /**
+   * Field to keep array with related planets
+   */
+  planetsList?: Planet[];
+
+  /**
+   * Field to keep array with related characters
+   */
+  charactersList?: Character[];
 }

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DocumentChangeAction, QueryDocumentSnapshot } from '@angular/fire/firestore';
 
-import { FilmDTO } from '../DTOs/film-dto';
-
 /**
  * Control over documents from which pages start and finish
  */
