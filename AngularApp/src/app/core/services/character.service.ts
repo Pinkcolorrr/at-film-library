@@ -26,13 +26,7 @@ export class CharacterService {
   /**
    * Filters, that define query params
    */
-  private readonly filters$ = new BehaviorSubject<QueryFilterParams>(new QueryFilterParams('people', 10, 'fields.name'));
-
-  /**
-   * Main character source.
-   * Will be updated every time, when filter$ updating
-   */
-  public readonly charactersSource$: Observable<Character[]>;
+  private filters$: BehaviorSubject<QueryFilterParams>;
 
   /**
    * Observable for toggle next page button
@@ -56,9 +50,7 @@ export class CharacterService {
      * Service for connecting to API
      */
     private readonly apiService: ApiService,
-  ) {
-    this.charactersSource$ = this.charactersSourceInit();
-  }
+  ) {}
 
   /**
    * Add new object in filter$ source, that trigger new server request
@@ -71,7 +63,9 @@ export class CharacterService {
    * Switch filter$ source from parameters object to source with applied filters
    * Using mapper for convert DTO
    */
-  private charactersSourceInit(): Observable<Character[]> {
+  public charactersSourceInit(queryFilters: QueryFilterParams): Observable<Character[]> {
+    this.filters$ = new BehaviorSubject(queryFilters);
+
     return this.filters$.pipe(
       switchMap(filters => {
         return this.applyFilters(filters);

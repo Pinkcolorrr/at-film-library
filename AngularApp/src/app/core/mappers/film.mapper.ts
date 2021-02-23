@@ -65,33 +65,37 @@ export class FilmMapper {
   /**
    * Transform titles, that used for table sorting, to server format
    */
-  public transformTitles(filter: QueryFilterParams): QueryFilterParams {
+  public transformTitles(filters: QueryFilterParams): QueryFilterParams {
+    let sortTarget: string;
+
+    switch (filters.sortTarget) {
+      case 'episodeId': {
+        sortTarget = 'fields.episode_id';
+        break;
+      }
+      case 'releaseDate': {
+        sortTarget = 'fields.release_date';
+        break;
+      }
+      case 'title': {
+        sortTarget = 'fields.title';
+        break;
+      }
+      case 'pk':
+      default: {
+        sortTarget = 'pk';
+        break;
+      }
+    }
+
     return {
-      limit: filter.limit,
-      pageDirection: filter.pageDirection,
-      get sortTarget(): string {
-        switch (filter.sortTarget) {
-          case 'episodeId': {
-            return 'fields.episode_id';
-          }
-          case 'releaseDate': {
-            return 'fields.release_date';
-          }
-          case 'title': {
-            return 'fields.title';
-          }
-          case 'pk':
-          default: {
-            return 'pk';
-          }
-        }
-      },
-      get searchTarget(): string {
-        return `fields.${filter.searchTarget}`;
-      },
-      sortDirection: filter.sortDirection,
-      searchValues: filter.searchValues,
-      collectionName: filter.collectionName,
+      limit: filters.limit,
+      pageDirection: filters.pageDirection,
+      sortTarget: sortTarget,
+      searchTarget: `fields.${filters.searchTarget}`,
+      sortDirection: filters.sortDirection,
+      searchValues: filters.searchValues,
+      collectionName: filters.collectionName,
     };
   }
 }

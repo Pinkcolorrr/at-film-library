@@ -93,7 +93,7 @@
               </mat-expansion-panel-header>
               <mat-selection-list #planetList (selectionChange)="updatePlanetsList(planetList.selectedOptions.selected)">
                 <mat-list-option *ngFor="let planet of planets$ | async" [value]="planet">
-                  {{ planet.pk }} {{ planet.title }}
+                  {{ planet.pk }} {{ planet.name }}
                 </mat-list-option>
               </mat-selection-list>
             </mat-expansion-panel>

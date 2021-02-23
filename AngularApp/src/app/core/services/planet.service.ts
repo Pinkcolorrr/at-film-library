@@ -26,13 +26,7 @@ export class PlanetService {
   /**
    * Filters, that define query params
    */
-  private readonly filters$ = new BehaviorSubject<QueryFilterParams>(new QueryFilterParams('planets', 10, 'fields.name'));
-
-  /**
-   * Main planet source.
-   * Will be updated every time, when filter$ updating
-   */
-  public readonly planetsSource$: Observable<Planet[]>;
+  private filters$: BehaviorSubject<QueryFilterParams>;
 
   /**
    * Observable for toggle next page button
@@ -56,9 +50,7 @@ export class PlanetService {
      * Service for connecting to API
      */
     private readonly apiService: ApiService,
-  ) {
-    this.planetsSource$ = this.planetsSourceInit();
-  }
+  ) {}
 
   /**
    * Add new object in filter$ source, that trigger new server request
@@ -71,7 +63,9 @@ export class PlanetService {
    * Switch filter$ source from parameters object to source with applied filters
    * Using mapper for convert DTO
    */
-  private planetsSourceInit(): Observable<Planet[]> {
+  public planetsSourceInit(queryFilters: QueryFilterParams): Observable<Planet[]> {
+    this.filters$ = new BehaviorSubject(queryFilters);
+
     return this.filters$.pipe(
       switchMap(filters => {
         return this.applyFilters(filters);

@@ -25,7 +25,7 @@ export class PlanetMapper {
       diameter: planet.fields.diameter,
       edited: new Date(planet.fields.edited),
       gravity: planet.fields.gravity,
-      title: planet.fields.name,
+      name: planet.fields.name,
       orbitalPeriod: planet.fields.orbital_period,
       population: planet.fields.population,
       rotationPeriod: planet.fields.rotation_period,
@@ -38,33 +38,15 @@ export class PlanetMapper {
   /**
    * Transform titles, that used for table sorting, to server format
    */
-  public transformTitles(filter: QueryFilterParams): QueryFilterParams {
+  public transformTitles(filters: QueryFilterParams): QueryFilterParams {
     return {
-      limit: filter.limit,
-      pageDirection: filter.pageDirection,
-      get sortTarget(): string {
-        switch (filter.sortTarget) {
-          case 'population': {
-            return 'fields.population';
-          }
-          case 'terrain': {
-            return 'fields.terrain';
-          }
-          case 'title': {
-            return 'fields.name';
-          }
-          case 'pk':
-          default: {
-            return 'pk';
-          }
-        }
-      },
-      get searchTarget(): string {
-        return `fields.${filter.searchTarget}`;
-      },
-      sortDirection: filter.sortDirection,
-      searchValues: filter.searchValues,
-      collectionName: filter.collectionName,
+      limit: filters.limit,
+      pageDirection: filters.pageDirection,
+      sortTarget: filters.sortTarget === 'pk' ? 'pk' : `fields.${filters.sortTarget}`,
+      searchTarget: `fields.${filters.searchTarget}`,
+      sortDirection: filters.sortDirection,
+      searchValues: filters.searchValues,
+      collectionName: filters.collectionName,
     };
   }
 }

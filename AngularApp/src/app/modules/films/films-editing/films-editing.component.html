@@ -122,14 +122,14 @@
               <div *ngIf="isPlanetsChanging$ | async">
                 <mat-selection-list #planetList (selectionChange)="updatePlanetsList(planetList.selectedOptions.selected)" onload="lol()">
                   <mat-list-option *ngFor="let planet of planets$ | async" [value]="planet" [selected]="checkPkInPlanets(planet.pk)">
-                    {{ planet.pk }} {{ planet.title }}
+                    {{ planet.pk }} {{ planet.name }}
                   </mat-list-option>
                 </mat-selection-list>
               </div>
 
               <div *ngIf="!(isPlanetsChanging$ | async)">
                 <mat-list>
-                  <mat-list-item *ngFor="let planet of filmData.planetsList"> {{ planet.pk }} {{ planet.title }} </mat-list-item>
+                  <mat-list-item *ngFor="let planet of filmData.planetsList"> {{ planet.pk }} {{ planet.name }} </mat-list-item>
                 </mat-list>
               </div>
               <div *ngIf="isPlanetsChanging$ | async; then relatedPlanets; else changePlanets"></div>
@@ -149,6 +149,10 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="spinner" *ngIf="isLoading$ | async">
+    <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+  </div>
 
   <div class="btn-wrapper">
     <a routerLink="/films/list" mat-flat-button color="primary" (click)="checkUnsavedData()">Back</a>

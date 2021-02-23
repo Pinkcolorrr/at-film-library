@@ -29,7 +29,7 @@ export interface Planet {
   /**
    * Planet name
    */
-  readonly title: string;
+  readonly name: string;
   /**
    * Planet orbital period
    */

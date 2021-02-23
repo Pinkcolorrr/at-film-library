@@ -16,7 +16,7 @@ import { PlanetService } from 'src/app/core/services/planet.service';
   styleUrls: ['./planets-list.component.css'],
 })
 export class PlanetsListComponent {
-  private queryFilter = new QueryFilterParams('planets', 10, 'name');
+  private queryFilters = new QueryFilterParams('planets', 10, 'name');
 
   /**
    * Form for searching planets
@@ -51,7 +51,7 @@ export class PlanetsListComponent {
   public readonly displayedColumns: string[] = ['title', 'population', 'terrain'];
 
   constructor(private readonly planetService: PlanetService) {
-    this.planetsData$ = this.planetService.planetsSource$.pipe(
+    this.planetsData$ = this.planetService.planetsSourceInit(this.queryFilters).pipe(
       tap(() => {
         if (this.isLoading$.value) {
           this.isLoading$.next(false);
@@ -71,43 +71,43 @@ export class PlanetsListComponent {
    */
   public matSort(event: Sort): void {
     if (event.direction) {
-      this.queryFilter.sortTarget = event.active;
-      this.queryFilter.sortDirection = event.direction as 'asc' | 'desc';
+      this.queryFilters.sortTarget = event.active;
+      this.queryFilters.sortDirection = event.direction as 'asc' | 'desc';
     } else {
-      this.queryFilter.sortTarget = 'pk';
-      this.queryFilter.sortDirection = 'asc';
+      this.queryFilters.sortTarget = 'pk';
+      this.queryFilters.sortDirection = 'asc';
     }
 
-    this.queryFilter.pageDirection = 'initial';
-    this.planetService.setFilter(this.queryFilter);
+    this.queryFilters.pageDirection = 'initial';
+    this.planetService.setFilter(this.queryFilters);
   }
 
   /**
    * Switch table to next page
    */
   public nextPage(): void {
-    this.queryFilter.pageDirection = 'next';
+    this.queryFilters.pageDirection = 'next';
     this.turnOffPageBtns();
 
-    this.planetService.setFilter(this.queryFilter);
+    this.planetService.setFilter(this.queryFilters);
   }
 
   /**
    * Switch table to previous page
    */
   public previousPage(): void {
-    this.queryFilter.pageDirection = 'previous';
+    this.queryFilters.pageDirection = 'previous';
     this.turnOffPageBtns();
 
-    this.planetService.setFilter(this.queryFilter);
+    this.planetService.setFilter(this.queryFilters);
   }
 
   /**
    * Filtering data by planet title
    */
   public filterByTitle(): void {
-    this.queryFilter.searchValues = this.searchForm.value.searchValue.trim();
-    this.queryFilter.pageDirection = 'initial';
-    this.planetService.setFilter(this.queryFilter);
+    this.queryFilters.searchValues = this.searchForm.value.searchValue.trim();
+    this.queryFilters.pageDirection = 'initial';
+    this.planetService.setFilter(this.queryFilters);
   }
 }

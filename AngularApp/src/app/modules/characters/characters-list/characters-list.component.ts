@@ -16,7 +16,7 @@ import { CharacterService } from 'src/app/core/services/character.service';
   styleUrls: ['./characters-list.component.css'],
 })
 export class CharactersListComponent {
-  private queryFilter = new QueryFilterParams('people', 10, 'name');
+  private queryFilters = new QueryFilterParams('people', 10, 'name');
 
   /**
    * Form for searching characters
@@ -51,7 +51,7 @@ export class CharactersListComponent {
   public readonly displayedColumns: string[] = ['name', 'gender', 'height', 'mass', 'skinColor'];
 
   constructor(private readonly characterService: CharacterService) {
-    this.charactersData$ = this.characterService.charactersSource$.pipe(
+    this.charactersData$ = this.characterService.charactersSourceInit(this.queryFilters).pipe(
       tap(() => {
         if (this.isLoading$.value) {
           this.isLoading$.next(false);
@@ -71,43 +71,43 @@ export class CharactersListComponent {
    */
   public matSort(event: Sort): void {
     if (event.direction) {
-      this.queryFilter.sortTarget = event.active;
-      this.queryFilter.sortDirection = event.direction as 'asc' | 'desc';
+      this.queryFilters.sortTarget = event.active;
+      this.queryFilters.sortDirection = event.direction as 'asc' | 'desc';
     } else {
-      this.queryFilter.sortTarget = 'pk';
-      this.queryFilter.sortDirection = 'asc';
+      this.queryFilters.sortTarget = 'pk';
+      this.queryFilters.sortDirection = 'asc';
     }
 
-    this.queryFilter.pageDirection = 'initial';
-    this.characterService.setFilter(this.queryFilter);
+    this.queryFilters.pageDirection = 'initial';
+    this.characterService.setFilter(this.queryFilters);
   }
 
   /**
    * Switch table to next page
    */
   public nextPage(): void {
-    this.queryFilter.pageDirection = 'next';
+    this.queryFilters.pageDirection = 'next';
     this.turnOffPageBtns();
 
-    this.characterService.setFilter(this.queryFilter);
+    this.characterService.setFilter(this.queryFilters);
   }
 
   /**
    * Switch table to previous page
    */
   public previousPage(): void {
-    this.queryFilter.pageDirection = 'previous';
+    this.queryFilters.pageDirection = 'previous';
     this.turnOffPageBtns();
 
-    this.characterService.setFilter(this.queryFilter);
+    this.characterService.setFilter(this.queryFilters);
   }
 
   /**
    * Filtering data by character title
    */
   public filterByTitle(): void {
-    this.queryFilter.searchValues = this.searchForm.value.searchValue.trim();
-    this.queryFilter.pageDirection = 'initial';
-    this.characterService.setFilter(this.queryFilter);
+    this.queryFilters.searchValues = this.searchForm.value.searchValue.trim();
+    this.queryFilters.pageDirection = 'initial';
+    this.characterService.setFilter(this.queryFilters);
   }
 }

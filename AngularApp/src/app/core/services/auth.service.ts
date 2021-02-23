@@ -59,7 +59,7 @@ export class AuthService {
    * Register user in app
    */
   public async register(user: UserRegister): Promise<UserInfo> {
-    return this.userMapper.transformResponse(await this.afAuth.signInWithEmailAndPassword(user.email, user.password));
+    return this.userMapper.transformResponse(await this.afAuth.createUserWithEmailAndPassword(user.email, user.password));
   }
 
   /**

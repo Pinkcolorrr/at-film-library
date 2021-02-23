@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DocumentChangeAction } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap, map, switchMap, filter } from 'rxjs/operators';
+import { tap, map, switchMap } from 'rxjs/operators';
 
 import { FilmDTO } from '../DTOs/film-dto';
 import { FilmMapper } from '../mappers/film.mapper';
@@ -26,13 +26,7 @@ export class FilmService {
   /**
    * Filters, that define query params
    */
-  private readonly filters$ = new BehaviorSubject<QueryFilterParams>(new QueryFilterParams('films', 2, 'fields.title'));
-
-  /**
-   * Main film source.
-   * Will be updated every time, when filter$ updating
-   */
-  public readonly filmsSource$: Observable<Film[]>;
+  private filters$: BehaviorSubject<QueryFilterParams>;
 
   /**
    * Observable for toggle next page button
@@ -56,9 +50,7 @@ export class FilmService {
      * Service for connecting to API
      */
     private readonly apiService: ApiService,
-  ) {
-    this.filmsSource$ = this.filmsSourceInit();
-  }
+  ) {}
 
   /**
    * Add new object in filter$ source, that trigger new server request
@@ -71,7 +63,9 @@ export class FilmService {
    * Switch filter$ source from parameters object to source with applied filters
    * Using mapper for convert DTO
    */
-  private filmsSourceInit(): Observable<Film[]> {
+  public filmsSourceInit(queryFilters: QueryFilterParams): Observable<Film[]> {
+    this.filters$ = new BehaviorSubject(queryFilters);
+
     return this.filters$.pipe(
       switchMap(filters => {
         return this.applyFilters(filters);
