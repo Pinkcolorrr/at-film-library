@@ -53,6 +53,11 @@ export class FilmsEditingComponent implements OnDestroy {
   public readonly isLoading$ = new BehaviorSubject(true);
 
   /**
+   * Show error, if failed to get the film
+   */
+  public readonly hasError$ = new BehaviorSubject(false);
+
+  /**
    * Object for control film form
    */
   public readonly filmInfoForm: FormGroup = new FormGroup({
@@ -86,19 +91,26 @@ export class FilmsEditingComponent implements OnDestroy {
     private readonly activatedRoute: ActivatedRoute,
     private readonly dialog: MatDialog,
   ) {
-    this.subscriptionFilmData = this.filmProcessingService.getFilm(this.filmPk).subscribe(film => {
-      this.filmData = film;
+    this.subscriptionFilmData = this.filmProcessingService.getFilm(this.filmPk).subscribe({
+      next: (film: Film): void => {
+        this.filmData = film;
 
-      this.filmInfoForm.setValue({
-        title: this.filmData.title,
-        episodeId: this.filmData.episodeId,
-        releaseDate: this.filmData.releaseDate,
-        director: this.filmData.director,
-        producer: this.filmData.producer,
-        openingCrawl: this.filmData.openingCrawl,
-      });
+        this.filmInfoForm.setValue({
+          title: this.filmData.title,
+          episodeId: this.filmData.episodeId,
+          releaseDate: this.filmData.releaseDate,
+          director: this.filmData.director,
+          producer: this.filmData.producer,
+          openingCrawl: this.filmData.openingCrawl,
+        });
 
-      this.isLoading$.next(false);
+        this.isLoading$.next(false);
+      },
+      error: (err: Error): void => {
+        console.error(err);
+        this.hasError$.next(true);
+        this.isLoading$.next(false);
+      },
     });
 
     this.planets$ = this.filmProcessingService.getAllPlanets().pipe(take(1));

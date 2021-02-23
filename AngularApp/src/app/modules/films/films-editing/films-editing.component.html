@@ -6,7 +6,7 @@
         <th class="mat-header-cell">value</th>
       </tr>
     </thead>
-    <tbody *ngIf="!(isLoading$ | async)">
+    <tbody *ngIf="!(isLoading$ | async) && filmData">
       <tr class="mat-row">
         <td class="mat-cell">
           <label for="title">title</label>
@@ -149,6 +149,8 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="error-msg film-load-error" *ngIf="!(isLoading$ | async) && (hasError$ | async)">failed to load film</div>
 
   <div class="spinner" *ngIf="isLoading$ | async">
     <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>

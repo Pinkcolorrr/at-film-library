@@ -79,3 +79,9 @@ textarea {
 .change-list-btn {
   width: 100%;
 }
+
+.film-load-error {
+  font-size: 15px;
+  margin: 20px;
+  text-align: center;
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DocumentReference } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 import { CharacterDTO } from '../DTOs/characters-dto';
 import { FilmDTO } from '../DTOs/film-dto';
@@ -16,7 +16,7 @@ import { Planet } from '../models/planet';
 import { ApiService } from './api.service';
 
 /**
- * Processing changing films data
+ * Processing all requests related to films changes
  */
 @Injectable({
   providedIn: 'root',
@@ -76,7 +76,7 @@ export class FilmProcessingService {
   /**
    * Get film by personal key
    */
-  public getFilm(pk: number | string): Observable<any> {
+  public getFilm(pk: number | string): Observable<Film> {
     return this.apiService.getItemsByKey<FilmDTO>('films', pk).pipe(
       map(film => {
         return this.filmMapper.transformResponse(film[0].payload.doc.data(), film[0].payload.doc.id);
@@ -86,6 +86,9 @@ export class FilmProcessingService {
       }),
       switchMap(film => {
         return this.addCharactersData(film);
+      }),
+      catchError(err => {
+        return throwError(err);
       }),
     );
   }
