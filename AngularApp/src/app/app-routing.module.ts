@@ -12,9 +12,11 @@ import { PlanetsModule } from './modules/planets/planets.module';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'films', loadChildren: () => import('./modules/films/films.module').then(m => m.FilmsModule) },
+  { path: 'planets', loadChildren: () => import('./modules/planets/planets.module').then(m => m.PlanetsModule) },
+  { path: 'characters', loadChildren: () => import('./modules/characters/characters.module').then(m => m.CharactersModule) },
+  { path: 'authorization', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
   { path: 'notfound', component: NotFoundComponent },
-  { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', redirectTo: '/notfound', pathMatch: 'full' },
 ];
@@ -23,7 +25,7 @@ const routes: Routes = [
  * Routing module
  */
 @NgModule({
-  imports: [RouterModule.forRoot(routes), FilmsModule, CharactersModule, PlanetsModule],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

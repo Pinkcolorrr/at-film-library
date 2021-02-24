@@ -16,6 +16,6 @@ import { FilmsRoutes } from './films.routing';
 @NgModule({
   declarations: [FimlsListComponent, FilmsAddingComponent, FimlsComponent, FilmsEditingComponent],
   imports: [CommonModule, MaterialModule, FilmsRoutes, ReactiveFormsModule, SharedModule],
-  exports: [ReactiveFormsModule],
+  exports: [],
 })
 export class FilmsModule {}

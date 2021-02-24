@@ -8,10 +8,10 @@ import { FilmsEditingComponent } from './films-editing/films-editing.component';
 import { FimlsComponent } from './films.component';
 
 const routes: Routes = [
-  { path: 'films', redirectTo: '/films/list', pathMatch: 'full' },
+  { path: '', redirectTo: '/films/list', pathMatch: 'full' },
 
   {
-    path: 'films',
+    path: '',
     component: FimlsComponent,
     children: [
       { path: 'list', component: FimlsListComponent },

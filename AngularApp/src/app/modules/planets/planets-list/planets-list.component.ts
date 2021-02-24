@@ -48,7 +48,7 @@ export class PlanetsListComponent {
   /**
    * Colums in table header
    */
-  public readonly displayedColumns: string[] = ['title', 'population', 'terrain'];
+  public readonly displayedColumns: string[] = ['name', 'population', 'terrain'];
 
   constructor(private readonly planetService: PlanetService) {
     this.planetsData$ = this.planetService.planetsSourceInit(this.queryFilters).pipe(
