@@ -39,7 +39,7 @@
     <ng-container matColumnDef="filmLink">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell class="edit-column" *matCellDef="let element">
-        <button mat-icon-button color="accent">
+        <button mat-icon-button color="accent" (click)="openDialog(element)">
           <mat-icon class="edit-icon">edit</mat-icon>
         </button>
       </td>
@@ -65,4 +65,13 @@
   <div class="add-btn-wrapper">
     <a mat-flat-button color="primary" routerLink="/films/add">Add new film</a>
   </div>
+</div>
+
+<div class="edit-dialog-wrapper" *ngIf="isDialogOpen$ | async">
+  <app-films-editing
+    class="edit-dialog"
+    [isDialog]="true"
+    [filmDialogData]="filmDialogData$ | async"
+    (closeDialog)="closeDialog()"
+  ></app-films-editing>
 </div>

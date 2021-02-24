@@ -3,12 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { AuthGuard } from './core/guards/auth.guard';
-import { LoginComponent } from './modules/auth/login/login.component';
-import { RegisterComponent } from './modules/auth/register/register.component';
-import { CharactersModule } from './modules/characters/characters.module';
-import { FilmsModule } from './modules/films/films.module';
-import { PlanetsModule } from './modules/planets/planets.module';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },

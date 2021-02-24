@@ -36,6 +36,16 @@ export class FimlsListComponent {
   public readonly isLoading$ = new BehaviorSubject(true);
 
   /**
+   * Toggle state of dialog window
+   */
+  public readonly isDialogOpen$ = new BehaviorSubject(false);
+
+  /**
+   * Data for changing dialog window
+   */
+  public readonly filmDialogData$ = new BehaviorSubject(null);
+
+  /**
    * Observable for toggle next button
    */
   public readonly isNextPageAvailable$ = this.filmService.isNextPageAvailable$;
@@ -58,6 +68,22 @@ export class FimlsListComponent {
         }
       }),
     );
+  }
+
+  /**
+   * Open edit film dialog window
+   */
+  public openDialog(filmDialogData: Film): void {
+    this.isDialogOpen$.next(true);
+    this.filmDialogData$.next(filmDialogData);
+  }
+
+  /**
+   * close edit film dialog window
+   */
+  public closeDialog(): void {
+    this.isDialogOpen$.next(false);
+    this.filmDialogData$.next(null);
   }
 
   private turnOffPageBtns(): void {

@@ -14,8 +14,8 @@
   text-align: center;
 }
 
-.btn-wrapper a:first-child {
-  margin-right: 40px;
+.btn-wrapper button:last-child {
+  margin-left: 40px;
 }
 
 .remove-button {

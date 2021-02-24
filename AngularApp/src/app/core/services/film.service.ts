@@ -72,7 +72,7 @@ export class FilmService {
       }),
       map(films => {
         return films.map(item => {
-          return this.filmMapper.transformResponse(item.payload.doc.data());
+          return this.filmMapper.transformResponse(item.payload.doc.data(), item.payload.doc.id);
         });
       }),
     );

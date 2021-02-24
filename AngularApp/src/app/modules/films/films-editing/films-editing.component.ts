@@ -1,10 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatListOption } from '@angular/material/list';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { Character } from 'src/app/core/models/characters';
 import { Film } from 'src/app/core/models/film';
 import { Planet } from 'src/app/core/models/planet';
@@ -19,21 +18,39 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
   templateUrl: './films-editing.component.html',
   styleUrls: ['./films-editing.component.css'],
 })
-export class FilmsEditingComponent implements OnDestroy {
+export class FilmsEditingComponent implements OnDestroy, OnInit {
+  constructor(
+    private readonly filmProcessingService: FilmProcessingService,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly dialog: MatDialog,
+  ) {}
   /**
    * Object, that contain initial film data
    */
   public filmData: Film;
 
   /**
+   * Object for control film form
+   */
+  public readonly filmInfoForm: FormGroup = new FormGroup({
+    title: new FormControl('', Validators.required),
+    episodeId: new FormControl('', Validators.required),
+    releaseDate: new FormControl('', Validators.required),
+    director: new FormControl(''),
+    producer: new FormControl(''),
+    openingCrawl: new FormControl(''),
+  });
+
+  /**
    * Observable with list of all planets
    */
-  public readonly planets$: Observable<Planet[]>;
+  public planets$: Observable<Planet[]>;
 
   /**
    * Observable with list of all characters
    */
-  public readonly characters$: Observable<Character[]>;
+  public characters$: Observable<Character[]>;
 
   /**
    * If true, mat-selection-list of planets is opened, where user can select new related data
@@ -58,63 +75,86 @@ export class FilmsEditingComponent implements OnDestroy {
   public readonly hasError$ = new BehaviorSubject(false);
 
   /**
-   * Object for control film form
-   */
-  public readonly filmInfoForm: FormGroup = new FormGroup({
-    title: new FormControl('', Validators.required),
-    episodeId: new FormControl('', Validators.required),
-    releaseDate: new FormControl('', Validators.required),
-    director: new FormControl(''),
-    producer: new FormControl(''),
-    openingCrawl: new FormControl(''),
-  });
-
-  /**
    * Film personal key
    * Get from url and use in server request
    */
-  private readonly filmPk = Number(this.activatedRoute.snapshot.params['pk']) || this.activatedRoute.snapshot.params['pk'];
-
-  /**
-   * Subscription on getting data from server
-   */
-  private readonly subscriptionFilmData: Subscription;
+  private filmPk: number | string;
 
   /**
    * Check if arrays with related data was touch
    */
   private readonly canDeactivate$ = new BehaviorSubject(true);
 
-  constructor(
-    private readonly filmProcessingService: FilmProcessingService,
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly dialog: MatDialog,
-  ) {
-    this.subscriptionFilmData = this.filmProcessingService.getFilm(this.filmPk).subscribe({
-      next: (film: Film): void => {
-        this.filmData = film;
+  /**
+   * Subscription on getting data from server
+   */
+  private subscriptionFilmData: Subscription;
 
-        this.filmInfoForm.setValue({
-          title: this.filmData.title,
-          episodeId: this.filmData.episodeId,
-          releaseDate: this.filmData.releaseDate,
-          director: this.filmData.director,
-          producer: this.filmData.producer,
-          openingCrawl: this.filmData.openingCrawl,
-        });
+  /**
+   * Check if component opened like dialog or standalone page
+   */
+  @Input() public readonly isDialog: boolean = false;
 
-        this.isLoading$.next(false);
-      },
-      error: (err: Error): void => {
-        console.error(err);
-        this.hasError$.next(true);
-        this.isLoading$.next(false);
-      },
+  /**
+   * Get data from films list so as not to download them from the server
+   */
+  @Input() private readonly filmDialogData: Film;
+
+  /**
+   * Output listener for close dialog window
+   */
+  @Output() public readonly closeDialog = new EventEmitter<void>();
+  /**
+   * Handler for back button
+   */
+  public close(): void {
+    this.closeDialog.emit();
+  }
+
+  /**
+   * Set data about film in form
+   * Save data in local film object
+   */
+  public ngOnInit(): void {
+    if (this.isDialog) {
+      this.filmPk = this.filmDialogData.pk;
+
+      this.filmData = this.filmDialogData;
+      this.formInit(this.filmData);
+      this.isLoading$.next(false);
+    } else {
+      this.filmPk = Number(this.activatedRoute.snapshot.params['pk']) || this.activatedRoute.snapshot.params['pk'];
+
+      this.subscriptionFilmData = this.filmProcessingService.getFilm(this.filmPk).subscribe({
+        next: (film: Film): void => {
+          this.filmData = film;
+          this.formInit(this.filmData);
+          this.isLoading$.next(false);
+        },
+        error: (err: Error): void => {
+          console.error(err);
+          this.hasError$.next(true);
+          this.isLoading$.next(false);
+        },
+      });
+
+      this.planets$ = this.filmProcessingService.getAllPlanets();
+      this.characters$ = this.filmProcessingService.getAllCharacters();
+    }
+  }
+
+  /**
+   * Set data from film object to form
+   */
+  private formInit(film: Film): void {
+    this.filmInfoForm.setValue({
+      title: film.title,
+      episodeId: film.episodeId,
+      releaseDate: film.releaseDate,
+      director: film.director,
+      producer: film.producer,
+      openingCrawl: film.openingCrawl,
     });
-
-    this.planets$ = this.filmProcessingService.getAllPlanets().pipe(take(1));
-    this.characters$ = this.filmProcessingService.getAllCharacters().pipe(take(1));
   }
 
   /**
@@ -159,7 +199,9 @@ export class FilmsEditingComponent implements OnDestroy {
    * Unsubscribe after destroy component
    */
   public ngOnDestroy(): void {
-    this.subscriptionFilmData.unsubscribe();
+    if (!this.isDialog) {
+      this.subscriptionFilmData.unsubscribe();
+    }
   }
 
   /**
@@ -187,6 +229,9 @@ export class FilmsEditingComponent implements OnDestroy {
     this.isPlanetsChanging$.next(false);
     this.isCharactersChanging$.next(false);
 
+    const charactersID = this.isDialog ? this.filmData.charactersID : this.filmData.charactersList.map(character => character.pk);
+    const planetsId = this.isDialog ? this.filmData.planetsID : this.filmData.planetsList.map(planet => planet.pk);
+
     this.filmData = {
       title: this.filmInfoForm.value.title,
       episodeId: this.filmInfoForm.value.episodeId,
@@ -194,8 +239,8 @@ export class FilmsEditingComponent implements OnDestroy {
       director: this.filmInfoForm.value.director,
       producer: this.filmInfoForm.value.producer,
       openingCrawl: this.filmInfoForm.value.openingCrawl,
-      charactersID: this.filmData.charactersList.map(character => character.pk),
-      planetsID: this.filmData.planetsList.map(planet => planet.pk),
+      charactersID: charactersID,
+      planetsID: planetsId,
       speciesID: this.filmData.speciesID,
       vehiclesID: this.filmData.vehiclesID,
       starshipsID: this.filmData.starshipsID,
@@ -205,7 +250,11 @@ export class FilmsEditingComponent implements OnDestroy {
     };
 
     this.filmProcessingService.editFilm(this.filmData).then(() => {
-      this.router.navigateByUrl('/films/list');
+      if (this.isDialog) {
+        this.close();
+      } else {
+        this.router.navigateByUrl('/films/list');
+      }
     });
   }
 
