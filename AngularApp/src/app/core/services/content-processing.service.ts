@@ -21,7 +21,7 @@ import { ApiService } from './api.service';
 @Injectable({
   providedIn: 'root',
 })
-export class FilmProcessingService {
+export class ContentProcessingService {
   private readonly filmMapper = new FilmMapper();
   private readonly planetMapper = new PlanetMapper();
   private readonly characterMapper = new CharacterMapper();
@@ -76,8 +76,10 @@ export class FilmProcessingService {
   /**
    * Get film by personal key
    */
-  public getFilm(pk: number | string): Observable<Film> {
-    return this.apiService.getItemsByKey<FilmDTO>('films', pk).pipe(
+  public getFilm(pk: string): Observable<Film> {
+    const assignedPk = Number(pk) || pk;
+
+    return this.apiService.getItemsByKey<FilmDTO>('films', assignedPk).pipe(
       map(film => {
         return this.filmMapper.transformResponse(film[0].payload.doc.data(), film[0].payload.doc.id);
       }),
@@ -97,25 +99,35 @@ export class FilmProcessingService {
    * Add planets related data to film
    */
   private addPlanetData(film: Film): Observable<Film> {
-    return this.apiService.getItemsByKey<PlanetDTO>('planets', film.planetsID).pipe(
-      take(1),
-      map(planet => {
-        film.planetsList = this.planetMapper.transformArrayResponse(planet.map(pl => pl.payload.doc.data()));
-        return film;
-      }),
-    );
+    return this.apiService
+      .getItemsByKey<PlanetDTO>(
+        'planets',
+        film.planetsID.map(item => Number(item) || item),
+      )
+      .pipe(
+        take(1),
+        map(planet => {
+          film.planetsList = this.planetMapper.transformArrayResponse(planet.map(pl => pl.payload.doc.data()));
+          return film;
+        }),
+      );
   }
 
   /**
    * Add characters related data to film
    */
   private addCharactersData(film: Film): Observable<Film> {
-    return this.apiService.getItemsByKey<CharacterDTO>('people', film.charactersID).pipe(
-      take(1),
-      map(character => {
-        film.charactersList = this.characterMapper.transformArrayResponse(character.map(ch => ch.payload.doc.data()));
-        return film;
-      }),
-    );
+    return this.apiService
+      .getItemsByKey<CharacterDTO>(
+        'people',
+        film.charactersID.map(item => Number(item) || item),
+      )
+      .pipe(
+        take(1),
+        map(character => {
+          film.charactersList = this.characterMapper.transformArrayResponse(character.map(ch => ch.payload.doc.data()));
+          return film;
+        }),
+      );
   }
 }

@@ -8,7 +8,7 @@ import { CanComponentDeactivate } from 'src/app/core/guards/component-deactivate
 import { Character } from 'src/app/core/models/characters';
 import { Film } from 'src/app/core/models/film';
 import { Planet } from 'src/app/core/models/planet';
-import { FilmProcessingService } from 'src/app/core/services/film-processing.service';
+import { ContentProcessingService } from 'src/app/core/services/content-processing.service';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import * as uuid from 'uuid';
 /**
@@ -55,7 +55,7 @@ export class FilmsAddingComponent implements CanComponentDeactivate {
   private readonly canDeactivate$ = new BehaviorSubject(true);
 
   constructor(
-    private readonly filmProcessingService: FilmProcessingService,
+    private readonly filmProcessingService: ContentProcessingService,
     private readonly router: Router,
     private readonly dialog: MatDialog,
   ) {

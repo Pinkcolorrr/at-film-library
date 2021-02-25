@@ -72,7 +72,7 @@ export class ApiService {
    * So this function is used in case, when we need request more than 10 documents
    */
   private generateSource<T>(collectionName: string, idArr: (number | string)[]): Observable<DocumentChangeAction<T>[]> {
-    const chunkedArr = getChunkedArray(idArr, 10);
+    const chunkedArr = getChunkedArray<string | number>(idArr, 10);
     const sources: Observable<DocumentChangeAction<T>[]>[] = [];
 
     chunkedArr.forEach(arr => {

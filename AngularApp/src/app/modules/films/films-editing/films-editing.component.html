@@ -116,7 +116,7 @@
               </mat-expansion-panel-header>
 
               <div *ngIf="isPlanetsChanging$ | async; else planetsNotChanging">
-                <mat-selection-list #planetList (selectionChange)="updatePlanetsList(planetList.selectedOptions.selected)" onload="lol()">
+                <mat-selection-list #planetList (selectionChange)="updatePlanetsList(planetList.selectedOptions.selected)">
                   <mat-list-option *ngFor="let planet of planets$ | async" [value]="planet" [selected]="checkPkInPlanets(planet.pk)">
                     {{ planet.pk }} {{ planet.name }}
                   </mat-list-option>
@@ -148,7 +148,7 @@
   </div>
 
   <div class="btn-wrapper">
-    <button mat-flat-button color="primary" (click)="close()" *ngIf="isDialog; else notDialog">Back</button>
+    <button mat-flat-button color="primary" type="button" (click)="close()" *ngIf="isDialog; else notDialog">Back</button>
     <ng-template #notDialog>
       <a routerLink="/films/list" mat-flat-button color="primary" (click)="checkUnsavedData()">Back</a>
     </ng-template>

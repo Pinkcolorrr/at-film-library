@@ -31,7 +31,7 @@ export class PlanetMapper {
       rotationPeriod: planet.fields.rotation_period,
       surfaceWater: planet.fields.surface_water,
       terrain: planet.fields.terrain,
-      pk: planet.pk,
+      pk: String(planet.pk),
     };
   }
 

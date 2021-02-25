@@ -32,7 +32,7 @@ export class CharacterMapper {
       mass: character.fields.mass,
       name: character.fields.name,
       skinColor: character.fields.skin_color,
-      pk: character.pk,
+      pk: String(character.pk),
     };
   }
 

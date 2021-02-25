@@ -20,7 +20,7 @@ export class FilmMapper {
    */
   public transformResponse(film: FilmDTO, id?: string): Film {
     return {
-      pk: film.pk,
+      pk: String(film.pk),
       id: id,
       title: film.fields.title,
       episodeId: film.fields.episode_id,
@@ -29,11 +29,11 @@ export class FilmMapper {
       producer: film.fields.producer,
       openingCrawl: film.fields.opening_crawl,
       created: new Date(film.fields.created),
-      planetsID: film.fields.planets,
-      charactersID: film.fields.characters,
-      vehiclesID: film.fields.vehicles,
-      starshipsID: film.fields.starships,
-      speciesID: film.fields.species,
+      planetsID: film.fields.planets.map(item => String(item)),
+      charactersID: film.fields.characters.map(item => String(item)),
+      vehiclesID: film.fields.vehicles.map(item => String(item)),
+      starshipsID: film.fields.starships.map(item => String(item)),
+      speciesID: film.fields.species.map(item => String(item)),
     };
   }
 
@@ -51,11 +51,11 @@ export class FilmMapper {
         opening_crawl: film.openingCrawl,
         created: film.created.toISOString(),
         edited: new Date().toISOString(),
-        planets: film.planetsID,
-        characters: film.charactersID,
-        vehicles: film.vehiclesID,
-        starships: film.starshipsID,
-        species: film.starshipsID,
+        planets: film.planetsID.map(item => Number(item) || item),
+        characters: film.charactersID.map(item => Number(item) || item),
+        vehicles: film.vehiclesID.map(item => Number(item) || item),
+        starships: film.starshipsID.map(item => Number(item) || item),
+        species: film.starshipsID.map(item => Number(item) || item),
       },
       pk: film.pk,
       model: 'resources.film',

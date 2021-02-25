@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Character } from 'src/app/core/models/characters';
 import { Film } from 'src/app/core/models/film';
 import { Planet } from 'src/app/core/models/planet';
-import { FilmProcessingService } from 'src/app/core/services/film-processing.service';
+import { ContentProcessingService } from 'src/app/core/services/content-processing.service';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 /**
@@ -20,7 +20,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
 })
 export class FilmsEditingComponent implements OnDestroy, OnInit {
   constructor(
-    private readonly filmProcessingService: FilmProcessingService,
+    private readonly filmProcessingService: ContentProcessingService,
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly dialog: MatDialog,
@@ -78,7 +78,7 @@ export class FilmsEditingComponent implements OnDestroy, OnInit {
    * Film personal key
    * Get from url and use in server request
    */
-  private filmPk: number | string;
+  private filmPk: string;
 
   /**
    * Check if arrays with related data was touch
@@ -123,7 +123,7 @@ export class FilmsEditingComponent implements OnDestroy, OnInit {
       this.formInit(this.filmData);
       this.isLoading$.next(false);
     } else {
-      this.filmPk = Number(this.activatedRoute.snapshot.params['pk']) || this.activatedRoute.snapshot.params['pk'];
+      this.filmPk = this.activatedRoute.snapshot.params['pk'];
 
       this.subscriptionFilmData = this.filmProcessingService.getFilm(this.filmPk).subscribe({
         next: (film: Film): void => {
@@ -311,7 +311,7 @@ export class FilmsEditingComponent implements OnDestroy, OnInit {
   /**
    * Selected realted characters in list of all characters
    */
-  public checkPkInCharacters(pk: string | number): boolean {
+  public checkPkInCharacters(pk: string): boolean {
     return Boolean(
       this.filmData.charactersList.find(item => {
         return item.pk === pk;
@@ -322,7 +322,7 @@ export class FilmsEditingComponent implements OnDestroy, OnInit {
   /**
    * Selected realted planets in list of all planets
    */
-  public checkPkInPlanets(pk: string | number): boolean {
+  public checkPkInPlanets(pk: string): boolean {
     return Boolean(
       this.filmData.planetsList.find(item => {
         return item.pk === pk;

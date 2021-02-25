@@ -15,7 +15,7 @@ export interface Film {
   /**
    * Personal key
    */
-  readonly pk: number | string;
+  readonly pk: string;
 
   /**
    * Film title
@@ -55,27 +55,27 @@ export interface Film {
   /**
    * Array of IDs related characters
    */
-  readonly charactersID: (number | string)[];
+  readonly charactersID: string[];
 
   /**
    * Array of IDs related planets
    */
-  readonly planetsID: (number | string)[];
+  readonly planetsID: string[];
 
   /**
    * Array of IDs related species
    */
-  readonly speciesID: (number | string)[];
+  readonly speciesID: string[];
 
   /**
    * Array of IDs related starships
    */
-  readonly starshipsID: (number | string)[];
+  readonly starshipsID: string[];
 
   /**
    * Array of IDs related vehicles
    */
-  readonly vehiclesID: (number | string)[];
+  readonly vehiclesID: string[];
 
   /**
    * Field to keep array with related planets

@@ -17,14 +17,14 @@ export class AuthService {
   /**
    * Check if user logged in
    */
-  public isLoggedIn$: Observable<boolean>;
+  public readonly isLoggedIn$: Observable<boolean>;
 
   /**
    * Observable user email
    */
-  public userEmail$: Observable<string>;
+  public readonly userEmail$: Observable<string>;
 
-  private userMapper = new UserMapper();
+  private readonly userMapper = new UserMapper();
 
   constructor(private afAuth: AngularFireAuth) {
     this.isLoggedIn$ = this.afAuth.authState.pipe(

@@ -8,8 +8,8 @@ import { FilmMapper } from '../mappers/film.mapper';
 import { Film } from '../models/film';
 import { QueryFilterParams } from '../models/query-filter-params';
 
+import { PaginationControl } from './../../shared/utils';
 import { ApiService } from './api.service';
-import { PaginationControlService } from './pagination-control.service';
 
 /**
  * Service for work with films
@@ -24,9 +24,16 @@ export class FilmService {
   private readonly filmMapper = new FilmMapper();
 
   /**
+   * Utils to control pagination states
+   * As first and last film on page
+   * The first and last element on the page.These docs are used in request on database
+   */
+  private readonly paginationControl = new PaginationControl<FilmDTO>();
+
+  /**
    * Filters, that define query params
    */
-  private filters$: BehaviorSubject<QueryFilterParams>;
+  private filters$ = new BehaviorSubject<QueryFilterParams>(null);
 
   /**
    * Observable for toggle next page button
@@ -39,13 +46,6 @@ export class FilmService {
   public readonly isPrevPageAvailable$ = new BehaviorSubject(false);
 
   constructor(
-    /**
-     * Service to control pagination states
-     * As first and last film on page
-     * The first and last element on the page.These docs are used in request on database
-     */
-    private readonly paginationControl: PaginationControlService<FilmDTO>,
-
     /**
      * Service for connecting to API
      */
@@ -64,7 +64,7 @@ export class FilmService {
    * Using mapper for convert DTO
    */
   public filmsSourceInit(queryFilters: QueryFilterParams): Observable<Film[]> {
-    this.filters$ = new BehaviorSubject(queryFilters);
+    this.filters$.next(queryFilters);
 
     return this.filters$.pipe(
       switchMap(filters => {

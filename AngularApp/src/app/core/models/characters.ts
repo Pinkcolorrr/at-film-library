@@ -5,7 +5,7 @@ export interface Character {
   /**
    * Personal key of character
    */
-  readonly pk: number | string;
+  readonly pk: string;
   /**
    * Charater birth year
    */

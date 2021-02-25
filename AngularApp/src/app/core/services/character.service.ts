@@ -8,8 +8,8 @@ import { CharacterMapper } from '../mappers/characters.mapper';
 import { Character } from '../models/characters';
 import { QueryFilterParams } from '../models/query-filter-params';
 
+import { PaginationControl } from './../../shared/utils';
 import { ApiService } from './api.service';
-import { PaginationControlService } from './pagination-control.service';
 
 /**
  * Service for work with characters
@@ -24,9 +24,17 @@ export class CharacterService {
   private readonly characterMapper = new CharacterMapper();
 
   /**
+   * Utils to control pagination states
+   * As first and last film on page
+   * The first and last element on the page.
+   * These docs are used in request on database
+   */
+  private readonly paginationControl = new PaginationControl<CharacterDTO>();
+
+  /**
    * Filters, that define query params
    */
-  private filters$: BehaviorSubject<QueryFilterParams>;
+  private filters$ = new BehaviorSubject<QueryFilterParams>(null);
 
   /**
    * Observable for toggle next page button
@@ -39,13 +47,6 @@ export class CharacterService {
   public readonly isPrevPageAvailable$ = new BehaviorSubject(false);
 
   constructor(
-    /**
-     * Service to control pagination states
-     * As first and last character on page
-     * The first and last element on the page.These docs are used in request on database
-     */
-    private readonly paginationControl: PaginationControlService<CharacterDTO>,
-
     /**
      * Service for connecting to API
      */
@@ -64,7 +65,7 @@ export class CharacterService {
    * Using mapper for convert DTO
    */
   public charactersSourceInit(queryFilters: QueryFilterParams): Observable<Character[]> {
-    this.filters$ = new BehaviorSubject(queryFilters);
+    this.filters$.next(queryFilters);
 
     return this.filters$.pipe(
       switchMap(filters => {
