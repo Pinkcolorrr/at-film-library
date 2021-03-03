@@ -82,7 +82,7 @@
                   onload="lol()"
                 >
                   <mat-list-option
-                    *ngFor="let character of characters$ | async"
+                    *ngFor="let character of characters$ | async; trackBy: trackByCharactersPk"
                     [value]="character"
                     [selected]="checkPkInCharacters(character.pk)"
                   >
@@ -96,7 +96,9 @@
 
               <ng-template #charactersNotChanging>
                 <mat-list>
-                  <mat-list-item *ngFor="let character of filmData.charactersList"> {{ character.pk }} {{ character.name }} </mat-list-item>
+                  <mat-list-item *ngFor="let character of filmData.charactersList; trackBy: trackByCharactersPk">
+                    {{ character.pk }} {{ character.name }}
+                  </mat-list-item>
                 </mat-list>
                 <button class="change-list-btn" type="button" (click)="toggleChangeModeForCharacters()" mat-flat-button color="primary">
                   Change characters
@@ -117,7 +119,11 @@
 
               <div *ngIf="isPlanetsChanging$ | async; else planetsNotChanging">
                 <mat-selection-list #planetList (selectionChange)="updatePlanetsList(planetList.selectedOptions.selected)">
-                  <mat-list-option *ngFor="let planet of planets$ | async" [value]="planet" [selected]="checkPkInPlanets(planet.pk)">
+                  <mat-list-option
+                    *ngFor="let planet of planets$ | async; trackBy: trackByPlanetsPk"
+                    [value]="planet"
+                    [selected]="checkPkInPlanets(planet.pk)"
+                  >
                     {{ planet.pk }} {{ planet.name }}
                   </mat-list-option>
                 </mat-selection-list>
@@ -128,7 +134,9 @@
 
               <ng-template #planetsNotChanging>
                 <mat-list>
-                  <mat-list-item *ngFor="let planet of filmData.planetsList"> {{ planet.pk }} {{ planet.name }} </mat-list-item>
+                  <mat-list-item *ngFor="let planet of filmData.planetsList; trackBy: trackByPlanetsPk">
+                    {{ planet.pk }} {{ planet.name }}
+                  </mat-list-item>
                 </mat-list>
                 <button class="change-list-btn" type="button" (click)="toggleChangeModeForPlanets()" mat-flat-button color="primary">
                   Change planets

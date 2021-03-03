@@ -1,3 +1,4 @@
+import { TrackByFunction } from '@angular/core';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -272,6 +273,20 @@ export class FilmsEditingComponent implements OnDestroy, OnInit {
           });
         }
       });
+  }
+
+  /**
+   * Track characters
+   */
+  public trackByCharactersPk(index: number, item: Character): String {
+    return item.pk;
+  }
+
+  /**
+   * Track planets
+   */
+  public trackByPlanetsPk(index: number, item: Planet): String {
+    return item.pk;
   }
 
   /**

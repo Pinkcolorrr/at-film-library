@@ -75,7 +75,7 @@
                 <mat-panel-title> Characters list </mat-panel-title>
               </mat-expansion-panel-header>
               <mat-selection-list #characterList (selectionChange)="updateCharactersList(characterList.selectedOptions.selected)">
-                <mat-list-option *ngFor="let character of characters$ | async" [value]="character">
+                <mat-list-option *ngFor="let character of allCharacters$ | async; trackBy: trackByCharactersPk" [value]="character">
                   {{ character.pk }} {{ character.name }}
                 </mat-list-option>
               </mat-selection-list>
@@ -92,7 +92,7 @@
                 <mat-panel-title> Planets list </mat-panel-title>
               </mat-expansion-panel-header>
               <mat-selection-list #planetList (selectionChange)="updatePlanetsList(planetList.selectedOptions.selected)">
-                <mat-list-option *ngFor="let planet of planets$ | async" [value]="planet">
+                <mat-list-option *ngFor="let planet of allPlanets$ | async; trackBy: trackByPlanetsPk" [value]="planet">
                   {{ planet.pk }} {{ planet.name }}
                 </mat-list-option>
               </mat-selection-list>

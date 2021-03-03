@@ -23,22 +23,22 @@ export class FilmsAddingComponent implements CanComponentDeactivate {
   /**
    * Observable with list of all planets
    */
-  public readonly planets$: Observable<Planet[]>;
+  public readonly allPlanets$: Observable<Planet[]>;
 
   /**
    * Observable with list of all characters
    */
-  public readonly characters$: Observable<Character[]>;
+  public readonly allCharacters$: Observable<Character[]>;
 
   /**
    * Array with characters objects
    */
-  public characters: Character[] = [];
+  public relatedCharactersList: Character[] = [];
 
   /**
    * Array with planets objects
    */
-  public planets: Planet[] = [];
+  public relatedPlanetsList: Planet[] = [];
 
   /**
    * Object for control film form
@@ -59,8 +59,8 @@ export class FilmsAddingComponent implements CanComponentDeactivate {
     private readonly router: Router,
     private readonly dialog: MatDialog,
   ) {
-    this.planets$ = this.filmProcessingService.getAllPlanets();
-    this.characters$ = this.filmProcessingService.getAllCharacters();
+    this.allPlanets$ = this.filmProcessingService.getAllPlanets();
+    this.allCharacters$ = this.filmProcessingService.getAllCharacters();
   }
 
   /**
@@ -94,7 +94,7 @@ export class FilmsAddingComponent implements CanComponentDeactivate {
    * Check, if form have unsaved data
    */
   public checkUnsavedData(): void {
-    const hasNotEmptyRelatedArrays = Boolean(this.characters.length) || Boolean(this.planets.length);
+    const hasNotEmptyRelatedArrays = Boolean(this.relatedCharactersList.length) || Boolean(this.relatedPlanetsList.length);
 
     if (this.filmInfoForm.dirty || hasNotEmptyRelatedArrays) {
       this.canDeactivate$.next(false);
@@ -115,8 +115,8 @@ export class FilmsAddingComponent implements CanComponentDeactivate {
       director: this.filmInfoForm.value.director,
       producer: this.filmInfoForm.value.producer,
       openingCrawl: this.filmInfoForm.value.openingCrawl,
-      charactersID: this.characters.map(character => character.pk),
-      planetsID: this.planets.map(planet => planet.pk),
+      charactersID: this.relatedCharactersList.map(character => character.pk),
+      planetsID: this.relatedPlanetsList.map(planet => planet.pk),
       speciesID: [],
       vehiclesID: [],
       starshipsID: [],
@@ -130,10 +130,24 @@ export class FilmsAddingComponent implements CanComponentDeactivate {
   }
 
   /**
+   * Track characters
+   */
+  public trackByCharactersPk(index: number, item: Character): String {
+    return item.pk;
+  }
+
+  /**
+   * Track planets
+   */
+  public trackByPlanetsPk(index: number, item: Planet): String {
+    return item.pk;
+  }
+
+  /**
    * Set charaters, that was marked in array
    */
   public updateCharactersList(options: MatListOption[]): void {
-    this.characters = options.map(item => {
+    this.relatedCharactersList = options.map(item => {
       return item.value;
     });
   }
@@ -142,7 +156,7 @@ export class FilmsAddingComponent implements CanComponentDeactivate {
    * Set planets, that was marked in array
    */
   public updatePlanetsList(options: MatListOption[]): void {
-    this.planets = options.map(item => {
+    this.relatedPlanetsList = options.map(item => {
       return item.value;
     });
   }
