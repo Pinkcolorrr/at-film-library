@@ -34,7 +34,7 @@ export const logoutUser: AsyncThunk<void, void, {}> = createAsyncThunk(
   }
 );
 
-export const loginUserOnLoad: AsyncThunk<
+export const observeUserState: AsyncThunk<
   Unsubscribe,
   void,
   {}

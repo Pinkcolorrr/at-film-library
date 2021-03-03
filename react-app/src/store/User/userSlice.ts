@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserInfo } from '../../models/UserInfo';
-import { loginUser, logoutUser, registerUser } from './userThunks';
+import { loginUser, registerUser } from './userThunks';
 
 type user = {
   logged: boolean;
