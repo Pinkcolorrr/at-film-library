@@ -13,7 +13,7 @@ export function GuardRoute({
   canActivate,
   to,
   ...rest
-}: guardRoute) {
+}: guardRoute): JSX.Element {
   return (
     <Route
       {...rest}

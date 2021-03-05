@@ -1,55 +1,68 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Maybe } from 'yup/lib/types';
 import { UserInfo } from '../../models/UserInfo';
-import { loginUser, registerUser } from './userThunks';
+import { RootState } from '../rootReducer';
+import {
+  addUserInStore,
+  signInByEmailAndPassword,
+  registerByEmailAndPassword,
+  removeUserFromStore,
+} from './userThunks';
 
-type user = {
-  logged: boolean;
-  errorMsg: string | null;
-  info: UserInfo | null;
+export type user = {
+  readonly info: Maybe<UserInfo>;
+  readonly errorMsg: Maybe<string>;
+  readonly logged: boolean;
+  readonly isPending: boolean;
 };
 
 const initialState: user = {
-  logged: false,
-  errorMsg: null,
   info: null,
+  errorMsg: null,
+  logged: false,
+  isPending: true,
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loginIn(state, action) {
-      state.logged = true;
-      state.info = action.payload;
-    },
-
-    logout(state) {
-      state.logged = false;
-      state.info = null;
+    removeErrorMsg(state) {
+      state.errorMsg = null;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loginUser.rejected, (state, action) => {
-      state.errorMsg = action.error.message as string | null;
-    });
-
-    builder.addCase(registerUser.rejected, (state, action) => {
-      state.errorMsg = action.error.message as string | null;
-    });
+    builder
+      .addCase(addUserInStore.fulfilled, (state, action) => {
+        state.isPending = false;
+        state.logged = true;
+        state.info = action.payload;
+      })
+      .addCase(removeUserFromStore.fulfilled, (state) => {
+        state.isPending = false;
+        state.logged = false;
+        state.info = null;
+      })
+      .addCase(signInByEmailAndPassword.rejected, (state, action) => {
+        state.errorMsg = action.error.message;
+      })
+      .addCase(registerByEmailAndPassword.rejected, (state, action) => {
+        state.errorMsg = action.error.message;
+      });
   },
 });
 
-export const { loginIn, logout } = userSlice.actions;
+export const { removeErrorMsg } = userSlice.actions;
 
-export const selectAuthState = (state: {
-  user: { logged: boolean };
-}): boolean => state.user.logged;
+export const selectAuthState = (state: RootState): boolean => state.user.logged;
 
-export const selectErrorMsg = (state: { user: { errorMsg: string } }): string =>
+export const selectErrorMsg = (state: RootState): Maybe<string> =>
   state.user.errorMsg;
 
-export const selectUserEmail = (state: {
-  user: { info: { email: string } };
-}): string => state.user.info?.email;
+export const selectUserEmail = (state: RootState): Maybe<string> =>
+  state.user.info?.email;
+
+export const selectIsUserPending = (state: RootState): boolean =>
+  state.user.isPending;
 
 export const userReducer = userSlice.reducer;

@@ -22,3 +22,9 @@
 .errorMsg {
   margin-top: 20px;
 }
+
+.registerText {
+  margin-top: 10px;
+  text-align: center;
+  color: #000;
+}

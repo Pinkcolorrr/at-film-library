@@ -1,14 +1,15 @@
 import { FormGroup, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { Field, FieldProps, Form, Formik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Auth.module.css';
 import * as yup from 'yup';
 import { TextField } from '@material-ui/core';
 import { UserAuthData } from '../../models/UserAuthData';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectErrorMsg } from '../../store/User/userSlice';
-import { registerUser } from '../../store/User/userThunks';
+import { removeErrorMsg, selectErrorMsg } from '../../store/User/userSlice';
+import { registerByEmailAndPassword } from '../../store/User/userThunks';
+import { Link } from 'react-router-dom';
 
 const registerSchema = yup.object({
   email: yup
@@ -21,9 +22,15 @@ const registerSchema = yup.object({
     .required('Password is required'),
 });
 
-export function Register() {
+export function Register(): JSX.Element {
   const errorMsg = useSelector(selectErrorMsg);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(removeErrorMsg());
+    };
+  }, [dispatch]);
 
   const init: UserAuthData = {
     email: '',
@@ -34,11 +41,11 @@ export function Register() {
     <Formik
       initialValues={init}
       onSubmit={(values) => {
-        dispatch(registerUser(values));
+        dispatch(registerByEmailAndPassword(values));
       }}
       validationSchema={registerSchema}
     >
-      {(formik) => (
+      {() => (
         <Form className={styles.root}>
           <h3 className={styles.formLabel}>register</h3>
 
@@ -84,6 +91,9 @@ export function Register() {
               {errorMsg}
             </Alert>
           ) : null}
+          <div className={styles.registerText}>
+            Already have an account? <Link to="/login">Login in</Link>
+          </div>
         </Form>
       )}
     </Formik>

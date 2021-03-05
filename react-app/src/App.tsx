@@ -1,50 +1,52 @@
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import styles from './App.module.css';
-import { Header } from './components/header/Header';
-import { Login } from './components/auth/Login';
-import { Register } from './components/auth/Register';
-import { MainContent } from './components/MainContent/MainContent';
+import { Login } from './components/Auth/Login';
+import { Register } from './components/Auth/Register';
+import { Wrapper } from './components/Wrapper/Wrapper';
 import { useDispatch, useSelector } from 'react-redux';
-import { observeUserState } from './store/User/userThunks';
-import { selectAuthState } from './store/User/userSlice';
+import { observeUser } from './store/User/userThunks';
+import { selectAuthState, selectIsUserPending } from './store/User/userSlice';
 import { GuardRoute } from './routers/GuardRouter';
 
-export function App() {
-  const dispatch = useDispatch();
+export function App(): JSX.Element {
   const authState = useSelector(selectAuthState);
+  const isPending = useSelector(selectIsUserPending);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(observeUserState());
-  });
+  useEffect((): void => {
+    dispatch(observeUser());
+  }, [dispatch]);
 
   return (
     <Router>
-      <div className={styles.root}>
-        <Header></Header>
-        <div className={styles.wrapper}>
-          <Switch>
-            <GuardRoute
-              path="/login"
-              component={Login}
-              canActivate={!authState}
-              to="home"
-            />
-            <GuardRoute
-              path="/register"
-              component={Register}
-              canActivate={!authState}
-              to="home"
-            />
-            <GuardRoute
-              path="/home"
-              component={MainContent}
-              canActivate={authState}
-              to="login"
-            />
-          </Switch>
+      {isPending ? null : (
+        <div className={styles.root}>
+          <div className={styles.wrapper}>
+            <Switch>
+              <Redirect exact from="/" to="/films"></Redirect>
+              <GuardRoute
+                path="/login"
+                component={Login}
+                canActivate={!authState}
+                to="/"
+              />
+              <GuardRoute
+                path="/register"
+                component={Register}
+                canActivate={!authState}
+                to="/"
+              />
+              <GuardRoute
+                path="/"
+                component={Wrapper}
+                canActivate={authState}
+                to="/login"
+              />
+            </Switch>
+          </div>
         </div>
-      </div>
+      )}
     </Router>
   );
 }
