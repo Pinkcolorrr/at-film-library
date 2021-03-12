@@ -59,6 +59,8 @@
     "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
+    "@saritasa/eslint-config-react": "^1.0.0",
+    "prettier": "^2.0.5",
     "typescript": "^4.2.3"
   }
 }

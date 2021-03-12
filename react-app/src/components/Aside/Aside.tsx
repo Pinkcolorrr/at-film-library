@@ -1,50 +1,57 @@
 import React from 'react';
-import { Drawer, Tab } from '@material-ui/core';
-import { Divider, Tabs } from '@material-ui/core';
+import { Drawer, makeStyles, Tab, Divider, Tabs } from '@material-ui/core';
+
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { Characters } from '../Characters/Characters';
 import { FilmsList } from '../Films/FilmsList';
-import { Planets } from '../Planets/Planests';
+import { PlanetsList } from '../Planets/PlanestsList';
 import { getStringSecondPart } from '../../utils/utils';
 import { wrapperStyles } from '../Wrapper/Wrapper';
+import { ProcessingButtons } from '../ProcessingButtons/ProcessingButtons';
+import { AsideTitle } from './AsideTitle';
+
+const useStyles = makeStyles(() => ({
+  asideContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
+  },
+}));
 
 export function Aside(props: wrapperStyles): JSX.Element {
+  const classes = useStyles();
   const location = useLocation();
   const pathname = getStringSecondPart(location.pathname, '/');
 
   return (
     <Drawer
-      className={props.classes.aside}
-      variant="permanent"
+      anchor="left"
       classes={{
         paper: props.classes.asidePaper,
       }}
-      anchor="left"
+      className={props.classes.aside}
+      variant="permanent"
     >
       <div className={props.classes.toolbar} />
       <Divider />
-      <Tabs variant="fullWidth" value={pathname} aria-label="nav tabs example">
-        <Tab label="films" component={NavLink} to="/films" value={'films'} />
-        <Tab
-          label="planets"
-          component={NavLink}
-          to="/planets"
-          value={'planets'}
-        />
-        <Tab
-          label="characters"
-          component={NavLink}
-          to="/characters"
-          value={'characters'}
-        />
+      <Tabs aria-label="nav tabs example" value={pathname} variant="fullWidth">
+        <Tab component={NavLink} label="films" to="/films" value="films" />
+        <Tab component={NavLink} label="planets" to="/planets" value="planets" />
+        <Tab component={NavLink} label="characters" to="/characters" value="characters" />
       </Tabs>
-
       <Divider />
-      <Switch>
-        <Route path={`/films`} component={FilmsList} />
-        <Route path={`/planets`} component={Planets} />
-        <Route path={`/characters`} component={Characters} />
-      </Switch>
+
+      <AsideTitle />
+
+      <div className={classes.asideContent}>
+        <Switch>
+          <Route component={FilmsList} path="/films" />
+          <Route path="/planets" render={() => <PlanetsList />} />
+          <Route component={Characters} path="/characters" />
+        </Switch>
+        <Divider />
+      </div>
     </Drawer>
   );
 }

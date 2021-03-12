@@ -3,6 +3,10 @@
  */
 export interface Planet {
   /**
+   * Planet id
+   */
+  readonly id: string;
+  /**
    * Personal key of planet
    */
   readonly pk: string;

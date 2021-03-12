@@ -56,13 +56,10 @@ export const { removeErrorMsg } = userSlice.actions;
 
 export const selectAuthState = (state: RootState): boolean => state.user.logged;
 
-export const selectErrorMsg = (state: RootState): Maybe<string> =>
-  state.user.errorMsg;
+export const selectErrorMsg = (state: RootState): Maybe<string> => state.user.errorMsg;
 
-export const selectUserEmail = (state: RootState): Maybe<string> =>
-  state.user.info?.email;
+export const selectUserEmail = (state: RootState): Maybe<string> => state.user.info?.email;
 
-export const selectIsUserPending = (state: RootState): boolean =>
-  state.user.isPending;
+export const selectIsUserPending = (state: RootState): boolean => state.user.isPending;
 
 export const userReducer = userSlice.reducer;

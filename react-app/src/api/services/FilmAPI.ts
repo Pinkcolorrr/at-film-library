@@ -10,10 +10,8 @@ import { FilmMapper } from '../mappers/FilmMapper';
 
 const filmMapper = new FilmMapper();
 
-export namespace FilmAPI {
-  export function getAllFilms(
-    dispatch: ThunkDispatch<unknown, unknown, AnyAction>
-  ): Unsubscribe {
+export const FilmAPI = {
+  getAllFilms(dispatch: ThunkDispatch<unknown, unknown, AnyAction>): Unsubscribe {
     return firebase
       .firestore()
       .collection('films')
@@ -21,24 +19,18 @@ export namespace FilmAPI {
       .onSnapshot((doc: firebase.firestore.QuerySnapshot<FilmDTO>): void => {
         const filmsData: Film[] = [];
 
-        doc.forEach((film) => {
-          return filmsData.push(
-            filmMapper.transformResponse(film.data(), film.id)
-          );
-        });
+        doc.forEach((film) => filmsData.push(filmMapper.transformResponse(film.data(), film.id)));
         dispatch(addFilmsInStore(filmsData));
       });
-  }
+  },
 
-  export async function getFilmById(id: string): Promise<Film> {
-    return firebase
+  async getFilmById(id: string): Promise<Film> {
+    return await firebase
       .firestore()
       .collection('films')
       .withConverter(firebaseConverter<FilmDTO>())
       .doc(id)
       .get()
-      .then((film) => {
-        return filmMapper.transformResponse(film.data() as FilmDTO, film.id);
-      });
-  }
-}
+      .then((film) => filmMapper.transformResponse(film.data() as FilmDTO, film.id));
+  },
+};

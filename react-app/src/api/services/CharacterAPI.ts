@@ -8,16 +8,14 @@ import { CharacterMapper } from '../mappers/CharactersMapper';
 
 const characterMapper = new CharacterMapper();
 
-export namespace CharacterAPI {
-  export async function getCharactersByPk(
-    pkArray: (number | string)[]
-  ): Promise<Character[]> {
+export const CharacterAPI = {
+  async getCharactersByPk(pkArray: (number | string)[]): Promise<Character[]> {
     if (pkArray.length > 10) {
       const chunkedArr: (string | number)[][] = getChunkedArray(pkArray, 10);
       const charactersData: Character[][] & Character[] = [];
 
       for (const item of chunkedArr) {
-        charactersData.push(await getCharactersByPk(item));
+        charactersData.push(await this.getCharactersByPk(item));
       }
 
       return charactersData.flat(Infinity);
@@ -32,11 +30,9 @@ export namespace CharacterAPI {
       .then((characters) => {
         const charactersData: Character[] = [];
         characters.forEach((character) => {
-          charactersData.push(
-            characterMapper.transformResponse(character.data())
-          );
+          charactersData.push(characterMapper.transformResponse(character.data()));
         });
         return charactersData;
       });
-  }
-}
+  },
+};

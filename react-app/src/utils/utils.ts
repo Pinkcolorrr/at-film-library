@@ -1,3 +1,7 @@
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import { Maybe } from 'yup/lib/types';
+
 export function getStringSecondPart(str: string, splitBy: string): string {
   return str.split(splitBy)[1];
 }
@@ -13,4 +17,16 @@ export function getChunkedArray<T>(array: Array<T>, chunkSize: number): T[][] {
     chunkedArr.push(copied.splice(0, chunkSize));
   }
   return chunkedArr;
+}
+
+export class PaginationControl {
+  private doc: Maybe<firebase.firestore.QueryDocumentSnapshot> = null;
+
+  public setLastDoc(doc: firebase.firestore.QueryDocumentSnapshot): void {
+    this.doc = doc;
+  }
+
+  public getLastDoc(): Maybe<firebase.firestore.QueryDocumentSnapshot> {
+    return this.doc;
+  }
 }

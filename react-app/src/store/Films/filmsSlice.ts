@@ -3,30 +3,30 @@ import { Maybe } from 'yup/lib/types';
 import { Character } from '../../models/Characters';
 import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
+import { getPlanetsByPk } from '../Planets/planetsThunks';
 import { RootState } from '../rootReducer';
-import {
-  addFilmsInStore,
-  getCharactersByPk,
-  getFilmById,
-  getPlanetsByPk,
-} from './filmsThunks';
+import { addFilmsInStore, getCharactersByPk, getFilmById } from './filmsThunks';
 
 export type films = {
   filmsList: Film[];
-  relatedData: {
-    planets: Planet[];
-    characters: Character[];
+  currentFilm: {
+    filmInfo: Maybe<Film>;
+    relatedData: {
+      planets: Planet[];
+      characters: Character[];
+    };
   };
-  selectedFilm: Maybe<Film>;
 };
 
 const initialState: films = {
   filmsList: [],
-  relatedData: {
-    planets: [],
-    characters: [],
+  currentFilm: {
+    filmInfo: null,
+    relatedData: {
+      planets: [],
+      characters: [],
+    },
   },
-  selectedFilm: null,
 };
 
 const filmsSlice = createSlice({
@@ -34,7 +34,7 @@ const filmsSlice = createSlice({
   initialState,
   reducers: {
     clearSelectedFilm(state) {
-      state.selectedFilm = null;
+      state.currentFilm.filmInfo = null;
     },
   },
   extraReducers: (builder) => {
@@ -43,28 +43,28 @@ const filmsSlice = createSlice({
         state.filmsList = action.payload;
       })
       .addCase(getFilmById.fulfilled, (state, action) => {
-        state.selectedFilm = action.payload;
+        state.currentFilm.filmInfo = action.payload;
       })
       .addCase(getPlanetsByPk.fulfilled, (state, action) => {
-        state.relatedData.planets = action.payload;
+        state.currentFilm.relatedData.planets = action.payload;
       })
       .addCase(getCharactersByPk.fulfilled, (state, action) => {
-        state.relatedData.characters = action.payload;
+        state.currentFilm.relatedData.characters = action.payload;
       });
   },
 });
 
 export const { clearSelectedFilm } = filmsSlice.actions;
 
-export const selectFilm = (state: RootState): Maybe<Film> =>
-  state.films.selectedFilm;
+export const selectCurrentFilm = (state: RootState): Maybe<Film> =>
+  state.films.currentFilm.filmInfo;
 
 export const selectFilms = (state: RootState): Film[] => state.films.filmsList;
 
 export const selectRelatedPlanets = (state: RootState): Planet[] =>
-  state.films.relatedData.planets;
+  state.films.currentFilm.relatedData.planets;
 
 export const selectRelatedCharacters = (state: RootState): Character[] =>
-  state.films.relatedData.characters;
+  state.films.currentFilm.relatedData.characters;
 
 export const filmsReducer = filmsSlice.reducer;

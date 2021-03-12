@@ -5,7 +5,7 @@ export interface Film {
   /**
    * Film id
    */
-  readonly id?: string;
+  readonly id: string;
 
   /**
    * Personal key

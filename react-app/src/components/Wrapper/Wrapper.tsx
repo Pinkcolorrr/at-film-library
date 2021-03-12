@@ -8,10 +8,7 @@ import { Main } from '../Main/Main';
 const drawerWidth = 500;
 
 export type wrapperStyles = {
-  classes: Record<
-    'root' | 'content' | 'toolbar' | 'header' | 'aside' | 'asidePaper',
-    string
-  >;
+  classes: Record<'root' | 'content' | 'toolbar' | 'header' | 'aside' | 'asidePaper', string>;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({

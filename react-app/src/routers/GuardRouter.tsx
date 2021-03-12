@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 type guardRoute = {
+  component: React.ElementType;
   path: string;
-  component: any;
   canActivate: boolean;
   to: string;
 };
