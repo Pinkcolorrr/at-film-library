@@ -21,7 +21,7 @@ export const CharacterAPI = {
       return charactersData.flat(Infinity);
     }
 
-    return await firebase
+    return firebase
       .firestore()
       .collection('people')
       .where('pk', 'in', pkArray)

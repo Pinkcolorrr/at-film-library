@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
 import { UserInfo } from '../../models/UserInfo';

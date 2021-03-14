@@ -10,15 +10,15 @@ const userMapper = new UserMapper();
 
 export const UserApi = {
   async signInByEmailAndPassword(user: UserAuthData): Promise<firebase.auth.UserCredential> {
-    return await firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+    return firebase.auth().signInWithEmailAndPassword(user.email, user.password);
   },
 
   async registerByEmailAndPassword(user: UserAuthData): Promise<firebase.auth.UserCredential> {
-    return await firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
+    return firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
   },
 
   async signOut(): Promise<void> {
-    return await firebase.auth().signOut();
+    return firebase.auth().signOut();
   },
 
   observeUser(dispatch: ThunkDispatch<unknown, unknown, AnyAction>): Unsubscribe {

@@ -1,5 +1,5 @@
-import { CssBaseline } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core';
+import { CssBaseline, makeStyles, Theme } from '@material-ui/core';
+
 import React from 'react';
 import { Aside } from '../Aside/Aside';
 import { Header } from '../Header/Header';
@@ -40,9 +40,9 @@ export function Wrapper(): JSX.Element {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header classes={classes}></Header>
-      <Aside classes={classes}></Aside>
-      <Main classes={classes}></Main>
+      <Header classes={classes} />
+      <Aside classes={classes} />
+      <Main classes={classes} />
     </div>
   );
 }

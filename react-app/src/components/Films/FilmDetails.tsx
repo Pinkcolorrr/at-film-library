@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function FilmDetails(props: props): JSX.Element {
   const classes = useStyles();
-  const id = props.match.params.id;
+  const { id } = props.match.params;
   const dispatch = useThunkDispatch();
   const film: Maybe<Film> = useSelector(selectCurrentFilm);
   const planets: Planet[] = useSelector(selectRelatedPlanets);
@@ -122,14 +122,14 @@ export function FilmDetails(props: props): JSX.Element {
                 Planets
               </AccordionSummary>
               <AccordionDetails>
-                <List component="nav" aria-label="main mailbox folders" className={classes.fullWidth}>
+                <List aria-label="main mailbox folders" className={classes.fullWidth} component="nav">
                   {planets.map((planet) => (
                     <ListItem
-                      className={classes.fullWidth}
                       key={planet.pk}
-                      button
+                      className={classes.fullWidth}
                       component={NavLink}
                       to={`/planets/${planet.id}/details`}
+                      button
                     >
                       <ListItemText primary={planet.name} />
                     </ListItem>
@@ -147,9 +147,9 @@ export function FilmDetails(props: props): JSX.Element {
                 Characters
               </AccordionSummary>
               <AccordionDetails>
-                <List component="nav" aria-label="main mailbox folders" className={classes.fullWidth}>
+                <List aria-label="main mailbox folders" className={classes.fullWidth} component="nav">
                   {characters.map((character) => (
-                    <ListItem className={classes.fullWidth} key={character.pk}>
+                    <ListItem key={character.pk} className={classes.fullWidth}>
                       <ListItemText primary={character.name} />
                     </ListItem>
                   ))}
@@ -170,16 +170,16 @@ export function FilmDetails(props: props): JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((film) => (
-                <TableRow key={film.key}>
-                  <TableCell>{film.key}</TableCell>
-                  <TableCell>{film.value}</TableCell>
+              {rows.map((item) => (
+                <TableRow key={item.key}>
+                  <TableCell>{item.key}</TableCell>
+                  <TableCell>{item.value}</TableCell>
                 </TableRow>
               ))}
-              {relatedRows.map((film) => (
-                <TableRow key={film.key}>
-                  <TableCell>{film.key}</TableCell>
-                  <TableCell>{film.value}</TableCell>
+              {relatedRows.map((item) => (
+                <TableRow key={item.key}>
+                  <TableCell>{item.key}</TableCell>
+                  <TableCell>{item.value}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

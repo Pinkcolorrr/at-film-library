@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { currentContentReducer } from './CurrentContent/currentContentSlice';
+import { currentContentReducer } from './CurrentContent';
 import { filmsReducer } from './Films/filmsSlice';
-import { planetsReducer } from './Planets/planetsSlice';
-import { userReducer } from './User/userSlice';
+import { planetsReducer } from './Planets';
+import { userReducer } from './User';
 
 export const rootReducer = combineReducers({
   user: userReducer,

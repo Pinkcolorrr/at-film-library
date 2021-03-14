@@ -11,9 +11,9 @@ export function Main(props: wrapperStyles): JSX.Element {
       <div className={props.classes.toolbar} />
 
       <Switch>
-        <Route path="/films/add" component={FilmAdding} />
-        <Route path="/films/:id/details" component={FilmDetails} />
-        <Route path="/planets/:id/details" component={PlanetDetails} />
+        <Route component={FilmAdding} path="/films/add" />
+        <Route component={FilmDetails} path="/films/:id/details" />
+        <Route component={PlanetDetails} path="/planets/:id/details" />
       </Switch>
     </div>
   );

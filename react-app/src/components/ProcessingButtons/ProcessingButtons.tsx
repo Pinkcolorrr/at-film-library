@@ -45,19 +45,19 @@ export function ProcessingButtons(props: any): JSX.Element {
 
   return (
     <div className={classes.processingButtons}>
-      <Link to="/films/add" className={classes.link}>
-        <Button variant="contained" color="primary">
+      <Link className={classes.link} to="/films/add">
+        <Button color="primary" variant="contained">
           Add film
         </Button>
       </Link>
 
       {props.id ? (
         <div className={classes.editButtons}>
-          <Button variant="contained" color="secondary">
+          <Button color="secondary" variant="contained">
             Remove film
           </Button>
-          <Link to={`/films/${props.id}/edit`} className={classes.link}>
-            <Button variant="contained" color="primary">
+          <Link className={classes.link} to={`/films/${props.id}/edit`}>
+            <Button color="primary" variant="contained">
               Edit film
             </Button>
           </Link>

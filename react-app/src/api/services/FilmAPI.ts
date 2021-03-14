@@ -25,7 +25,7 @@ export const FilmAPI = {
   },
 
   async getFilmById(id: string): Promise<Film> {
-    return await firebase
+    return firebase
       .firestore()
       .collection('films')
       .withConverter(firebaseConverter<FilmDTO>())

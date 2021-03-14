@@ -18,14 +18,12 @@ export function withSubscription(Component: React.ElementType): React.ElementTyp
     unsubscribers = [];
   };
 
-  return (props): JSX.Element => {
-    return (
-      <Component
-        {...props}
-        pushUnsubscriber={pushUnsubscriber}
-        unsubscribeAll={unsubscribeAll}
-        clearUnsubscribers={clearUnsubscribers}
-      />
-    );
-  };
+  return (props): JSX.Element => (
+    <Component
+      {...props}
+      clearUnsubscribers={clearUnsubscribers}
+      pushUnsubscriber={pushUnsubscriber}
+      unsubscribeAll={unsubscribeAll}
+    />
+  );
 }

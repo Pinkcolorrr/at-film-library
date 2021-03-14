@@ -1,4 +1,4 @@
-import { ListItem, ListItemText } from '@material-ui/core';
+import { Button, ListItem, ListItemText } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -36,5 +36,9 @@ export function FilmsList(): JSX.Element {
     };
   }, [dispatch]);
 
-  return <List>{filmsList}</List>;
+  return (
+    <div>
+      <List>{filmsList}</List>
+    </div>
+  );
 }

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Drawer, makeStyles, Tab, Divider, Tabs } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Drawer, makeStyles, Tab, Divider, Tabs, Button, Menu, MenuItem, TextField } from '@material-ui/core';
 
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { Characters } from '../Characters/Characters';
@@ -7,16 +7,20 @@ import { FilmsList } from '../Films/FilmsList';
 import { PlanetsList } from '../Planets/PlanestsList';
 import { getStringSecondPart } from '../../utils/utils';
 import { wrapperStyles } from '../Wrapper/Wrapper';
-import { ProcessingButtons } from '../ProcessingButtons/ProcessingButtons';
 import { AsideTitle } from './AsideTitle';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   asideContent: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     height: '100%',
   },
+  tabs: {
+    height: '100%',
+    alignItems: 'center',
+  },
+  tab: {},
 }));
 
 export function Aside(props: wrapperStyles): JSX.Element {
@@ -33,13 +37,13 @@ export function Aside(props: wrapperStyles): JSX.Element {
       className={props.classes.aside}
       variant="permanent"
     >
-      <div className={props.classes.toolbar} />
-      <Divider />
-      <Tabs aria-label="nav tabs example" value={pathname} variant="fullWidth">
-        <Tab component={NavLink} label="films" to="/films" value="films" />
-        <Tab component={NavLink} label="planets" to="/planets" value="planets" />
-        <Tab component={NavLink} label="characters" to="/characters" value="characters" />
-      </Tabs>
+      <div className={props.classes.toolbar}>
+        <Tabs className={classes.tabs} value={pathname} variant="fullWidth">
+          <Tab className={classes.tab} component={NavLink} label="films" to="/films" value="films" />
+          <Tab component={NavLink} label="planets" to="/planets" value="planets" />
+          <Tab component={NavLink} label="characters" to="/characters" value="characters" />
+        </Tabs>
+      </div>
       <Divider />
 
       <AsideTitle />

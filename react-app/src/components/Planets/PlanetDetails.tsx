@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function PlanetDetails(props: props): JSX.Element {
   const classes = useStyles();
-  const id = props.match.params.id;
+  const { id } = props.match.params;
   const dispatch = useThunkDispatch();
   const planet: Maybe<Planet> = useSelector(selectCurrentPlanet);
 
@@ -116,10 +116,10 @@ export function PlanetDetails(props: props): JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((planet) => (
-                <TableRow key={planet.key}>
-                  <TableCell>{planet.key}</TableCell>
-                  <TableCell>{planet.value}</TableCell>
+              {rows.map((item) => (
+                <TableRow key={item.key}>
+                  <TableCell>{item.key}</TableCell>
+                  <TableCell>{item.value}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

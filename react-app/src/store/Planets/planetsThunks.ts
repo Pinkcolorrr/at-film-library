@@ -1,16 +1,29 @@
 import { AsyncThunk, createAsyncThunk, Unsubscribe } from '@reduxjs/toolkit';
 import { Planet } from '../../models/Planet';
 import { PlanetAPI } from '../../api/services/PlanetAPI';
+import { RequsetOptions } from '../../models/RequsetOptions';
 
-export const getInitialPlanets: AsyncThunk<Unsubscribe, number, Record<string, never>> = createAsyncThunk(
+export const setIsHaveMoreData: AsyncThunk<boolean, boolean, Record<string, never>> = createAsyncThunk(
+  'planets/setIsHaveMoreData',
+  async (ishaveMoreData: boolean): Promise<boolean> => ishaveMoreData,
+);
+
+export const getInitialPlanets: AsyncThunk<Unsubscribe, RequsetOptions, Record<string, never>> = createAsyncThunk(
   'planets/getInitialPlanets',
-  async (chunkSize: number, thunkAPI): Promise<Unsubscribe> =>
-    PlanetAPI.getInitialPlanets(chunkSize, thunkAPI.dispatch),
+  async (options: RequsetOptions, thunkAPI): Promise<Unsubscribe> => {
+    thunkAPI.dispatch(setIsHaveMoreData(true));
+    return PlanetAPI.getInitialPlanets(options.chunkSize, thunkAPI.dispatch, options.sortTarget);
+  },
 );
 
 export const getNextPlanets: AsyncThunk<Unsubscribe, number, Record<string, never>> = createAsyncThunk(
   'planets/getNextPlanets',
   async (chunkSize: number, thunkAPI): Promise<Unsubscribe> => PlanetAPI.getNextPlanets(chunkSize, thunkAPI.dispatch),
+);
+
+export const getPlanetByName: AsyncThunk<Planet, string, Record<string, never>> = createAsyncThunk(
+  'planets/getPlanetByName',
+  async (name: string): Promise<Planet> => PlanetAPI.getPlanetByName(name),
 );
 
 export const pushPlanetsInStore: AsyncThunk<Planet[], Planet[], Record<string, never>> = createAsyncThunk(
@@ -30,9 +43,7 @@ export const removePlanetsFromStore: AsyncThunk<Planet[], Planet[], Record<strin
 
 export const clearPlanetsList: AsyncThunk<void, void, Record<string, never>> = createAsyncThunk(
   'planets/clearPlanetsList',
-  async (): Promise<void> => {
-    return;
-  },
+  async (): Promise<void> => {},
 );
 
 export const getPlanetById: AsyncThunk<Planet, string, Record<string, never>> = createAsyncThunk(
