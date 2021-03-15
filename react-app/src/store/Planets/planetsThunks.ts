@@ -1,24 +1,28 @@
 import { AsyncThunk, createAsyncThunk, Unsubscribe } from '@reduxjs/toolkit';
 import { Planet } from '../../models/Planet';
 import { PlanetAPI } from '../../api/services/PlanetAPI';
-import { RequsetOptions } from '../../models/RequsetOptions';
+import { RequestOptions } from '../../models/RequestOptions';
+import { RequestOptionsMapper } from '../../api/mappers/RequestOptionsMapper';
+
+const requestOptionsMapper = new RequestOptionsMapper();
 
 export const setIsHaveMoreData: AsyncThunk<boolean, boolean, Record<string, never>> = createAsyncThunk(
   'planets/setIsHaveMoreData',
   async (ishaveMoreData: boolean): Promise<boolean> => ishaveMoreData,
 );
 
-export const getInitialPlanets: AsyncThunk<Unsubscribe, RequsetOptions, Record<string, never>> = createAsyncThunk(
+export const getInitialPlanets: AsyncThunk<Unsubscribe, RequestOptions, Record<string, never>> = createAsyncThunk(
   'planets/getInitialPlanets',
-  async (options: RequsetOptions, thunkAPI): Promise<Unsubscribe> => {
+  async (options: RequestOptions, thunkAPI): Promise<Unsubscribe> => {
     thunkAPI.dispatch(setIsHaveMoreData(true));
-    return PlanetAPI.getInitialPlanets(options.chunkSize, thunkAPI.dispatch, options.sortTarget);
+    return PlanetAPI.getInitialPlanets(requestOptionsMapper.transofrmRequest(options), thunkAPI.dispatch);
   },
 );
 
-export const getNextPlanets: AsyncThunk<Unsubscribe, number, Record<string, never>> = createAsyncThunk(
+export const getNextPlanets: AsyncThunk<Unsubscribe, RequestOptions, Record<string, never>> = createAsyncThunk(
   'planets/getNextPlanets',
-  async (chunkSize: number, thunkAPI): Promise<Unsubscribe> => PlanetAPI.getNextPlanets(chunkSize, thunkAPI.dispatch),
+  async (options: RequestOptions, thunkAPI): Promise<Unsubscribe> =>
+    PlanetAPI.getNextPlanets(requestOptionsMapper.transofrmRequest(options), thunkAPI.dispatch),
 );
 
 export const getPlanetByName: AsyncThunk<Planet, string, Record<string, never>> = createAsyncThunk(

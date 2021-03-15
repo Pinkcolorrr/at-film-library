@@ -1,25 +1,17 @@
 import { Planet } from '../../models/Planet';
 import { PlanetDTO } from '../dtos/PlanetDto';
 
-/**
- * Mapping planet data before send or accept
- */
+/**  Mapping planet data before send or accept */
 export class PlanetMapper {
-  /**
-   * Transoform planet DTO array to object model array
-   */
-  public transformArrayResponse(
-    planetData: PlanetDTO[],
-    id: string[]
-  ): Planet[] {
+  /** Transoform planet DTO array to object model array */
+
+  public transformArrayResponse(planetData: PlanetDTO[], id: string[]): Planet[] {
     return planetData.map((planet, index) => {
       return this.transformResponse(planet, id[index]);
     });
   }
 
-  /**
-   * Remove useless data from planetDTO object
-   */
+  /** Remove useless data from planetDTO object */
   public transformResponse(planet: PlanetDTO, planetId: string): Planet {
     return {
       climate: planet.fields.climate || 'Unknown',

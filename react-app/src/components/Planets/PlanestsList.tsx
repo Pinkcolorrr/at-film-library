@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CircularProgress, IconButton, List, ListItem, ListItemText, makeStyles, TextField } from '@material-ui/core';
+import { CircularProgress, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { NavLink, useRouteMatch } from 'react-router-dom';
-import { SearchOutlined } from '@material-ui/icons';
 import { Planet } from '../../models/Planet';
 import { setRootContent, clearRootContent } from '../../store/CurrentContent/currentContentSlice';
-import { selectEndDataMsg, selectIsHaveMoreData, selectPlanets } from '../../store/Planets/planetsSlice';
+import {
+  selectEndDataMsg,
+  selectIsHaveMoreData,
+  selectPlanets,
+  selectRequestOptions,
+  setSortTarget,
+} from '../../store/Planets/planetsSlice';
 import {
   clearPlanetsList,
   getInitialPlanets,
@@ -15,7 +20,8 @@ import {
 } from '../../store/Planets/planetsThunks';
 import { useThunkDispatch } from '../../store/store';
 import { withSubscription } from '../../hocs/withSubscription';
-import { RequsetOptions } from '../../models/RequsetOptions';
+import { SortMenu } from '../SortMenu/SortMenu';
+import { SearchForm } from '../SearchForm/SearchForm';
 
 type props = {
   pushUnsubscriber(unsubscribe: Unsubscribe): void;
@@ -46,50 +52,55 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PlanetsListWithSubscription(props: props): JSX.Element {
-  const classes = useStyles();
   const dispatch = useThunkDispatch();
-  const scroll = useRef<HTMLDivElement>(null);
+  const classes = useStyles();
+  const { url } = useRouteMatch();
+
   const planets = useSelector(selectPlanets);
   const isHaveMoreData = useSelector(selectIsHaveMoreData);
   const endDataMsg = useSelector(selectEndDataMsg);
-  const { url } = useRouteMatch();
-  const [searchValue, setSearchValue] = useState('');
+  const requestOptions = useSelector(selectRequestOptions);
+
+  const scroll = useRef<HTMLDivElement>(null);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
+  const sortOptions = ['Default', 'Name'];
 
-  const requsetOptions: RequsetOptions = {
-    chunkSize: 20,
-    sortTarget: 'pk',
-  };
-
-  const planetsList = planets.map((planet: Planet) => (
-    <ListItem key={planet.pk} component={NavLink} to={`${url}/${planet.id}/details`} button>
-      <ListItemText primary={planet.name} />
-    </ListItem>
-  ));
-
-  useEffect(() => {
-    dispatch(getInitialPlanets(requsetOptions)).then(({ payload }) => {
+  const planetsRequset = () => {
+    dispatch(clearPlanetsList());
+    props.unsubscribeAll();
+    props.clearUnsubscribers();
+    dispatch(getInitialPlanets(requestOptions)).then(({ payload }) => {
       props.pushUnsubscriber(payload as Unsubscribe);
     });
-
     dispatch(setRootContent('Planets list'));
+  };
+
+  const sortBySelectedOption = (selected: number) => {
+    dispatch(setSortTarget(sortOptions[selected]));
+  };
+
+  const getPlanetBySearch = (name: string): void => {
+    dispatch(getPlanetByName(name));
+  };
+
+  useEffect(() => {
+    planetsRequset();
 
     return () => {
       props.unsubscribeAll();
       props.clearUnsubscribers();
 
-      dispatch(clearPlanetsList());
       dispatch(clearRootContent());
     };
-  }, [dispatch]);
+  }, [dispatch, requestOptions.sortTarget]);
 
   useEffect(() => {
     if (isScrollEnd && isHaveMoreData) {
-      dispatch(getNextPlanets(20)).then(({ payload }) => {
+      dispatch(getNextPlanets(requestOptions)).then(({ payload }) => {
         props.pushUnsubscriber(payload as Unsubscribe);
       });
     }
-  }, [isScrollEnd]);
+  }, [dispatch, isScrollEnd]);
 
   const onScroll = () => {
     if (
@@ -104,34 +115,19 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
 
   return (
     <div ref={scroll} className={classes.list} onScroll={onScroll}>
-      <form
-        className={classes.searchForm}
-        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault();
-          if (searchValue) {
-            dispatch(getPlanetByName(searchValue));
-          } else {
-            dispatch(clearPlanetsList());
-            dispatch(getInitialPlanets(requsetOptions));
-          }
-        }}
-      >
-        <TextField
-          label="Search"
-          onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setSearchValue(event.target.value);
-          }}
-          size="small"
-          value={searchValue}
-          variant="outlined"
-          fullWidth
-        />
-        <IconButton type="submit">
-          <SearchOutlined />
-        </IconButton>
-      </form>
+      <SearchForm getPlanetByName={getPlanetBySearch} getInitialPlanets={planetsRequset} />
+      <SortMenu
+        options={sortOptions}
+        sortBySelectedOption={sortBySelectedOption}
+        index={sortOptions.indexOf(requestOptions.sortTarget)}
+      ></SortMenu>
+
       <List>
-        {planetsList}
+        {planets.map((planet: Planet) => (
+          <ListItem key={planet.pk} component={NavLink} to={`${url}/${planet.id}/details`} button>
+            <ListItemText primary={planet.name} />
+          </ListItem>
+        ))}
         <ListItem className={classes.circularProgress}>
           {isHaveMoreData ? <CircularProgress /> : <ListItemText primary={endDataMsg} />}
         </ListItem>

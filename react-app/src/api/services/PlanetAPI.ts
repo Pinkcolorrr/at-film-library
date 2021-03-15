@@ -3,6 +3,7 @@ import 'firebase/firestore';
 import { AnyAction, Unsubscribe } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Planet } from '../../models/Planet';
+import { RequestOptions } from '../../models/RequestOptions';
 import {
   setIsHaveMoreData,
   pushPlanetsInStore,
@@ -109,9 +110,8 @@ export const PlanetAPI = {
   },
 
   getInitialPlanets(
-    chunkSize: number,
+    { chunkSize, sortTarget }: RequestOptions,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-    sortTarget = 'pk',
   ): Unsubscribe {
     return firebase
       .firestore()
@@ -124,12 +124,15 @@ export const PlanetAPI = {
       });
   },
 
-  getNextPlanets(chunkSize: number, dispatch: ThunkDispatch<unknown, unknown, AnyAction>): Unsubscribe {
+  getNextPlanets(
+    { chunkSize, sortTarget }: RequestOptions,
+    dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
+  ): Unsubscribe {
     return firebase
       .firestore()
       .collection('planets')
       .withConverter(firebaseConverter<PlanetDTO>())
-      .orderBy('pk')
+      .orderBy(sortTarget)
       .startAfter(paginationControl.getLastDoc())
       .limit(chunkSize)
       .onSnapshot((doc: firebase.firestore.QuerySnapshot<PlanetDTO>) => {

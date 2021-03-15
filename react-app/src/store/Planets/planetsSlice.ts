@@ -3,6 +3,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
 import { Planet } from '../../models/Planet';
+import { RequestOptions } from '../../models/RequestOptions';
 import { RootState } from '../rootReducer';
 import {
   pushPlanetsInStore,
@@ -16,20 +17,25 @@ import {
 
 export type planets = {
   planetList: Planet[];
-  isHaveMoreData: boolean;
-  endDataMsg: string;
   currentPlanet: {
     planetInfo: Maybe<Planet>;
   };
+  requestOptions: RequestOptions;
+  isHaveMoreData: boolean;
+  endDataMsg: string;
 };
 
 const initialState: planets = {
   planetList: [],
-  isHaveMoreData: true,
-  endDataMsg: 'You hit the bottom',
   currentPlanet: {
     planetInfo: null,
   },
+  requestOptions: {
+    chunkSize: 20,
+    sortTarget: 'Default',
+  },
+  isHaveMoreData: true,
+  endDataMsg: 'You hit the bottom',
 };
 
 const planetsSlice = createSlice({
@@ -38,6 +44,9 @@ const planetsSlice = createSlice({
   reducers: {
     clearSelectedPlanet(state) {
       state.currentPlanet.planetInfo = null;
+    },
+    setSortTarget(state, action) {
+      state.requestOptions.sortTarget = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -88,7 +97,7 @@ const planetsSlice = createSlice({
   },
 });
 
-export const { clearSelectedPlanet } = planetsSlice.actions;
+export const { clearSelectedPlanet, setSortTarget } = planetsSlice.actions;
 
 export const selectCurrentPlanet = (state: RootState): Maybe<Planet> => state.planets.currentPlanet.planetInfo;
 
@@ -97,5 +106,7 @@ export const selectPlanets = (state: RootState): Planet[] => state.planets.plane
 export const selectIsHaveMoreData = (state: RootState): boolean => state.planets.isHaveMoreData;
 
 export const selectEndDataMsg = (state: RootState): string => state.planets.endDataMsg;
+
+export const selectRequestOptions = (state: RootState): RequestOptions => state.planets.requestOptions;
 
 export const planetsReducer = planetsSlice.reducer;
