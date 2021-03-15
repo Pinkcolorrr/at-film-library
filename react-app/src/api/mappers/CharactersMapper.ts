@@ -4,20 +4,18 @@ import { CharacterDTO } from '../dtos/CharactersDto';
 /**
  * Mapping character data before send or accept
  */
-export class CharacterMapper {
+export const CharacterMapper = {
   /**
    * Transoform character DTO array to object model array
    */
-  public transformArrayResponse(characterData: CharacterDTO[]): Character[] {
-    return characterData.map((character) => {
-      return this.transformResponse(character);
-    });
-  }
+  transformArrayResponse(characterData: CharacterDTO[], id: string[]): Character[] {
+    return characterData.map((character, index) => this.transformResponse(character, id[index]));
+  },
 
   /**
    * Remove useless data from characterDTO
    */
-  public transformResponse(character: CharacterDTO): Character {
+  transformResponse(character: CharacterDTO, characterId: string): Character {
     return {
       birthYear: character.fields.birth_year,
       created: new Date(character.fields.created),
@@ -31,6 +29,7 @@ export class CharacterMapper {
       name: character.fields.name,
       skinColor: character.fields.skin_color,
       pk: String(character.pk),
+      id: characterId,
     };
-  }
-}
+  },
+};

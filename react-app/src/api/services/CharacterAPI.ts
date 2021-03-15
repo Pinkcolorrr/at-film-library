@@ -6,16 +6,14 @@ import { getChunkedArray } from '../../utils/utils';
 import { CharacterDTO } from '../dtos/CharactersDto';
 import { CharacterMapper } from '../mappers/CharactersMapper';
 
-const characterMapper = new CharacterMapper();
-
 export const CharacterAPI = {
   async getCharactersByPk(pkArray: (number | string)[]): Promise<Character[]> {
     if (pkArray.length > 10) {
       const chunkedArr: (string | number)[][] = getChunkedArray(pkArray, 10);
       const charactersData: Character[][] & Character[] = [];
 
-      for (const item of chunkedArr) {
-        charactersData.push(await this.getCharactersByPk(item));
+      for (let i = 0; i < chunkedArr.length; i++) {
+        charactersData.push(await this.getCharactersByPk(chunkedArr[i]));
       }
 
       return charactersData.flat(Infinity);
@@ -27,12 +25,8 @@ export const CharacterAPI = {
       .where('pk', 'in', pkArray)
       .withConverter(firebaseConverter<CharacterDTO>())
       .get()
-      .then((characters) => {
-        const charactersData: Character[] = [];
-        characters.forEach((character) => {
-          charactersData.push(characterMapper.transformResponse(character.data()));
-        });
-        return charactersData;
-      });
+      .then((characters) =>
+        characters.docs.map((character) => CharacterMapper.transformResponse(character.data(), character.id)),
+      );
   },
 };

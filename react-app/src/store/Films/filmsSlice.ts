@@ -1,11 +1,14 @@
+/* no-param-reassign was disabled, beacuse redux-toolkit use immer and don't mutate state */
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
 import { Character } from '../../models/Characters';
 import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
-import { getPlanetsByPk } from '../Planets/planetsThunks';
-import { RootState } from '../rootReducer';
-import { addFilmsInStore, getCharactersByPk, getFilmById } from './filmsThunks';
+import { getPlanetsByPk } from '../Planets/planetsThunks/apiThunks';
+import { getFilmById, getCharactersByPk } from './filmsThunks/apiThunks';
+import { addFilmsInStore } from './filmsThunks/storeThunks';
 
 export type films = {
   filmsList: Film[];
@@ -55,16 +58,5 @@ const filmsSlice = createSlice({
 });
 
 export const { clearSelectedFilm } = filmsSlice.actions;
-
-export const selectCurrentFilm = (state: RootState): Maybe<Film> =>
-  state.films.currentFilm.filmInfo;
-
-export const selectFilms = (state: RootState): Film[] => state.films.filmsList;
-
-export const selectRelatedPlanets = (state: RootState): Planet[] =>
-  state.films.currentFilm.relatedData.planets;
-
-export const selectRelatedCharacters = (state: RootState): Character[] =>
-  state.films.currentFilm.relatedData.characters;
 
 export const filmsReducer = filmsSlice.reducer;

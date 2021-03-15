@@ -2,17 +2,14 @@ import { Planet } from '../../models/Planet';
 import { PlanetDTO } from '../dtos/PlanetDto';
 
 /**  Mapping planet data before send or accept */
-export class PlanetMapper {
+export const PlanetMapper = {
   /** Transoform planet DTO array to object model array */
-
-  public transformArrayResponse(planetData: PlanetDTO[], id: string[]): Planet[] {
-    return planetData.map((planet, index) => {
-      return this.transformResponse(planet, id[index]);
-    });
-  }
+  transformArrayResponse(planetData: PlanetDTO[], id: string[]): Planet[] {
+    return planetData.map((planet, index) => this.transformResponse(planet, id[index]));
+  },
 
   /** Remove useless data from planetDTO object */
-  public transformResponse(planet: PlanetDTO, planetId: string): Planet {
+  transformResponse(planet: PlanetDTO, planetId: string): Planet {
     return {
       climate: planet.fields.climate || 'Unknown',
       created: new Date(planet.fields.created),
@@ -27,5 +24,5 @@ export class PlanetMapper {
       pk: String(planet.pk),
       id: planetId,
     };
-  }
-}
+  },
+};

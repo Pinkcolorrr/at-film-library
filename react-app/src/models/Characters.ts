@@ -2,6 +2,7 @@
  * Interface for character DOM
  */
 export interface Character {
+  readonly id: string;
   /**
    * Personal key of character
    */

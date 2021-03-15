@@ -15,8 +15,9 @@ import { Maybe } from 'yup/lib/types';
 import { Planet } from '../../models/Planet';
 import { tableRows } from '../../models/TableRows';
 import { setAdditionalContent, clearAdditionalContent } from '../../store/CurrentContent/currentContentSlice';
-import { clearSelectedPlanet, selectCurrentPlanet } from '../../store/Planets/planetsSlice';
-import { getPlanetById } from '../../store/Planets/planetsThunks';
+import { selectCurrentPlanet } from '../../store/Planets/planetSelectors';
+import { clearSelectedPlanet } from '../../store/Planets/planetsSlice';
+import { getPlanetById } from '../../store/Planets/planetsThunks/apiThunks';
 import { useThunkDispatch } from '../../store/store';
 
 type props = {

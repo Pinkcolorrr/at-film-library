@@ -1,15 +1,16 @@
+import React, { useEffect } from 'react';
 import { FormGroup, Button, TextField } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { Field, FieldProps, Form, Formik } from 'formik';
-import React, { useEffect } from 'react';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './Auth.module.css';
 
 import { UserAuthData } from '../../models/UserAuthData';
-import { signInByEmailAndPassword } from '../../store/User/userThunks';
-import { removeErrorMsg, selectErrorMsg } from '../../store/User/userSlice';
+import { removeErrorMsg } from '../../store/User/userSlice';
+import { signInByEmailAndPassword } from '../../store/User/userThunks/apiThunks';
+import { selectErrorMsg } from '../../store/User/userSelectors';
 
 const loginSchema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email is required'),
@@ -85,7 +86,7 @@ export function Login(): JSX.Element {
           </Alert>
         ) : null}
         <div className={styles.registerText}>
-          Don't have an account yet? <Link to="/register">Register</Link>
+          Don&apos;t have an account yet? <Link to="/register">Register</Link>
         </div>
       </Form>
     </Formik>

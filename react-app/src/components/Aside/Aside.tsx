@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Drawer, makeStyles, Tab, Divider, Tabs, Button, Menu, MenuItem, TextField } from '@material-ui/core';
+import React from 'react';
+import { Drawer, makeStyles, Tab, Divider, Tabs } from '@material-ui/core';
 
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { Characters } from '../Characters/Characters';
 import { FilmsList } from '../Films/FilmsList';
 import { PlanetsList } from '../Planets/PlanestsList';
 import { getStringSecondPart } from '../../utils/utils';
-import { wrapperStyles } from '../Wrapper/Wrapper';
 import { AsideTitle } from './AsideTitle';
+import { wrapperStyles } from '../Wrapper/wrapperStyles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   asideContent: {
     display: 'flex',
     flexDirection: 'column',

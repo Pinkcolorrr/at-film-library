@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { selectAdditionalContent, selectRootContent } from '../../store/CurrentContent/currentContentSlice';
+import { selectRootContent, selectAdditionalContent } from '../../store/CurrentContent/currentContentSelectors';
 
 const useStyles = makeStyles((theme) => ({
   title: {

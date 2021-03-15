@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 import styles from './Auth.module.css';
 
 import { UserAuthData } from '../../models/UserAuthData';
-import { removeErrorMsg, selectErrorMsg } from '../../store/User/userSlice';
-import { registerByEmailAndPassword } from '../../store/User/userThunks';
+import { removeErrorMsg } from '../../store/User/userSlice';
+import { registerByEmailAndPassword } from '../../store/User/userThunks/apiThunks';
+import { selectErrorMsg } from '../../store/User/userSelectors';
 
 const registerSchema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email is required'),

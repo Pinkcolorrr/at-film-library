@@ -24,14 +24,10 @@ import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
 import { tableRows } from '../../models/TableRows';
 import { clearAdditionalContent, setAdditionalContent } from '../../store/CurrentContent/currentContentSlice';
-import {
-  clearSelectedFilm,
-  selectCurrentFilm,
-  selectRelatedCharacters,
-  selectRelatedPlanets,
-} from '../../store/Films/filmsSlice';
-import { getCharactersByPk, getFilmById } from '../../store/Films/filmsThunks';
-import { getPlanetsByPk } from '../../store/Planets/planetsThunks';
+import { selectCurrentFilm, selectRelatedPlanets, selectRelatedCharacters } from '../../store/Films/filmSelectors';
+import { clearSelectedFilm } from '../../store/Films/filmsSlice';
+import { getFilmById, getCharactersByPk } from '../../store/Films/filmsThunks/apiThunks';
+import { getPlanetsByPk } from '../../store/Planets/planetsThunks/apiThunks';
 import { useThunkDispatch } from '../../store/store';
 
 type props = {

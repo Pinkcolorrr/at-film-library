@@ -3,13 +3,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
 import { UserInfo } from '../../models/UserInfo';
-import { RootState } from '../rootReducer';
-import {
-  addUserInStore,
-  signInByEmailAndPassword,
-  registerByEmailAndPassword,
-  removeUserFromStore,
-} from './userThunks';
+import { signInByEmailAndPassword, registerByEmailAndPassword } from './userThunks/apiThunks';
+import { addUserInStore, removeUserFromStore } from './userThunks/storeThunks';
 
 export type user = {
   readonly info: Maybe<UserInfo>;
@@ -55,13 +50,5 @@ const userSlice = createSlice({
 });
 
 export const { removeErrorMsg } = userSlice.actions;
-
-export const selectAuthState = (state: RootState): boolean => state.user.logged;
-
-export const selectErrorMsg = (state: RootState): Maybe<string> => state.user.errorMsg;
-
-export const selectUserEmail = (state: RootState): Maybe<string> => state.user.info?.email;
-
-export const selectIsUserPending = (state: RootState): boolean => state.user.isPending;
 
 export const userReducer = userSlice.reducer;

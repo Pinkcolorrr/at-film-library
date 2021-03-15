@@ -5,23 +5,18 @@ import { useSelector } from 'react-redux';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import { Planet } from '../../models/Planet';
 import { setRootContent, clearRootContent } from '../../store/CurrentContent/currentContentSlice';
-import {
-  selectEndDataMsg,
-  selectIsHaveMoreData,
-  selectPlanets,
-  selectRequestOptions,
-  setSortTarget,
-} from '../../store/Planets/planetsSlice';
-import {
-  clearPlanetsList,
-  getInitialPlanets,
-  getNextPlanets,
-  getPlanetByName,
-} from '../../store/Planets/planetsThunks';
+import { clearPlanetsList, setSortTarget } from '../../store/Planets/planetsSlice';
+import { getInitialPlanets, getNextPlanets, getPlanetByName } from '../../store/Planets/planetsThunks/apiThunks';
 import { useThunkDispatch } from '../../store/store';
 import { withSubscription } from '../../hocs/withSubscription';
 import { SortMenu } from '../SortMenu/SortMenu';
 import { SearchForm } from '../SearchForm/SearchForm';
+import {
+  selectPlanets,
+  selectIsHaveMoreData,
+  selectEndDataMsg,
+  selectRequestOptions,
+} from '../../store/Planets/planetSelectors';
 
 type props = {
   pushUnsubscriber(unsubscribe: Unsubscribe): void;
@@ -115,12 +110,12 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
 
   return (
     <div ref={scroll} className={classes.list} onScroll={onScroll}>
-      <SearchForm getPlanetByName={getPlanetBySearch} getInitialPlanets={planetsRequset} />
+      <SearchForm getInitialPlanets={planetsRequset} getPlanetByName={getPlanetBySearch} />
       <SortMenu
+        index={sortOptions.indexOf(requestOptions.sortTarget)}
         options={sortOptions}
         sortBySelectedOption={sortBySelectedOption}
-        index={sortOptions.indexOf(requestOptions.sortTarget)}
-      ></SortMenu>
+      />
 
       <List>
         {planets.map((planet: Planet) => (

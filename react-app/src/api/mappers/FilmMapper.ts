@@ -4,20 +4,18 @@ import { FilmDTO } from '../dtos/FilmDto';
 /**
  * Mapping film data before send or accept
  */
-export class FilmMapper {
+export const FilmMapper = {
   /**
    * Transoform film DTO array to object model array
    */
-  public transformArrayResponse(filmData: FilmDTO[], id: string[]): Film[] {
-    return filmData.map((film, index) => {
-      return this.transformResponse(film, id[index]);
-    });
-  }
+  transformArrayResponse(filmData: FilmDTO[], id: string[]): Film[] {
+    return filmData.map((film, index) => this.transformResponse(film, id[index]));
+  },
 
   /**
    * Remove useless data from filmDTO object
    */
-  public transformResponse(film: FilmDTO, filmID: string): Film {
+  transformResponse(film: FilmDTO, filmID: string): Film {
     return {
       title: film.fields.title || 'Unknown',
       episodeId: film.fields.episode_id || NaN,
@@ -34,5 +32,5 @@ export class FilmMapper {
       pk: String(film.pk),
       id: filmID,
     };
-  }
-}
+  },
+};

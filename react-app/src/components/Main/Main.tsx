@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router';
 import { FilmAdding } from '../Films/FilmAdding';
 import { FilmDetails } from '../Films/FilmDetails';
 import { PlanetDetails } from '../Planets/PlanetDetails';
-import { wrapperStyles } from '../Wrapper/Wrapper';
+import { wrapperStyles } from '../Wrapper/wrapperStyles';
 
 export function Main(props: wrapperStyles): JSX.Element {
   return (

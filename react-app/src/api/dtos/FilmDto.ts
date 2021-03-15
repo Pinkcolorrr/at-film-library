@@ -1,3 +1,7 @@
+/* have to use camel_case here, because DTO */
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable camelcase */
+
 import { FirebaseDTO } from './FirebaseDto';
 
 /**

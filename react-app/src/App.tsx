@@ -5,9 +5,9 @@ import styles from './App.module.css';
 import { Login } from './components/Auth/Login';
 import { Register } from './components/Auth/Register';
 import { Wrapper } from './components/Wrapper/Wrapper';
-import { observeUser } from './store/User/userThunks';
-import { selectAuthState, selectIsUserPending } from './store/User/userSlice';
+import { observeUser } from './store/User/userThunks/apiThunks';
 import { GuardRoute } from './routers/GuardRouter';
+import { selectAuthState, selectIsUserPending } from './store/User/userSelectors';
 
 export function App(): JSX.Element {
   const authState = useSelector(selectAuthState);

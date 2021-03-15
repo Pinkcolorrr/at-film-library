@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import { currentContentReducer } from './CurrentContent';
-import { filmsReducer } from './Films/filmsSlice';
+import { filmsReducer } from './Films';
 import { planetsReducer } from './Planets';
 import { userReducer } from './User';
 

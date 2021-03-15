@@ -2,7 +2,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
-import { RootState } from '../rootReducer';
 
 type currentContent = {
   rootContent: Maybe<string>;
@@ -39,8 +38,5 @@ export const {
   setAdditionalContent,
   clearAdditionalContent,
 } = currentContentSlice.actions;
-
-export const selectRootContent = (state: RootState): Maybe<string> => state.currentContent.rootContent;
-export const selectAdditionalContent = (state: RootState): Maybe<string> => state.currentContent.additionalContent;
 
 export const currentContentReducer = currentContentSlice.reducer;

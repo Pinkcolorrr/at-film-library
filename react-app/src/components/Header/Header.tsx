@@ -2,10 +2,10 @@ import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserEmail } from '../../store/User/userSlice';
 import styles from './Header.module.css';
-import { signOut } from '../../store/User/userThunks';
-import { wrapperStyles } from '../Wrapper/Wrapper';
+import { signOut } from '../../store/User/userThunks/apiThunks';
+import { selectUserEmail } from '../../store/User/userSelectors';
+import { wrapperStyles } from '../Wrapper/wrapperStyles';
 
 export function Header(props: wrapperStyles): JSX.Element {
   const userEmail = useSelector(selectUserEmail);

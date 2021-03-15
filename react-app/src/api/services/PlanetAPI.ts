@@ -7,15 +7,14 @@ import { RequestOptions } from '../../models/RequestOptions';
 import {
   setIsHaveMoreData,
   pushPlanetsInStore,
-  removePlanetsFromStore,
   setPlanetsInStore,
-} from '../../store/Planets/planetsThunks';
+  removePlanetsFromStore,
+} from '../../store/Planets/planetsThunks/storeThunks';
 import { firebaseConverter } from '../../utils/FirebaseConverters';
 import { getChunkedArray, PaginationControl } from '../../utils/utils';
 import { PlanetDTO } from '../dtos/PlanetDto';
 import { PlanetMapper } from '../mappers/PlanetMapper';
 
-const planetMapper = new PlanetMapper();
 const paginationControl = new PaginationControl();
 
 function snapshotRequset(
@@ -34,16 +33,16 @@ function snapshotRequset(
   doc.docChanges().forEach((planet) => {
     switch (planet.type) {
       case 'modified': {
-        modifiedDocs.push(planetMapper.transformResponse(planet.doc.data(), planet.doc.id));
+        modifiedDocs.push(PlanetMapper.transformResponse(planet.doc.data(), planet.doc.id));
         break;
       }
       case 'removed': {
-        removedDocs.push(planetMapper.transformResponse(planet.doc.data(), planet.doc.id));
+        removedDocs.push(PlanetMapper.transformResponse(planet.doc.data(), planet.doc.id));
         break;
       }
       case 'added':
       default: {
-        addedDocs.push(planetMapper.transformResponse(planet.doc.data(), planet.doc.id));
+        addedDocs.push(PlanetMapper.transformResponse(planet.doc.data(), planet.doc.id));
         break;
       }
     }
@@ -64,14 +63,14 @@ function snapshotRequset(
 export const PlanetAPI = {
   async getPlanetsByPk(pkArray: (number | string)[]): Promise<Planet[]> {
     if (pkArray.length > 10) {
-      const chunkedArr: (string | number)[][] = getChunkedArray(pkArray, 10);
-      const charactersData: Planet[][] & Planet[] = [];
+      const chunkedArr: (string | number)[][] = getChunkedArray<number | string>(pkArray, 10);
+      const planetsData: Planet[][] & Planet[] = [];
 
-      for (const item of chunkedArr) {
-        charactersData.push(await this.getPlanetsByPk(item));
+      for (let i = 0; i < chunkedArr.length; i++) {
+        planetsData.push(await this.getPlanetsByPk(chunkedArr[i]));
       }
 
-      return charactersData.flat(Infinity);
+      return planetsData.flat(Infinity);
     }
 
     return firebase
@@ -80,13 +79,7 @@ export const PlanetAPI = {
       .where('pk', 'in', pkArray)
       .withConverter(firebaseConverter<PlanetDTO>())
       .get()
-      .then((planets) => {
-        const planetsData: Planet[] = [];
-        planets.forEach((planet) => {
-          planetsData.push(planetMapper.transformResponse(planet.data(), planet.id));
-        });
-        return planetsData;
-      });
+      .then((planets) => planets.docs.map((planet) => PlanetMapper.transformResponse(planet.data(), planet.id)));
   },
 
   async getPlanetById(id: string): Promise<Planet> {
@@ -96,7 +89,7 @@ export const PlanetAPI = {
       .withConverter(firebaseConverter<PlanetDTO>())
       .doc(id)
       .get()
-      .then((planet) => planetMapper.transformResponse(planet.data() as PlanetDTO, planet.id));
+      .then((planet) => PlanetMapper.transformResponse(planet.data() as PlanetDTO, planet.id));
   },
 
   async getPlanetByName(name: string): Promise<Planet> {
@@ -106,7 +99,7 @@ export const PlanetAPI = {
       .withConverter(firebaseConverter<PlanetDTO>())
       .where('fields.name', '==', name)
       .get()
-      .then((planet) => planetMapper.transformResponse(planet.docs[0].data(), planet.docs[0].id));
+      .then((planet) => PlanetMapper.transformResponse(planet.docs[0].data(), planet.docs[0].id));
   },
 
   getInitialPlanets(

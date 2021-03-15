@@ -1,19 +1,17 @@
+/* no-param-reassign was disabled, beacuse redux-toolkit use immer and don't mutate state */
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
 import { Planet } from '../../models/Planet';
 import { RequestOptions } from '../../models/RequestOptions';
-import { RootState } from '../rootReducer';
+import { getPlanetById, getPlanetByName } from './planetsThunks/apiThunks';
 import {
   pushPlanetsInStore,
-  getPlanetById,
-  clearPlanetsList,
   setPlanetsInStore,
   removePlanetsFromStore,
-  getPlanetByName,
   setIsHaveMoreData,
-} from './planetsThunks';
+} from './planetsThunks/storeThunks';
 
 export type planets = {
   planetList: Planet[];
@@ -44,6 +42,9 @@ const planetsSlice = createSlice({
   reducers: {
     clearSelectedPlanet(state) {
       state.currentPlanet.planetInfo = null;
+    },
+    clearPlanetsList(state) {
+      state.planetList = [];
     },
     setSortTarget(state, action) {
       state.requestOptions.sortTarget = action.payload;
@@ -88,25 +89,12 @@ const planetsSlice = createSlice({
           }
         });
       })
-      .addCase(clearPlanetsList.fulfilled, (state) => {
-        state.planetList = [];
-      })
       .addCase(setIsHaveMoreData.fulfilled, (state, action) => {
         state.isHaveMoreData = action.payload;
       });
   },
 });
 
-export const { clearSelectedPlanet, setSortTarget } = planetsSlice.actions;
-
-export const selectCurrentPlanet = (state: RootState): Maybe<Planet> => state.planets.currentPlanet.planetInfo;
-
-export const selectPlanets = (state: RootState): Planet[] => state.planets.planetList;
-
-export const selectIsHaveMoreData = (state: RootState): boolean => state.planets.isHaveMoreData;
-
-export const selectEndDataMsg = (state: RootState): string => state.planets.endDataMsg;
-
-export const selectRequestOptions = (state: RootState): RequestOptions => state.planets.requestOptions;
+export const { clearSelectedPlanet, setSortTarget, clearPlanetsList } = planetsSlice.actions;
 
 export const planetsReducer = planetsSlice.reducer;
