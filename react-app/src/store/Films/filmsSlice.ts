@@ -6,8 +6,9 @@ import { Maybe } from 'yup/lib/types';
 import { Character } from '../../models/Characters';
 import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
+import { getCharactersByPk } from '../Characters/charactersThunks/apiThunks';
 import { getPlanetsByPk } from '../Planets/planetsThunks/apiThunks';
-import { getFilmById, getCharactersByPk } from './filmsThunks/apiThunks';
+import { getFilmById } from './filmsThunks/apiThunks';
 import { addFilmsInStore } from './filmsThunks/storeThunks';
 
 export type films = {
@@ -35,11 +36,7 @@ const initialState: films = {
 const filmsSlice = createSlice({
   name: 'films',
   initialState,
-  reducers: {
-    clearSelectedFilm(state) {
-      state.currentFilm.filmInfo = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(addFilmsInStore.fulfilled, (state, action) => {
@@ -56,7 +53,5 @@ const filmsSlice = createSlice({
       });
   },
 });
-
-export const { clearSelectedFilm } = filmsSlice.actions;
 
 export const filmsReducer = filmsSlice.reducer;

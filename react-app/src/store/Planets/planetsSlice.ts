@@ -1,4 +1,4 @@
-/* no-param-reassign was disabled, beacuse redux-toolkit use immer and don't mutate state */
+/* no-param-reassign was disabled, because redux-toolkit use immer and don't mutate state */
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
@@ -10,14 +10,16 @@ import {
   pushPlanetsInStore,
   setPlanetsInStore,
   removePlanetsFromStore,
-  setIsHaveMoreData,
+  setIsHaveMorePlanets,
+  setLastPlanetId,
 } from './planetsThunks/storeThunks';
 
-export type planets = {
+type planets = {
   planetList: Planet[];
   currentPlanet: {
     planetInfo: Maybe<Planet>;
   };
+  lastDocId: string;
   requestOptions: RequestOptions;
   isHaveMoreData: boolean;
   endDataMsg: string;
@@ -32,6 +34,7 @@ const initialState: planets = {
     chunkSize: 20,
     sortTarget: 'Default',
   },
+  lastDocId: '',
   isHaveMoreData: true,
   endDataMsg: 'You hit the bottom',
 };
@@ -40,13 +43,10 @@ const planetsSlice = createSlice({
   name: 'planets',
   initialState,
   reducers: {
-    clearSelectedPlanet(state) {
-      state.currentPlanet.planetInfo = null;
-    },
     clearPlanetsList(state) {
       state.planetList = [];
     },
-    setSortTarget(state, action) {
+    setPlanetsSortTarget(state, action) {
       state.requestOptions.sortTarget = action.payload;
     },
   },
@@ -69,6 +69,9 @@ const planetsSlice = createSlice({
         state.isHaveMoreData = false;
         state.endDataMsg = 'Not found';
       })
+      .addCase(setLastPlanetId.fulfilled, (state, action) => {
+        state.lastDocId = action.payload;
+      })
       .addCase(setPlanetsInStore.fulfilled, (state, action) => {
         action.payload.forEach((editedPlanet) => {
           for (let i = 0; i < state.planetList.length; i++) {
@@ -89,12 +92,12 @@ const planetsSlice = createSlice({
           }
         });
       })
-      .addCase(setIsHaveMoreData.fulfilled, (state, action) => {
+      .addCase(setIsHaveMorePlanets.fulfilled, (state, action) => {
         state.isHaveMoreData = action.payload;
       });
   },
 });
 
-export const { clearSelectedPlanet, setSortTarget, clearPlanetsList } = planetsSlice.actions;
+export const { setPlanetsSortTarget, clearPlanetsList } = planetsSlice.actions;
 
 export const planetsReducer = planetsSlice.reducer;

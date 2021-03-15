@@ -11,11 +11,11 @@ import {
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Maybe } from 'yup/lib/types';
-import { Planet } from '../../models/Planet';
+import { Character } from '../../models/Characters';
 import { tableRows } from '../../models/TableRows';
-import { setAdditionalContent, clearAdditionalContent } from '../../store/CurrentContent/currentContentSlice';
-import { selectCurrentPlanet } from '../../store/Planets/planetSelectors';
-import { getPlanetById } from '../../store/Planets/planetsThunks/apiThunks';
+import { selectCurrentCharacter } from '../../store/Characters/characterSelectors';
+import { getCharacterById } from '../../store/Characters/charactersThunks/apiThunks';
+import { setAdditionalContent, clearAdditionalContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
 import { detailsPageClasses } from '../../styles/DetailPage';
 
@@ -23,73 +23,67 @@ type props = {
   match: { params: { id: string } };
 };
 
-export function PlanetDetails(props: props): JSX.Element {
+export function CharacterDetails(props: props): JSX.Element {
   const classes = detailsPageClasses();
-  const dispatch = useThunkDispatch();
-  const planet: Maybe<Planet> = useSelector(selectCurrentPlanet);
   const { id } = props.match.params;
+  const dispatch = useThunkDispatch();
+  const character: Maybe<Character> = useSelector(selectCurrentCharacter);
 
   useEffect(() => {
-    if (!planet || id !== planet.id) {
-      dispatch(getPlanetById(id));
+    if (!character || character.id !== id) {
+      dispatch(getCharacterById(id));
     }
-
-    return () => {};
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (planet) {
-      dispatch(setAdditionalContent(planet.name));
+    if (character) {
+      dispatch(setAdditionalContent(character.name));
     }
     return () => {
       dispatch(clearAdditionalContent());
     };
-  }, [dispatch, planet]);
+  }, [dispatch, character]);
 
-  return planet && planet.id === id ? (
+  return character && character.id === id ? (
     (() => {
       const rows: tableRows[] = [
         {
           key: 'Name',
-          value: planet.name,
+          value: character.name,
         },
         {
-          key: 'Climate',
-          value: planet.climate,
+          key: 'Gender',
+          value: character.gender,
         },
         {
-          key: 'Diameter',
-          value: planet.diameter,
+          key: 'Birth year',
+          value: character.birthYear,
         },
         {
-          key: 'Gravity',
-          value: planet.gravity,
-        },
-        {
-          key: 'Orbital period',
-          value: planet.orbitalPeriod,
-        },
-        {
-          key: 'Rotation period',
-          value: planet.rotationPeriod,
-        },
-        {
-          key: 'Population',
-          value: planet.population,
+          key: 'Eye color',
+          value: character.eyeColor,
         },
 
         {
-          key: 'Surface water',
-          value: planet.surfaceWater,
+          key: 'Hair color',
+          value: character.hairColor,
         },
         {
-          key: 'Terrain',
-          value: planet.terrain,
+          key: 'Height',
+          value: character.height,
+        },
+        {
+          key: 'Mass',
+          value: character.mass,
+        },
+        {
+          key: 'Skin color',
+          value: character.skinColor,
         },
       ];
       return (
         <TableContainer component={Paper} elevation={0}>
-          <Table aria-label="film table" className={classes.table}>
+          <Table className={classes.table}>
             <TableHead className={classes.tableHeaer}>
               <TableRow>
                 <TableCell className={classes.tableHeaderCell}>Key</TableCell>

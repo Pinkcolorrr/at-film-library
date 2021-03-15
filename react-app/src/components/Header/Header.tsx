@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './Header.module.css';
 import { signOut } from '../../store/User/userThunks/apiThunks';
 import { selectUserEmail } from '../../store/User/userSelectors';
-import { wrapperStyles } from '../Wrapper/wrapperStyles';
+import { wrapperStyles } from '../../styles/wrapperStyles';
 
 export function Header(props: wrapperStyles): JSX.Element {
   const userEmail = useSelector(selectUserEmail);

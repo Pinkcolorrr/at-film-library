@@ -2,21 +2,23 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CircularProgress, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { NavLink, Redirect, useLocation, useRouteMatch } from 'react-router-dom';
 import { Planet } from '../../models/Planet';
 import { setRootContent, clearRootContent } from '../../store/CurrentContent/currentContentSlice';
-import { clearPlanetsList, setSortTarget } from '../../store/Planets/planetsSlice';
+import { clearPlanetsList, setPlanetsSortTarget } from '../../store/Planets/planetsSlice';
 import { getInitialPlanets, getNextPlanets, getPlanetByName } from '../../store/Planets/planetsThunks/apiThunks';
 import { useThunkDispatch } from '../../store/store';
 import { withSubscription } from '../../hocs/withSubscription';
 import { SortMenu } from '../SortMenu/SortMenu';
 import { SearchForm } from '../SearchForm/SearchForm';
 import {
-  selectPlanets,
-  selectIsHaveMoreData,
-  selectEndDataMsg,
-  selectRequestOptions,
+  selectAllPlanets,
+  selectCurrentPlanet,
+  selectIsHaveMorePlanets,
+  selectLastPlanetsMsg,
+  selectPlanetsRequestOptions,
 } from '../../store/Planets/planetSelectors';
+import { asideListClasses } from '../../styles/AsideList';
 
 type props = {
   pushUnsubscriber(unsubscribe: Unsubscribe): void;
@@ -24,37 +26,17 @@ type props = {
   clearUnsubscribers(): void;
 };
 
-const useStyles = makeStyles((theme) => ({
-  list: {
-    height: '500px',
-    overflowY: 'scroll',
-    flexGrow: 1,
-  },
-
-  searchForm: {
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(1, 2),
-  },
-
-  circularProgress: {
-    display: 'flex',
-    justifyContent: 'center',
-    textAlign: 'center',
-    color: theme.palette.primary.main,
-  },
-}));
-
 function PlanetsListWithSubscription(props: props): JSX.Element {
   const dispatch = useThunkDispatch();
-  const classes = useStyles();
+  const classes = asideListClasses();
   const { url } = useRouteMatch();
+  const location = useLocation();
 
-  const planets = useSelector(selectPlanets);
-  const isHaveMoreData = useSelector(selectIsHaveMoreData);
-  const endDataMsg = useSelector(selectEndDataMsg);
-  const requestOptions = useSelector(selectRequestOptions);
+  const currentPlanet = useSelector(selectCurrentPlanet);
+  const planets = useSelector(selectAllPlanets);
+  const isHaveMoreData = useSelector(selectIsHaveMorePlanets);
+  const endDataMsg = useSelector(selectLastPlanetsMsg);
+  const requestOptions = useSelector(selectPlanetsRequestOptions);
 
   const scroll = useRef<HTMLDivElement>(null);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
@@ -71,7 +53,7 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
   };
 
   const sortBySelectedOption = (selected: number) => {
-    dispatch(setSortTarget(sortOptions[selected]));
+    dispatch(setPlanetsSortTarget(sortOptions[selected]));
   };
 
   const getPlanetBySearch = (name: string): void => {
@@ -127,6 +109,9 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
           {isHaveMoreData ? <CircularProgress /> : <ListItemText primary={endDataMsg} />}
         </ListItem>
       </List>
+      {currentPlanet && !location.pathname.includes('details') ? (
+        <Redirect from="/planets" to={`/planets/${currentPlanet.id}/details`} />
+      ) : null}
     </div>
   );
 }

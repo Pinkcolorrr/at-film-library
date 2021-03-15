@@ -18,15 +18,3 @@ export function getChunkedArray<T>(array: Array<T>, chunkSize: number): T[][] {
   }
   return chunkedArr;
 }
-
-export class PaginationControl {
-  private doc: Maybe<firebase.firestore.QueryDocumentSnapshot> = null;
-
-  public setLastDoc(doc: firebase.firestore.QueryDocumentSnapshot): void {
-    this.doc = doc;
-  }
-
-  public getLastDoc(): Maybe<firebase.firestore.QueryDocumentSnapshot> {
-    return this.doc;
-  }
-}

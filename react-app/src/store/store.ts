@@ -10,5 +10,5 @@ export const store = configureStore({
     }),
 });
 
-type AppDispatch = typeof store.dispatch;
+export type AppDispatch = typeof store.dispatch;
 export const useThunkDispatch = (): AppDispatch => useDispatch<AppDispatch>();

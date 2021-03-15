@@ -2,12 +2,12 @@ import React from 'react';
 import { Drawer, makeStyles, Tab, Divider, Tabs } from '@material-ui/core';
 
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
-import { Characters } from '../Characters/Characters';
+import { CharactersList } from '../Characters/CharactersList';
 import { FilmsList } from '../Films/FilmsList';
 import { PlanetsList } from '../Planets/PlanestsList';
 import { getStringSecondPart } from '../../utils/utils';
 import { AsideTitle } from './AsideTitle';
-import { wrapperStyles } from '../Wrapper/wrapperStyles';
+import { wrapperStyles } from '../../styles/wrapperStyles';
 
 const useStyles = makeStyles(() => ({
   asideContent: {
@@ -52,7 +52,7 @@ export function Aside(props: wrapperStyles): JSX.Element {
         <Switch>
           <Route component={FilmsList} path="/films" />
           <Route path="/planets" render={() => <PlanetsList />} />
-          <Route component={Characters} path="/characters" />
+          <Route path="/characters" render={() => <CharactersList />} />
         </Switch>
         <Divider />
       </div>

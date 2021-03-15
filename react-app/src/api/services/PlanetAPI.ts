@@ -5,24 +5,23 @@ import { ThunkDispatch } from 'redux-thunk';
 import { Planet } from '../../models/Planet';
 import { RequestOptions } from '../../models/RequestOptions';
 import {
-  setIsHaveMoreData,
+  setIsHaveMorePlanets,
   pushPlanetsInStore,
   setPlanetsInStore,
   removePlanetsFromStore,
+  setLastPlanetId,
 } from '../../store/Planets/planetsThunks/storeThunks';
 import { firebaseConverter } from '../../utils/FirebaseConverters';
-import { getChunkedArray, PaginationControl } from '../../utils/utils';
+import { getChunkedArray } from '../../utils/utils';
 import { PlanetDTO } from '../dtos/PlanetDto';
 import { PlanetMapper } from '../mappers/PlanetMapper';
 
-const paginationControl = new PaginationControl();
-
-function snapshotRequset(
+function snapshotResponse(
   doc: firebase.firestore.QuerySnapshot<PlanetDTO>,
   dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
 ): void {
   if (doc.size === 0) {
-    dispatch(setIsHaveMoreData(false));
+    dispatch(setIsHaveMorePlanets(false));
     return;
   }
 
@@ -49,7 +48,7 @@ function snapshotRequset(
   });
 
   if (addedDocs.length) {
-    paginationControl.setLastDoc(doc.docs[doc.docs.length - 1]);
+    dispatch(setLastPlanetId(doc.docs[doc.docs.length - 1].id));
     dispatch(pushPlanetsInStore(addedDocs));
   }
   if (modifiedDocs.length) {
@@ -67,6 +66,7 @@ export const PlanetAPI = {
       const planetsData: Planet[][] & Planet[] = [];
 
       for (let i = 0; i < chunkedArr.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
         planetsData.push(await this.getPlanetsByPk(chunkedArr[i]));
       }
 
@@ -113,23 +113,26 @@ export const PlanetAPI = {
       .orderBy(sortTarget)
       .limit(chunkSize)
       .onSnapshot((doc: firebase.firestore.QuerySnapshot<PlanetDTO>) => {
-        snapshotRequset(doc, dispatch);
+        snapshotResponse(doc, dispatch);
       });
   },
 
-  getNextPlanets(
+  async getNextPlanets(
     { chunkSize, sortTarget }: RequestOptions,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-  ): Unsubscribe {
+    lastDocId: string,
+  ): Promise<Unsubscribe> {
+    const planetDoc = await firebase.firestore().collection('planets').doc(lastDocId).get();
+
     return firebase
       .firestore()
       .collection('planets')
       .withConverter(firebaseConverter<PlanetDTO>())
       .orderBy(sortTarget)
-      .startAfter(paginationControl.getLastDoc())
+      .startAfter(planetDoc)
       .limit(chunkSize)
       .onSnapshot((doc: firebase.firestore.QuerySnapshot<PlanetDTO>) => {
-        snapshotRequset(doc, dispatch);
+        snapshotResponse(doc, dispatch);
       });
   },
 };

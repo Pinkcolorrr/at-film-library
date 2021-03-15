@@ -4,7 +4,7 @@ import React from 'react';
 import { Aside } from '../Aside/Aside';
 import { Header } from '../Header/Header';
 import { Main } from '../Main/Main';
-import { wrapperClasses } from './wrapperStyles';
+import { wrapperClasses } from '../../styles/wrapperStyles';
 
 export function Wrapper(): JSX.Element {
   const classes = wrapperClasses();
