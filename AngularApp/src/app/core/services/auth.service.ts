@@ -17,14 +17,14 @@ export class AuthService {
   /**
    * Check if user logged in
    */
-  public isLoggedIn$: Observable<boolean>;
+  public readonly isLoggedIn$: Observable<boolean>;
 
   /**
    * Observable user email
    */
-  public userEmail$: Observable<string>;
+  public readonly userEmail$: Observable<string>;
 
-  private userMapper = new UserMapper();
+  private readonly userMapper = new UserMapper();
 
   constructor(private afAuth: AngularFireAuth) {
     this.isLoggedIn$ = this.afAuth.authState.pipe(
@@ -59,7 +59,7 @@ export class AuthService {
    * Register user in app
    */
   public async register(user: UserRegister): Promise<UserInfo> {
-    return this.userMapper.transformResponse(await this.afAuth.signInWithEmailAndPassword(user.email, user.password));
+    return this.userMapper.transformResponse(await this.afAuth.createUserWithEmailAndPassword(user.email, user.password));
   }
 
   /**

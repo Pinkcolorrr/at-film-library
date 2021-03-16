@@ -32,42 +32,22 @@ export class CharacterMapper {
       mass: character.fields.mass,
       name: character.fields.name,
       skinColor: character.fields.skin_color,
+      pk: String(character.pk),
     };
   }
 
   /**
    * Transform titles, that used for table sorting, to server format
    */
-  public transformTitles(filter: QueryFilterParams): QueryFilterParams {
+  public transformTitles(filters: QueryFilterParams): QueryFilterParams {
     return {
-      limit: filter.limit,
-      pageDirection: filter.pageDirection,
-      get sortTarget(): string {
-        switch (filter.sortTarget) {
-          case 'name': {
-            return 'fields.name';
-          }
-          case 'gender': {
-            return 'fields.gender';
-          }
-          case 'height': {
-            return 'fields.height';
-          }
-          case 'mass': {
-            return 'fields.mass';
-          }
-          case 'pk':
-          default: {
-            return 'pk';
-          }
-        }
-      },
-      get searchTarget(): string {
-        return `fields.${filter.searchTarget}`;
-      },
-      sortDirection: filter.sortDirection,
-      searchValues: filter.searchValues,
-      target: filter.target,
+      limit: filters.limit,
+      pageDirection: filters.pageDirection,
+      sortTarget: filters.sortTarget === 'pk' ? 'pk' : `fields.${filters.sortTarget}`,
+      searchTarget: `fields.${filters.searchTarget}`,
+      sortDirection: filters.sortDirection,
+      searchValues: filters.searchValues,
+      collectionName: filters.collectionName,
     };
   }
 }

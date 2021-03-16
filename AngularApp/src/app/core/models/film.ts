@@ -1,61 +1,89 @@
+import { Observable } from 'rxjs';
+
+import { Character } from './characters';
+import { Planet } from './planet';
+
 /**
  * Interface for film DOM
  */
 export interface Film {
   /**
+   * Film id
+   */
+  readonly id?: string;
+
+  /**
    * Personal key
    */
-  readonly pk: number;
+  readonly pk: string;
+
   /**
    * Film title
    */
   readonly title: string;
+
   /**
    * Film director
    */
   readonly director: string;
+
   /**
    * Film release date
    */
   readonly releaseDate: Date;
+
   /**
    * Film episode Id
    */
   readonly episodeId: number;
+
   /**
    * Film producer
    */
   readonly producer: string;
+
   /**
    * Film opening crawl
    */
   readonly openingCrawl: string;
+
   /**
    * When note about film was created
    */
   readonly created: Date;
+
   /**
-   * When note was last time edited
+   * Array of IDs related characters
    */
-  readonly edited: Date;
+  readonly charactersID: string[];
+
   /**
-   * Array of related data about characters
+   * Array of IDs related planets
    */
-  readonly characters: number[];
+  readonly planetsID: string[];
+
   /**
-   * Array of related data about planets
+   * Array of IDs related species
    */
-  readonly planets: number[];
+  readonly speciesID: string[];
+
   /**
-   * Array of related data about species
+   * Array of IDs related starships
    */
-  readonly species: number[];
+  readonly starshipsID: string[];
+
   /**
-   * Array of related data about starships
+   * Array of IDs related vehicles
    */
-  readonly starships: number[];
+  readonly vehiclesID: string[];
+
   /**
-   * Array of related data about vehicles
+   * Field to keep array with related planets
    */
-  readonly vehicles: number[];
+  planetsList?: Planet[];
+
+  /**
+   * Field to keep array with related characters
+   */
+  charactersList?: Character[];
 }

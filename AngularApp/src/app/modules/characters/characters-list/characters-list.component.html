@@ -42,6 +42,10 @@
     </tr>
   </table>
 
+  <div class="spinner" *ngIf="isLoading$ | async">
+    <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+  </div>
+
   <div class="paginator">
     <button mat-flat-button (click)="previousPage()" [disabled]="!(isPrevPageAvailable$ | async)">Prev</button>
     <button mat-flat-button (click)="nextPage()" [disabled]="!(isNextPageAvailable$ | async)">Next</button>

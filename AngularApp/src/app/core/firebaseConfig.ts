@@ -1,9 +1,9 @@
 export const firebaseConfig = {
-  apiKey: 'AIzaSyB6IMJ4M58cTWPOLBmaQ-4K3x5xIYueGWc',
-  authDomain: 'js-camp-htmlform-project.firebaseapp.com',
-  databaseURL: 'https://js-camp-htmlform-project-default-rtdb.firebaseio.com',
-  projectId: 'js-camp-htmlform-project',
-  storageBucket: 'js-camp-htmlform-project.appspot.com',
-  messagingSenderId: '504716557007',
-  appId: '1:504716557007:web:51a7998b2c12f3845255ba',
+  apiKey: 'AIzaSyCrCU4Lg5n6k0eXmJAEnLnRTmdpZxDq0cc',
+  authDomain: 'js-camp-pr.firebaseapp.com',
+  databaseURL: 'https://js-camp-pr-default-rtdb.firebaseio.com',
+  projectId: 'js-camp-pr',
+  storageBucket: 'js-camp-pr.appspot.com',
+  messagingSenderId: '502014543669',
+  appId: '1:502014543669:web:bf98bd05a11c982b25ae7c',
 };

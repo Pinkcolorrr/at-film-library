@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 @Component({
   selector: 'app-login-form',
   templateUrl: './login.component.html',
-  styleUrls: ['./../auth.css'],
+  styleUrls: ['./../auth.component.css'],
 })
 export class LoginComponent {
   /**

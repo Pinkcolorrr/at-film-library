@@ -8,8 +8,8 @@ import { CharacterMapper } from '../mappers/characters.mapper';
 import { Character } from '../models/characters';
 import { QueryFilterParams } from '../models/query-filter-params';
 
+import { PaginationControl } from './../../shared/utils';
 import { ApiService } from './api.service';
-import { PaginationControlService } from './pagination-control.service';
 
 /**
  * Service for work with characters
@@ -24,15 +24,17 @@ export class CharacterService {
   private readonly characterMapper = new CharacterMapper();
 
   /**
-   * Filters, that define query params
+   * Utils to control pagination states
+   * As first and last film on page
+   * The first and last element on the page.
+   * These docs are used in request on database
    */
-  private readonly filters$ = new BehaviorSubject<QueryFilterParams>(new QueryFilterParams('people', 10, 'fields.name'));
+  private readonly paginationControl = new PaginationControl<CharacterDTO>();
 
   /**
-   * Main character source.
-   * Will be updated every time, when filter$ updating
+   * Filters, that define query params
    */
-  public readonly charactersSource$: Observable<Character[]>;
+  private filters$ = new BehaviorSubject<QueryFilterParams>(null);
 
   /**
    * Observable for toggle next page button
@@ -46,19 +48,10 @@ export class CharacterService {
 
   constructor(
     /**
-     * Service to control pagination states
-     * As first and last character on page
-     * The first and last element on the page.These docs are used in request on database
-     */
-    private readonly paginationControl: PaginationControlService<CharacterDTO>,
-
-    /**
      * Service for connecting to API
      */
     private readonly apiService: ApiService,
-  ) {
-    this.charactersSource$ = this.charactersSourceInit();
-  }
+  ) {}
 
   /**
    * Add new object in filter$ source, that trigger new server request
@@ -71,7 +64,9 @@ export class CharacterService {
    * Switch filter$ source from parameters object to source with applied filters
    * Using mapper for convert DTO
    */
-  private charactersSourceInit(): Observable<Character[]> {
+  public charactersSourceInit(queryFilters: QueryFilterParams): Observable<Character[]> {
+    this.filters$.next(queryFilters);
+
     return this.filters$.pipe(
       switchMap(filters => {
         return this.applyFilters(filters);

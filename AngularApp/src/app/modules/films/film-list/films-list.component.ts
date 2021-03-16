@@ -16,7 +16,7 @@ import { FilmService } from 'src/app/core/services/film.service';
   styleUrls: ['./films-list.component.css'],
 })
 export class FimlsListComponent {
-  private queryFilter = new QueryFilterParams('films', 2, 'title');
+  private queryFilters = new QueryFilterParams('films', 2, 'title');
 
   /**
    * Form for searching films
@@ -36,6 +36,16 @@ export class FimlsListComponent {
   public readonly isLoading$ = new BehaviorSubject(true);
 
   /**
+   * Toggle state of dialog window
+   */
+  public readonly isDialogOpen$ = new BehaviorSubject(false);
+
+  /**
+   * Data for changing dialog window
+   */
+  public readonly filmDialogData$ = new BehaviorSubject(null);
+
+  /**
    * Observable for toggle next button
    */
   public readonly isNextPageAvailable$ = this.filmService.isNextPageAvailable$;
@@ -51,13 +61,29 @@ export class FimlsListComponent {
   public readonly displayedColumns: string[] = ['episodeId', 'title', 'releaseDate', 'director', 'producer', 'filmLink'];
 
   constructor(private readonly filmService: FilmService) {
-    this.filmsData$ = this.filmService.filmsSource$.pipe(
+    this.filmsData$ = this.filmService.filmsSourceInit(this.queryFilters).pipe(
       tap(() => {
         if (this.isLoading$.value) {
           this.isLoading$.next(false);
         }
       }),
     );
+  }
+
+  /**
+   * Open edit film dialog window
+   */
+  public openDialog(filmDialogData: Film): void {
+    this.isDialogOpen$.next(true);
+    this.filmDialogData$.next(filmDialogData);
+  }
+
+  /**
+   * close edit film dialog window
+   */
+  public closeDialog(): void {
+    this.isDialogOpen$.next(false);
+    this.filmDialogData$.next(null);
   }
 
   private turnOffPageBtns(): void {
@@ -71,43 +97,43 @@ export class FimlsListComponent {
    */
   public matSort(event: Sort): void {
     if (event.direction) {
-      this.queryFilter.sortTarget = event.active;
-      this.queryFilter.sortDirection = event.direction as 'asc' | 'desc';
+      this.queryFilters.sortTarget = event.active;
+      this.queryFilters.sortDirection = event.direction as 'asc' | 'desc';
     } else {
-      this.queryFilter.sortTarget = 'pk';
-      this.queryFilter.sortDirection = 'asc';
+      this.queryFilters.sortTarget = 'pk';
+      this.queryFilters.sortDirection = 'asc';
     }
 
-    this.queryFilter.pageDirection = 'initial';
-    this.filmService.setFilter(this.queryFilter);
+    this.queryFilters.pageDirection = 'initial';
+    this.filmService.setFilter(this.queryFilters);
   }
 
   /**
    * Switch table to next page
    */
   public nextPage(): void {
-    this.queryFilter.pageDirection = 'next';
+    this.queryFilters.pageDirection = 'next';
     this.turnOffPageBtns();
 
-    this.filmService.setFilter(this.queryFilter);
+    this.filmService.setFilter(this.queryFilters);
   }
 
   /**
    * Switch table to previous page
    */
   public previousPage(): void {
-    this.queryFilter.pageDirection = 'previous';
+    this.queryFilters.pageDirection = 'previous';
     this.turnOffPageBtns();
 
-    this.filmService.setFilter(this.queryFilter);
+    this.filmService.setFilter(this.queryFilters);
   }
 
   /**
    * Filtering data by film title
    */
   public filterByTitle(): void {
-    this.queryFilter.searchValues = this.searchForm.value.searchValue.trim();
-    this.queryFilter.pageDirection = 'initial';
-    this.filmService.setFilter(this.queryFilter);
+    this.queryFilters.searchValues = this.searchForm.value.searchValue.trim();
+    this.queryFilters.pageDirection = 'initial';
+    this.filmService.setFilter(this.queryFilters);
   }
 }

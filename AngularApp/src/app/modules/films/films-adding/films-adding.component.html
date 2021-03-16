@@ -1,0 +1,110 @@
+<form [formGroup]="filmInfoForm" (ngSubmit)="addFilm()">
+  <table class="mat-table">
+    <thead>
+      <tr class="mat-header-row">
+        <th class="mat-header-cell">key</th>
+        <th class="mat-header-cell">value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="mat-row">
+        <td class="mat-cell">
+          <label for="title">title</label>
+        </td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="title" matInput formControlName="title" placeholder="title" />
+          </mat-form-field>
+          <span class="error-msg" *ngIf="!filmInfoForm.get('title').valid && filmInfoForm.get('title').touched"> Title is required </span>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">
+          <label for="episodeId">episode id</label>
+        </td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="episodeId" matInput formControlName="episodeId" type="number" placeholder="episodeId" />
+          </mat-form-field>
+          <span class="error-msg" *ngIf="!filmInfoForm.get('episodeId').valid && filmInfoForm.get('episodeId').touched">
+            Episode id is required
+          </span>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell"><label for="releaseDate">release date</label></td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="releaseDate" matInput formControlName="releaseDate" type="date" placeholder="releaseDate" />
+          </mat-form-field>
+          <span class="error-msg" *ngIf="!filmInfoForm.get('releaseDate').valid && filmInfoForm.get('releaseDate').touched">
+            Release date id is required
+          </span>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell"><label for="director">director</label></td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="director" matInput formControlName="director" type="text" placeholder="director" />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell"><label for="producer">producer</label></td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <input id="producer" matInput formControlName="producer" type="text" placeholder="producer" />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell"><label for="openingCrawl">opening crawl</label></td>
+        <td class="mat-cell">
+          <mat-form-field class="example-full-width">
+            <textarea id="openingCrawl" matInput formControlName="openingCrawl" type="text" placeholder="openingCrawl"></textarea>
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">characters</td>
+        <td class="mat-cell">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Characters list </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-selection-list #characterList (selectionChange)="updateCharactersList(characterList.selectedOptions.selected)">
+                <mat-list-option *ngFor="let character of allCharacters$ | async; trackBy: trackByCharactersPk" [value]="character">
+                  {{ character.pk }} {{ character.name }}
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </td>
+      </tr>
+      <tr class="mat-row">
+        <td class="mat-cell">planets</td>
+        <td class="mat-cell">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title> Planets list </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-selection-list #planetList (selectionChange)="updatePlanetsList(planetList.selectedOptions.selected)">
+                <mat-list-option *ngFor="let planet of allPlanets$ | async; trackBy: trackByPlanetsPk" [value]="planet">
+                  {{ planet.pk }} {{ planet.name }}
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="btn-wrapper">
+    <a routerLink="/films/list" mat-flat-button color="primary" (click)="checkUnsavedData()">Back</a>
+    <button mat-flat-button color="primary" type="submit" [disabled]="!filmInfoForm.valid">Submit</button>
+  </div>
+</form>

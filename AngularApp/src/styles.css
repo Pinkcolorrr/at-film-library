@@ -17,3 +17,8 @@ body {
   font-family: Helvetica, Arial, sans-serif;
   height: 100%;
 }
+
+.error-msg {
+  color: var(--error-color);
+  font-size: 10px;
+}

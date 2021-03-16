@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { DocumentChangeAction } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap, map, switchMap, filter } from 'rxjs/operators';
+import { tap, map, switchMap } from 'rxjs/operators';
 
 import { FilmDTO } from '../DTOs/film-dto';
 import { FilmMapper } from '../mappers/film.mapper';
 import { Film } from '../models/film';
 import { QueryFilterParams } from '../models/query-filter-params';
 
+import { PaginationControl } from './../../shared/utils';
 import { ApiService } from './api.service';
-import { PaginationControlService } from './pagination-control.service';
 
 /**
  * Service for work with films
@@ -24,15 +24,16 @@ export class FilmService {
   private readonly filmMapper = new FilmMapper();
 
   /**
-   * Filters, that define query params
+   * Utils to control pagination states
+   * As first and last film on page
+   * The first and last element on the page.These docs are used in request on database
    */
-  private readonly filters$ = new BehaviorSubject<QueryFilterParams>(new QueryFilterParams('films', 2, 'fields.title'));
+  private readonly paginationControl = new PaginationControl<FilmDTO>();
 
   /**
-   * Main film source.
-   * Will be updated every time, when filter$ updating
+   * Filters, that define query params
    */
-  public readonly filmsSource$: Observable<Film[]>;
+  private filters$ = new BehaviorSubject<QueryFilterParams>(null);
 
   /**
    * Observable for toggle next page button
@@ -46,19 +47,10 @@ export class FilmService {
 
   constructor(
     /**
-     * Service to control pagination states
-     * As first and last film on page
-     * The first and last element on the page.These docs are used in request on database
-     */
-    private readonly paginationControl: PaginationControlService<FilmDTO>,
-
-    /**
      * Service for connecting to API
      */
     private readonly apiService: ApiService,
-  ) {
-    this.filmsSource$ = this.filmsSourceInit();
-  }
+  ) {}
 
   /**
    * Add new object in filter$ source, that trigger new server request
@@ -71,14 +63,16 @@ export class FilmService {
    * Switch filter$ source from parameters object to source with applied filters
    * Using mapper for convert DTO
    */
-  private filmsSourceInit(): Observable<Film[]> {
+  public filmsSourceInit(queryFilters: QueryFilterParams): Observable<Film[]> {
+    this.filters$.next(queryFilters);
+
     return this.filters$.pipe(
       switchMap(filters => {
         return this.applyFilters(filters);
       }),
       map(films => {
         return films.map(item => {
-          return this.filmMapper.transformResponse(item.payload.doc.data());
+          return this.filmMapper.transformResponse(item.payload.doc.data(), item.payload.doc.id);
         });
       }),
     );

@@ -3,6 +3,10 @@
  */
 export interface Planet {
   /**
+   * Personal key of planet
+   */
+  readonly pk: string;
+  /**
    * Planet climate
    */
   readonly climate: string;
@@ -25,7 +29,7 @@ export interface Planet {
   /**
    * Planet name
    */
-  readonly title: string;
+  readonly name: string;
   /**
    * Planet orbital period
    */

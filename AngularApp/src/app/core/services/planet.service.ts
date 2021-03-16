@@ -8,8 +8,8 @@ import { PlanetMapper } from '../mappers/planet.mapper';
 import { Planet } from '../models/planet';
 import { QueryFilterParams } from '../models/query-filter-params';
 
+import { PaginationControl } from './../../shared/utils';
 import { ApiService } from './api.service';
-import { PaginationControlService } from './pagination-control.service';
 
 /**
  * Service for work with planets
@@ -24,15 +24,17 @@ export class PlanetService {
   private readonly planetMapper = new PlanetMapper();
 
   /**
-   * Filters, that define query params
+   * Utils to control pagination states
+   * As first and last film on page
+   * The first and last element on the page.
+   * These docs are used in request on database
    */
-  private readonly filters$ = new BehaviorSubject<QueryFilterParams>(new QueryFilterParams('planets', 10, 'fields.name'));
+  private readonly paginationControl = new PaginationControl<PlanetDTO>();
 
   /**
-   * Main planet source.
-   * Will be updated every time, when filter$ updating
+   * Filters, that define query params
    */
-  public readonly planetsSource$: Observable<Planet[]>;
+  private filters$ = new BehaviorSubject<QueryFilterParams>(null);
 
   /**
    * Observable for toggle next page button
@@ -46,19 +48,10 @@ export class PlanetService {
 
   constructor(
     /**
-     * Service to control pagination states
-     * As first and last planet on page
-     * The first and last element on the page.These docs are used in request on database
-     */
-    private readonly paginationControl: PaginationControlService<PlanetDTO>,
-
-    /**
      * Service for connecting to API
      */
     private readonly apiService: ApiService,
-  ) {
-    this.planetsSource$ = this.planetsSourceInit();
-  }
+  ) {}
 
   /**
    * Add new object in filter$ source, that trigger new server request
@@ -71,7 +64,9 @@ export class PlanetService {
    * Switch filter$ source from parameters object to source with applied filters
    * Using mapper for convert DTO
    */
-  private planetsSourceInit(): Observable<Planet[]> {
+  public planetsSourceInit(queryFilters: QueryFilterParams): Observable<Planet[]> {
+    this.filters$.next(queryFilters);
+
     return this.filters$.pipe(
       switchMap(filters => {
         return this.applyFilters(filters);

@@ -1,15 +1,22 @@
-import { Injectable } from '@angular/core';
 import { DocumentChangeAction, QueryDocumentSnapshot } from '@angular/fire/firestore';
 
-import { FilmDTO } from '../DTOs/film-dto';
+/**
+ * Divide big array into chunks
+ */
+export function getChunkedArray<T>(array: Array<T>, chunkSize: number): T[][] {
+  const chunkedArr: T[][] = [];
+  const copied: T[] = [...array];
+  const numOfChild: number = Math.ceil(copied.length / chunkSize);
+  for (let i = 0; i < numOfChild; i++) {
+    chunkedArr.push(copied.splice(0, chunkSize));
+  }
+  return chunkedArr;
+}
 
 /**
  * Control over documents from which pages start and finish
  */
-@Injectable({
-  providedIn: 'root',
-})
-export class PaginationControlService<T> {
+export class PaginationControl<T> {
   constructor() {}
 
   /**
@@ -38,8 +45,8 @@ export class PaginationControlService<T> {
   /**
    * Set actual state for first and last documents on page
    */
-  public setFirstAndLast(films: DocumentChangeAction<T>[]): void {
-    this.firstDocOnPage = films[0].payload.doc;
-    this.lastDocOnPage = films[films.length - 1].payload.doc;
+  public setFirstAndLast(document: DocumentChangeAction<T>[]): void {
+    this.firstDocOnPage = document[0].payload.doc;
+    this.lastDocOnPage = document[document.length - 1].payload.doc;
   }
 }

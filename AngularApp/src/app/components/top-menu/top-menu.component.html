@@ -4,8 +4,8 @@
 
     <div class="top-menu-wrapper">
       <ng-container *ngIf="!(isLoggedIn$ | async)">
-        <a mat-stroked-button routerLink="login">Sign In</a>
-        <a mat-stroked-button routerLink="register">Register</a>
+        <a mat-stroked-button routerLink="authorization/login">Sign In</a>
+        <a mat-stroked-button routerLink="authorization/register">Register</a>
       </ng-container>
 
       <ng-container *ngIf="isLoggedIn$ | async">
