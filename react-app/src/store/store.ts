@@ -1,8 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import thunk from 'redux-thunk';
+import { useDispatch } from 'react-redux';
 import { rootReducer } from './rootReducer';
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: [thunk],
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
+
+export type AppDispatch = typeof store.dispatch;
+export const useThunkDispatch = (): AppDispatch => useDispatch<AppDispatch>();

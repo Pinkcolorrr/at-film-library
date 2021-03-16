@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 type guardRoute = {
+  component: React.ElementType;
   path: string;
-  component: any;
   canActivate: boolean;
   to: string;
 };
@@ -13,7 +13,7 @@ export function GuardRoute({
   canActivate,
   to,
   ...rest
-}: guardRoute) {
+}: guardRoute): JSX.Element {
   return (
     <Route
       {...rest}

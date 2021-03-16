@@ -1,0 +1,30 @@
+.root {
+  padding: 50px;
+  width: 250px;
+  box-shadow: 0 0 12px 4px rgba(34, 60, 80, 0.2);
+}
+
+.emailGroup {
+  margin-bottom: 20px;
+}
+
+.passwordGroup {
+  margin-bottom: 60px;
+}
+
+.formLabel {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+.errorMsg {
+  margin-top: 20px;
+}
+
+.registerText {
+  margin-top: 10px;
+  text-align: center;
+  color: #000;
+}

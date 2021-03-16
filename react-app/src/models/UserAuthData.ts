@@ -1,3 +1,4 @@
-export class UserAuthData {
-  constructor(public email: string, public password: string) {}
+export interface UserAuthData {
+  readonly email: string;
+  readonly password: string;
 }

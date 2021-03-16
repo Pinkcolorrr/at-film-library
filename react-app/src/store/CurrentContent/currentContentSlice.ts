@@ -1,0 +1,42 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
+import { Maybe } from 'yup/lib/types';
+
+type currentContent = {
+  rootContent: Maybe<string>;
+  additionalContent: Maybe<string>;
+};
+
+const initialState: currentContent = {
+  rootContent: null,
+  additionalContent: null,
+};
+
+const currentContentSlice = createSlice({
+  name: 'currentContent',
+  initialState,
+  reducers: {
+    setRootContent(state, action) {
+      state.rootContent = action.payload;
+    },
+    clearRootContent(state) {
+      state.rootContent = null;
+    },
+    setAdditionalContent(state, action) {
+      state.additionalContent = action.payload;
+    },
+    clearAdditionalContent(state) {
+      state.additionalContent = null;
+    },
+  },
+});
+
+export const {
+  setRootContent,
+  clearRootContent,
+  setAdditionalContent,
+  clearAdditionalContent,
+} = currentContentSlice.actions;
+
+export const currentContentReducer = currentContentSlice.reducer;

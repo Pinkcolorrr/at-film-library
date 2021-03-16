@@ -1,5 +1,11 @@
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { UserInfo } from '../../models/UserInfo';
 
-export const userMapper = (user: firebase.default.User | null): UserInfo => {
-  return new UserInfo(user?.email);
+export const UserMapper = {
+  transformResponse(user: firebase.User): UserInfo {
+    return {
+      email: user.email,
+    };
+  },
 };
