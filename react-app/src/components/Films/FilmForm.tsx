@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Theme, makeStyles, FormGroup, TextField, Button } from '@material-ui/core';
+import { Paper, FormGroup, TextField, Button } from '@material-ui/core';
 import { Formik, Form, Field, FieldProps } from 'formik';
 import { Prompt, Redirect } from 'react-router';
-import * as yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -17,8 +16,11 @@ import { AccordionCheckList } from '../AccordionCheckList/AccordionCheckList';
 import { selectAllCharacters } from '../../store/Characters/characterSelectors';
 import { getAllCharacters } from '../../store/Characters/charactersThunks/apiThunks';
 import { addFilmInDb, editFilmIdDb } from '../../store/Films/filmsThunks/apiThunks';
+import { filmFormStyles } from './FilmFormStyles';
+import { filmSchema } from '../../utils/validateSchemas';
 
 type props = {
+  /** Initial form data */
   initData: {
     title: string;
     episodeId: string;
@@ -27,51 +29,37 @@ type props = {
     producer: string;
     openingCrawl: string;
   };
+  /** Film id, if forType is edit */
   filmId?: string;
+  /** Type of form */
   formType: 'add' | 'edit';
+  /** List of related planets keys */
   selectedPlanetsPk: string[];
+  /** List of related characters keys */
   selectedCharactersPk: string[];
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    minWidth: '700px',
-    padding: theme.spacing(5, 10),
-  },
-  formGroup: {
-    marginBottom: '30px',
-  },
-  buttons: {
-    marginTop: '20px',
-    display: 'flex',
-  },
-  link: {
-    width: '100%',
-    textDecoration: 'none',
-  },
-}));
-
-const filmSchema = yup.object({
-  title: yup.string().required('title is required'),
-  episodeId: yup.string().required('episodeId is required'),
-  releaseDate: yup.string().required('releaseDate is required'),
-});
-
+/** Form for proccesing film */
 export function FilmForm(props: props): JSX.Element {
-  const classes = useStyles();
+  const classes = filmFormStyles();
   const dispatch = useThunkDispatch();
-  const [canDeactivate, setCanDeactivate] = useState(true);
+
   const [redirect, setRedirect] = useState(false);
+  const [canDeactivate, setCanDeactivate] = useState(true);
+
   const planetsList = useSelector(selectAllPlanets);
   const charactersList = useSelector(selectAllCharacters);
+
   let checkedPlanetsPk: string[] = [];
   let checkedCharactersPk: string[] = [];
 
+  /** Get related film data */
   useEffect(() => {
     dispatch(getAllPlanets());
     dispatch(getAllCharacters());
   }, []);
 
+  /** Set checked planets PK in array */
   const getCheckedPlanets = (value: string[]) => {
     checkedPlanetsPk = [];
     planetsList.forEach((planet) => {
@@ -83,6 +71,7 @@ export function FilmForm(props: props): JSX.Element {
     });
   };
 
+  /** Set checked charactgers PK in array */
   const getCheckedCharacters = (value: string[]) => {
     checkedCharactersPk = [];
     charactersList.forEach((character) => {
@@ -94,6 +83,7 @@ export function FilmForm(props: props): JSX.Element {
     });
   };
 
+  /** Set dirty, if check list was touched */
   const setDirty = () => {
     setCanDeactivate(false);
   };
@@ -203,15 +193,15 @@ export function FilmForm(props: props): JSX.Element {
             </Field>
           </FormGroup>
           <AccordionCheckList
-            array={planetsList.map((planet) => planet.name)}
             getCheckedValues={getCheckedPlanets}
+            listOptions={planetsList.map((planet) => planet.name)}
             selected={getNamesByPk<Planet>(planetsList, props.selectedPlanetsPk)}
             setDirty={setDirty}
             title="Planets"
           />
           <AccordionCheckList
-            array={charactersList.map((character) => character.name)}
             getCheckedValues={getCheckedCharacters}
+            listOptions={charactersList.map((character) => character.name)}
             selected={getNamesByPk<Character>(charactersList, props.selectedCharactersPk)}
             setDirty={setDirty}
             title="Characters"

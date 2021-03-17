@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
   TableContainer,
   Paper,
@@ -8,9 +9,9 @@ import {
   TableBody,
   CircularProgress,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Maybe } from 'yup/lib/types';
+import { RouteComponentProps } from 'react-router';
 import { Planet } from '../../models/Planet';
 import { tableRows } from '../../models/TableRows';
 import {
@@ -18,29 +19,34 @@ import {
   clearAdditionalContent,
   setRootContent,
 } from '../../store/CurrentContent/currentContentSlice';
-import { selectCurrentPlanet } from '../../store/Planets/planetSelectors';
+import { selectCurrentPlanet, selectRejectedPlentMsg } from '../../store/Planets/planetSelectors';
 import { getPlanetById } from '../../store/Planets/planetsThunks/apiThunks';
 import { useThunkDispatch } from '../../store/store';
-import { detailsPageClasses } from '../../styles/DetailPage';
+import { detailsPageClasses } from '../../styles/DetailPageStyles';
 
 type props = {
-  match: { params: { id: string } };
+  /** Planet ID */
+  id: string;
 };
 
-export function PlanetDetails(props: props): JSX.Element {
+/** Displaying table with planet information */
+export function PlanetDetails(props: RouteComponentProps<props>): JSX.Element {
+  const { id } = props.match.params;
   const classes = detailsPageClasses();
   const dispatch = useThunkDispatch();
   const planet: Maybe<Planet> = useSelector(selectCurrentPlanet);
-  const { id } = props.match.params;
+  const rejectedMsg = useSelector(selectRejectedPlentMsg);
 
+  /** Get planet if it isn't in the store or store have different planet */
   useEffect(() => {
     if (!planet || id !== planet.id) {
       dispatch(getPlanetById(id));
     }
 
     return () => {};
-  }, [dispatch, id]);
+  }, [id]);
 
+  /** Set content for aside title */
   useEffect(() => {
     if (planet) {
       dispatch(setAdditionalContent(planet.name));
@@ -49,7 +55,7 @@ export function PlanetDetails(props: props): JSX.Element {
     return () => {
       dispatch(clearAdditionalContent());
     };
-  }, [dispatch, planet]);
+  }, [planet]);
 
   return planet && planet.id === id ? (
     (() => {
@@ -114,6 +120,6 @@ export function PlanetDetails(props: props): JSX.Element {
       );
     })()
   ) : (
-    <CircularProgress />
+    <div>{rejectedMsg || <CircularProgress />}</div>
   );
 }

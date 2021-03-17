@@ -1,24 +1,11 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { selectRootContent, selectAdditionalContent } from '../../store/CurrentContent/currentContentSelectors';
+import { asideTitleClasses } from './AsideStyles';
 
-const useStyles = makeStyles((theme) => ({
-  title: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    backgroundColor: theme.palette.grey[300],
-    fontSize: '17px',
-    padding: '15px 0',
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-  },
-}));
-
+/** Title on aside bar, that display current page information */
 export function AsideTitle(): JSX.Element {
-  const classes = useStyles();
+  const classes = asideTitleClasses();
   const rootTitle = useSelector(selectRootContent);
   const additionalTitle = useSelector(selectAdditionalContent);
 

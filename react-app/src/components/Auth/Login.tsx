@@ -1,23 +1,19 @@
 import React, { useEffect } from 'react';
 import { FormGroup, Button, TextField } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
 import { Field, FieldProps, Form, Formik } from 'formik';
-import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styles from './Auth.module.css';
-
+import Alert from '@material-ui/lab/Alert';
 import { UserAuthData } from '../../models/UserAuthData';
 import { removeErrorMsg } from '../../store/User/userSlice';
 import { signInByEmailAndPassword } from '../../store/User/userThunks/apiThunks';
 import { selectErrorMsg } from '../../store/User/userSelectors';
+import { authFormStyles } from './AuthFormStyles';
+import { authSchema } from '../../utils/validateSchemas';
 
-const loginSchema = yup.object({
-  email: yup.string().email('Enter a valid email').required('Email is required'),
-  password: yup.string().min(6, 'Password should be of minimum 6 characters length').required('Password is required'),
-});
-
+/** Login form */
 export function Login(): JSX.Element {
+  const classes = authFormStyles();
   const errorMsg = useSelector(selectErrorMsg);
   const dispatch = useDispatch();
   const init: UserAuthData = {
@@ -25,6 +21,7 @@ export function Login(): JSX.Element {
     password: '',
   };
 
+  /** Remove error msg after destroy component */
   useEffect(
     () => () => {
       dispatch(removeErrorMsg());
@@ -38,12 +35,12 @@ export function Login(): JSX.Element {
       onSubmit={(values) => {
         dispatch(signInByEmailAndPassword(values));
       }}
-      validationSchema={loginSchema}
+      validationSchema={authSchema}
     >
-      <Form className={styles.root}>
-        <h3 className={styles.formLabel}>Login</h3>
+      <Form className={classes.root}>
+        <h3 className={classes.formLabel}>Login</h3>
 
-        <FormGroup className={styles.emailGroup}>
+        <FormGroup className={classes.emailGroup}>
           <Field name="email">
             {({ field, meta }: FieldProps) => (
               <TextField
@@ -58,7 +55,7 @@ export function Login(): JSX.Element {
           </Field>
         </FormGroup>
 
-        <FormGroup className={styles.passwordGroup}>
+        <FormGroup className={classes.passwordGroup}>
           <Field name="password">
             {({ field, meta }: FieldProps) => (
               <TextField
@@ -74,18 +71,18 @@ export function Login(): JSX.Element {
           </Field>
         </FormGroup>
 
-        <FormGroup className={styles.submitButton}>
+        <FormGroup>
           <Button color="primary" type="submit" variant="contained">
             Submit form
           </Button>
         </FormGroup>
 
         {errorMsg ? (
-          <Alert className={styles.errorMsg} severity="error">
+          <Alert className={classes.errorMsg} severity="error">
             {errorMsg}
           </Alert>
         ) : null}
-        <div className={styles.registerText}>
+        <div className={classes.registerText}>
           Don&apos;t have an account yet? <Link to="/register">Register</Link>
         </div>
       </Form>

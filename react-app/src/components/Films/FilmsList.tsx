@@ -6,25 +6,25 @@ import { NavLink, Redirect, useRouteMatch } from 'react-router-dom';
 import { CircularProgress, ListItem, ListItemText } from '@material-ui/core';
 import { Film } from '../../models/Film';
 import { useThunkDispatch } from '../../store/store';
-import { selectCurrentFilm, selectFilms } from '../../store/Films/filmSelectors';
+import { selectCurrentFilm, selectAllFilms } from '../../store/Films/filmSelectors';
 import { getAllFilms } from '../../store/Films/filmsThunks/apiThunks';
 import { clearRootContent, setRootContent } from '../../store/CurrentContent/currentContentSlice';
-import { asideListClasses } from '../../styles/AsideList';
+import { asideListClasses } from '../../styles/AsideListStyles';
 
+/** List of films */
 export function FilmsList(): JSX.Element {
   const classes = asideListClasses();
   const dispatch = useThunkDispatch();
   const { url } = useRouteMatch();
 
   const currentFilm = useSelector(selectCurrentFilm);
-  const films = useSelector(selectFilms);
+  const films = useSelector(selectAllFilms);
 
-  const filmsList = films.map((film: Film) => (
-    <ListItem key={film.id} component={NavLink} to={`${url}/${film.id}/details`} button>
-      <ListItemText primary={film.title} />
-    </ListItem>
-  ));
-
+  /**
+   * Get films list
+   * Save unsubscribe function
+   * Set root contnet
+   */
   useEffect(() => {
     let unsubscribe: Unsubscribe;
 
@@ -34,11 +34,18 @@ export function FilmsList(): JSX.Element {
 
     dispatch(setRootContent('films list'));
 
+    /** Clear content and call unsubscribe */
     return () => {
       dispatch(clearRootContent());
       unsubscribe();
     };
-  }, [dispatch]);
+  }, []);
+
+  const filmsList = films.map((film: Film) => (
+    <ListItem key={film.id} component={NavLink} to={`${url}/${film.id}/details`} button>
+      <ListItemText primary={film.title} />
+    </ListItem>
+  ));
 
   return (
     <div className={classes.list}>
@@ -47,7 +54,6 @@ export function FilmsList(): JSX.Element {
           filmsList
         ) : (
           <ListItem className={classes.circularProgress}>
-            {' '}
             <CircularProgress />
           </ListItem>
         )}

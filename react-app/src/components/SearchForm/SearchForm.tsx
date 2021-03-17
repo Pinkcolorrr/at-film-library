@@ -1,27 +1,19 @@
-import { IconButton, makeStyles, TextField } from '@material-ui/core';
+import React, { useState } from 'react';
+import { IconButton, TextField } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
-import React from 'react';
-import { useState } from 'react';
-import { useThunkDispatch } from '../../store/store';
+import { searchFormStyles } from './SearchFormStyles';
 
 type props = {
-  getPlanetByName(name: string): void;
-  getInitialPlanets(): void;
+  /** Call function for searching in parent component */
+  getItemByName(name: string): void;
+  /** Call function for getting initial items in parent component */
+  getInitialItems(): void;
 };
 
-const useStyles = makeStyles((theme) => ({
-  searchForm: {
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(1, 2),
-  },
-}));
-
+/** Form for searching items */
 export function SearchForm(props: props): JSX.Element {
-  const classes = useStyles();
+  const classes = searchFormStyles();
   const [searchValue, setSearchValue] = useState('');
-  const dispatch = useThunkDispatch();
 
   return (
     <div>
@@ -30,9 +22,9 @@ export function SearchForm(props: props): JSX.Element {
         onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           if (searchValue) {
-            props.getPlanetByName(searchValue);
+            props.getItemByName(searchValue);
           } else {
-            props.getInitialPlanets();
+            props.getInitialItems();
           }
         }}
       >

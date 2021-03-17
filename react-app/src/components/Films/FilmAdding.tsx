@@ -3,6 +3,7 @@ import { setRootContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
 import { FilmForm } from './FilmForm';
 
+/** Component with FilmForm for adding films */
 export function FilmAdding(): JSX.Element {
   const dispatch = useThunkDispatch();
 

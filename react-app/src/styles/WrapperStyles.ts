@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 export type wrapperStyles = {
   classes: Record<'root' | 'content' | 'toolbar' | 'header' | 'aside' | 'asidePaper', string>;
@@ -6,7 +6,7 @@ export type wrapperStyles = {
 
 const drawerWidth = 500;
 
-export const wrapperClasses = makeStyles((theme: Theme) => ({
+export const wrapperClasses = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },

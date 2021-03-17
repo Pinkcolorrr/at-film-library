@@ -9,14 +9,16 @@ import { observeUser } from './store/User/userThunks/apiThunks';
 import { GuardRoute } from './routers/GuardRouter';
 import { selectAuthState, selectIsUserPending } from './store/User/userSelectors';
 
+/** Entry point to the application */
 export function App(): JSX.Element {
   const authState = useSelector(selectAuthState);
   const isPending = useSelector(selectIsUserPending);
   const dispatch = useDispatch();
 
+  /** Start tracking user state */
   useEffect((): void => {
     dispatch(observeUser());
-  }, [dispatch]);
+  }, []);
 
   return (
     <Router>
@@ -25,9 +27,9 @@ export function App(): JSX.Element {
           <div className={styles.wrapper}>
             <Switch>
               <Redirect from="/" to="/films" exact />
-              <GuardRoute canActivate={!authState} component={Login} path="/login" to="/" />
-              <GuardRoute canActivate={!authState} component={Register} path="/register" to="/" />
-              <GuardRoute canActivate={authState} component={Wrapper} path="/" to="/login" />
+              <GuardRoute canActivate={!authState} component={Login} path="/login" redirectPath="/" />
+              <GuardRoute canActivate={!authState} component={Register} path="/register" redirectPath="/" />
+              <GuardRoute canActivate={authState} component={Wrapper} path="/" redirectPath="/login" />
             </Switch>
           </div>
         </div>

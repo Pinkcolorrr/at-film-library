@@ -17,6 +17,7 @@ import { CharacterDTO } from '../dtos/CharactersDto';
 import { firestore } from '../firebase-config';
 import { CharacterMapper } from '../mappers/CharactersMapper';
 
+/** Function for processesing response from server */
 function snapshotResponse(
   doc: firebase.firestore.QuerySnapshot<CharacterDTO>,
   dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
@@ -60,22 +61,12 @@ function snapshotResponse(
   }
 }
 
+/** Object for work with character API */
 export const CharacterAPI = {
-  async getCharactersByPk(pkArray: (number | string)[]): Promise<Character[]> {
-    if (pkArray.length > 10) {
-      const chunkedArr: (string | number)[][] = getChunkedArray(pkArray, 10);
-      const charactersData: Character[][] & Character[] = [];
-
-      for (let i = 0; i < chunkedArr.length; i++) {
-        charactersData.push(await this.getCharactersByPk(chunkedArr[i]));
-      }
-
-      return charactersData.flat(Infinity);
-    }
-
+  /** Get all list of characters */
+  async getAllCharacters(): Promise<Character[]> {
     return firestore
       .collection('people')
-      .where('pk', 'in', pkArray)
       .withConverter(firebaseConverter<CharacterDTO>())
       .get()
       .then((characters) =>
@@ -83,24 +74,10 @@ export const CharacterAPI = {
       );
   },
 
-  async getCharacterById(id: string): Promise<Character> {
-    return firestore
-      .collection('people')
-      .withConverter(firebaseConverter<CharacterDTO>())
-      .doc(id)
-      .get()
-      .then((character) => CharacterMapper.transformResponse(character.data() as CharacterDTO, character.id));
-  },
-
-  async getCharacterByName(name: string): Promise<Character> {
-    return firestore
-      .collection('people')
-      .withConverter(firebaseConverter<CharacterDTO>())
-      .where('fields.name', '==', name)
-      .get()
-      .then((character) => CharacterMapper.transformResponse(character.docs[0].data(), character.docs[0].id));
-  },
-
+  /**
+   * Get first part of characters and subscribe to their updates
+   * Sorted by @sortTarget
+   */
   getInitialCharacters(
     { chunkSize, sortTarget }: RequestOptions,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
@@ -115,6 +92,7 @@ export const CharacterAPI = {
       });
   },
 
+  /** Get characters startAfter lastDoc from store and subscribe to their updates */
   async getNextCharacters(
     { chunkSize, sortTarget }: RequestOptions,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
@@ -133,13 +111,51 @@ export const CharacterAPI = {
       });
   },
 
-  async getAllCharacters(): Promise<Character[]> {
+  /**
+   * Get related characters data
+   * Frebase cannot get more then 10 item by 1 requset.
+   * So we have to chunked array and make multiple requests.
+   */
+  async getCharactersByPk(pkArray: (number | string)[]): Promise<Character[]> {
+    if (pkArray.length > 10) {
+      const chunkedArr: (string | number)[][] = getChunkedArray(pkArray, 10);
+      const promises: Promise<Character[]>[] = [];
+
+      for (let i = 0; i < chunkedArr.length; i++) {
+        promises.push(this.getCharactersByPk(chunkedArr[i]));
+      }
+
+      const data: Character[][] = await Promise.all(promises);
+      return data.flat(Infinity) as Character[];
+    }
+
     return firestore
       .collection('people')
+      .where('pk', 'in', pkArray)
       .withConverter(firebaseConverter<CharacterDTO>())
       .get()
       .then((characters) =>
         characters.docs.map((character) => CharacterMapper.transformResponse(character.data(), character.id)),
       );
+  },
+
+  /** Get character from db by ID */
+  async getCharacterById(id: string): Promise<Character> {
+    return firestore
+      .collection('people')
+      .withConverter(firebaseConverter<CharacterDTO>())
+      .doc(id)
+      .get()
+      .then((character) => CharacterMapper.transformResponse(character.data() as CharacterDTO, character.id));
+  },
+
+  /** Get character from db by name */
+  async getCharacterByName(name: string): Promise<Character> {
+    return firestore
+      .collection('people')
+      .withConverter(firebaseConverter<CharacterDTO>())
+      .where('fields.name', '==', name)
+      .get()
+      .then((character) => CharacterMapper.transformResponse(character.docs[0].data(), character.docs[0].id));
   },
 };

@@ -1,26 +1,27 @@
-import { FormGroup, Button, TextField } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
-import { Field, FieldProps, Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
-import * as yup from 'yup';
+import { FormGroup, Button, TextField } from '@material-ui/core';
+import { Field, FieldProps, Form, Formik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
+import Alert from '@material-ui/lab/Alert';
 import { Link } from 'react-router-dom';
-import styles from './Auth.module.css';
-
 import { UserAuthData } from '../../models/UserAuthData';
 import { removeErrorMsg } from '../../store/User/userSlice';
-import { registerByEmailAndPassword } from '../../store/User/userThunks/apiThunks';
 import { selectErrorMsg } from '../../store/User/userSelectors';
+import { registerByEmailAndPassword } from '../../store/User/userThunks/apiThunks';
+import { authFormStyles } from './AuthFormStyles';
+import { authSchema } from '../../utils/validateSchemas';
 
-const registerSchema = yup.object({
-  email: yup.string().email('Enter a valid email').required('Email is required'),
-  password: yup.string().min(6, 'Password should be of minimum 6 characters length').required('Password is required'),
-});
-
+/** Register form */
 export function Register(): JSX.Element {
+  const classes = authFormStyles();
   const errorMsg = useSelector(selectErrorMsg);
   const dispatch = useDispatch();
+  const init: UserAuthData = {
+    email: '',
+    password: '',
+  };
 
+  /** Remove error msg after destroy component */
   useEffect(
     () => () => {
       dispatch(removeErrorMsg());
@@ -28,24 +29,19 @@ export function Register(): JSX.Element {
     [dispatch],
   );
 
-  const init: UserAuthData = {
-    email: '',
-    password: '',
-  };
-
   return (
     <Formik
       initialValues={init}
       onSubmit={(values) => {
         dispatch(registerByEmailAndPassword(values));
       }}
-      validationSchema={registerSchema}
+      validationSchema={authSchema}
     >
       {() => (
-        <Form className={styles.root}>
-          <h3 className={styles.formLabel}>register</h3>
+        <Form className={classes.root}>
+          <h3 className={classes.formLabel}>register</h3>
 
-          <FormGroup className={styles.emailGroup}>
+          <FormGroup className={classes.emailGroup}>
             <Field name="email">
               {({ field, meta }: FieldProps) => (
                 <TextField
@@ -60,7 +56,7 @@ export function Register(): JSX.Element {
             </Field>
           </FormGroup>
 
-          <FormGroup className={styles.passwordGroup}>
+          <FormGroup className={classes.passwordGroup}>
             <Field name="password">
               {({ field, meta }: FieldProps) => (
                 <TextField
@@ -76,18 +72,18 @@ export function Register(): JSX.Element {
             </Field>
           </FormGroup>
 
-          <FormGroup className={styles.submitButton}>
+          <FormGroup>
             <Button color="primary" type="submit" variant="contained">
               Submit form
             </Button>
           </FormGroup>
 
           {errorMsg ? (
-            <Alert className={styles.errorMsg} severity="error">
+            <Alert className={classes.errorMsg} severity="error">
               {errorMsg}
             </Alert>
           ) : null}
-          <div className={styles.registerText}>
+          <div className={classes.registerText}>
             Already have an account? <Link to="/login">Login in</Link>
           </div>
         </Form>

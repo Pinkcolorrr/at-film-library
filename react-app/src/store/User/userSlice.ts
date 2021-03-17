@@ -1,3 +1,4 @@
+/* No-param-reassign was disabled, because redux-toolkit use immer and don't mutate state */
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
@@ -7,9 +8,13 @@ import { signInByEmailAndPassword, registerByEmailAndPassword } from './userThun
 import { addUserInStore, removeUserFromStore } from './userThunks/storeThunks';
 
 export type user = {
+  /** Information about user */
   readonly info: Maybe<UserInfo>;
+  /** Errors from server during authorization */
   readonly errorMsg: Maybe<string>;
+  /** User login state */
   readonly logged: boolean;
+  /** Is user pending */
   readonly isPending: boolean;
 };
 
@@ -20,6 +25,10 @@ const initialState: user = {
   isPending: true,
 };
 
+/**
+ * Contain all data about user
+ * And methods to work with that data
+ */
 const userSlice = createSlice({
   name: 'user',
   initialState,

@@ -9,7 +9,9 @@ import { FilmDTO } from '../dtos/FilmDto';
 import { firestore } from '../firebase-config';
 import { FilmMapper } from '../mappers/FilmMapper';
 
+/** Object for work with film API */
 export const FilmAPI = {
+  /** Get all list of films and subscribe to updates */
   getAllFilms(dispatch: ThunkDispatch<unknown, unknown, AnyAction>): Unsubscribe {
     return firestore
       .collection('films')
@@ -22,6 +24,7 @@ export const FilmAPI = {
       });
   },
 
+  /** Get film from db by ID */
   async getFilmById(id: string): Promise<Film> {
     return firestore
       .collection('films')
@@ -31,14 +34,17 @@ export const FilmAPI = {
       .then((film) => FilmMapper.transformResponse(film.data() as FilmDTO, film.id));
   },
 
+  /** Add film in db */
   async addFilm(film: FilmDTO): Promise<firebase.firestore.DocumentReference<firebase.firestore.DocumentData>> {
     return firestore.collection('films').add(film);
   },
 
+  /** Edit film in db by id */
   async editFilm(film: FilmDTO, id: string): Promise<void> {
     firestore.collection('films').doc(id).set(film);
   },
 
+  /** Remove film from db by id */
   async removeFilm(id: string): Promise<void> {
     firestore.collection('films').doc(id).delete();
   },

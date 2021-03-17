@@ -17,6 +17,7 @@ import { PlanetDTO } from '../dtos/PlanetDto';
 import { firestore } from '../firebase-config';
 import { PlanetMapper } from '../mappers/PlanetMapper';
 
+/** Function for processesing response from server */
 function snapshotResponse(
   doc: firebase.firestore.QuerySnapshot<PlanetDTO>,
   dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
@@ -60,46 +61,21 @@ function snapshotResponse(
   }
 }
 
+/** Object for work with planet API */
 export const PlanetAPI = {
-  async getPlanetsByPk(pkArray: (number | string)[]): Promise<Planet[]> {
-    if (pkArray.length > 10) {
-      const chunkedArr: (string | number)[][] = getChunkedArray<number | string>(pkArray, 10);
-      const planetsData: Planet[][] & Planet[] = [];
-
-      for (let i = 0; i < chunkedArr.length; i++) {
-        // eslint-disable-next-line no-await-in-loop
-        planetsData.push(await this.getPlanetsByPk(chunkedArr[i]));
-      }
-
-      return planetsData.flat(Infinity);
-    }
-
+  /** Get all list of planets */
+  async getAllPlanets(): Promise<Planet[]> {
     return firestore
       .collection('planets')
-      .where('pk', 'in', pkArray)
       .withConverter(firebaseConverter<PlanetDTO>())
       .get()
       .then((planets) => planets.docs.map((planet) => PlanetMapper.transformResponse(planet.data(), planet.id)));
   },
 
-  async getPlanetById(id: string): Promise<Planet> {
-    return firestore
-      .collection('planets')
-      .withConverter(firebaseConverter<PlanetDTO>())
-      .doc(id)
-      .get()
-      .then((planet) => PlanetMapper.transformResponse(planet.data() as PlanetDTO, planet.id));
-  },
-
-  async getPlanetByName(name: string): Promise<Planet> {
-    return firestore
-      .collection('planets')
-      .withConverter(firebaseConverter<PlanetDTO>())
-      .where('fields.name', '==', name)
-      .get()
-      .then((planet) => PlanetMapper.transformResponse(planet.docs[0].data(), planet.docs[0].id));
-  },
-
+  /**
+   * Get first part of planets and subscribe to their updates
+   * Planets will be sorted by @sortTarget
+   */
   getInitialPlanets(
     { chunkSize, sortTarget }: RequestOptions,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
@@ -114,6 +90,7 @@ export const PlanetAPI = {
       });
   },
 
+  /** Get planets startAfter lastDoc from store and subscribe to their updates */
   async getNextPlanets(
     { chunkSize, sortTarget }: RequestOptions,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
@@ -132,11 +109,49 @@ export const PlanetAPI = {
       });
   },
 
-  async getAllPlanets(): Promise<Planet[]> {
+  /**
+   * Get related planets data
+   * Frebase cannot get more then 10 item by 1 requset.
+   * So we have to chunked array and make multiple requests.
+   */
+  async getPlanetsByPk(pkArray: (number | string)[]): Promise<Planet[]> {
+    if (pkArray.length > 10) {
+      const chunkedArr: (string | number)[][] = getChunkedArray(pkArray, 10);
+      const promises: Promise<Planet[]>[] = [];
+
+      for (let i = 0; i < chunkedArr.length; i++) {
+        promises.push(this.getPlanetsByPk(chunkedArr[i]));
+      }
+
+      const data: Planet[][] = await Promise.all(promises);
+      return data.flat(Infinity) as Planet[];
+    }
+
     return firestore
       .collection('planets')
+      .where('pk', 'in', pkArray)
       .withConverter(firebaseConverter<PlanetDTO>())
       .get()
       .then((planets) => planets.docs.map((planet) => PlanetMapper.transformResponse(planet.data(), planet.id)));
+  },
+
+  /** Get planet from db by ID */
+  async getPlanetById(id: string): Promise<Planet> {
+    return firestore
+      .collection('planets')
+      .withConverter(firebaseConverter<PlanetDTO>())
+      .doc(id)
+      .get()
+      .then((planet) => PlanetMapper.transformResponse(planet.data() as PlanetDTO, planet.id));
+  },
+
+  /** Get planet from db by name */
+  async getPlanetByName(name: string): Promise<Planet> {
+    return firestore
+      .collection('planets')
+      .withConverter(firebaseConverter<PlanetDTO>())
+      .where('fields.name', '==', name)
+      .get()
+      .then((planet) => PlanetMapper.transformResponse(planet.docs[0].data(), planet.docs[0].id));
   },
 };

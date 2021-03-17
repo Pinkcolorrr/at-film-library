@@ -1,53 +1,38 @@
-/**
- * Interface for planet model
- */
+/** Planet model */
 export interface Planet {
-  /**
-   * Planet id
-   */
+  /** Planet id */
   readonly id: string;
-  /**
-   * Personal key of planet
-   */
+
+  /** Personal key of planet */
   readonly pk: string;
-  /**
-   * Planet climate
-   */
+
+  /** Planet climate */
   readonly climate: string;
-  /**
-   * Planet diameter
-   */
+
+  /** Planet diameter */
   readonly diameter: string;
-  /**
-   * When note was created
-   */
+
+  /** When note was created */
   readonly created: Date;
-  /**
-   * Planet gravity
-   */
+
+  /** Planet gravity */
   readonly gravity: string;
-  /**
-   * Planet name
-   */
+
+  /** Planet name */
   readonly name: string;
-  /**
-   * Planet orbital period
-   */
+
+  /** Planet orbital period */
   readonly orbitalPeriod: string;
-  /**
-   * Planet population
-   */
+
+  /** Planet population */
   readonly population: string;
-  /**
-   * Planet rotation period
-   */
+
+  /** Planet rotation period */
   readonly rotationPeriod: string;
-  /**
-   * Planet surface water
-   */
+
+  /** Planet surface water */
   readonly surfaceWater: string;
-  /**
-   * Planet terrain
-   */
+
+  /** Planet terrain */
   readonly terrain: string;
 }

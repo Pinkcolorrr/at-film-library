@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CircularProgress, List, ListItem, ListItemText } from '@material-ui/core';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
-import { NavLink, Redirect, useLocation, useRouteMatch } from 'react-router-dom';
+import { NavLink, Redirect, useRouteMatch } from 'react-router-dom';
 import { Planet } from '../../models/Planet';
 import { setRootContent, clearRootContent } from '../../store/CurrentContent/currentContentSlice';
 import { clearPlanetsList, setPlanetsSortTarget } from '../../store/Planets/planetsSlice';
@@ -18,7 +18,7 @@ import {
   selectLastPlanetsMsg,
   selectPlanetsRequestOptions,
 } from '../../store/Planets/planetSelectors';
-import { asideListClasses } from '../../styles/AsideList';
+import { asideListClasses } from '../../styles/AsideListStyles';
 
 type props = {
   pushUnsubscriber(unsubscribe: Unsubscribe): void;
@@ -26,6 +26,7 @@ type props = {
   clearUnsubscribers(): void;
 };
 
+/** List of planets */
 function PlanetsListWithSubscription(props: props): JSX.Element {
   const dispatch = useThunkDispatch();
   const classes = asideListClasses();
@@ -41,6 +42,7 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
   const [isScrollEnd, setIsScrollEnd] = useState(false);
   const sortOptions = ['Default', 'Name'];
 
+  /** Get initial list of planets */
   const planetsRequset = () => {
     dispatch(clearPlanetsList());
     props.unsubscribeAll();
@@ -51,17 +53,21 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
     dispatch(setRootContent('planets list'));
   };
 
+  /** Set sort state and get initial sorted list of planets */
   const sortBySelectedOption = (selected: number) => {
     dispatch(setPlanetsSortTarget(sortOptions[selected]));
   };
 
+  /** Get planet by name from input */
   const getPlanetBySearch = (name: string): void => {
     dispatch(getPlanetByName(name));
   };
 
+  /** Get initial list of planets after component loading */
   useEffect(() => {
     planetsRequset();
 
+    /** Unsubscribe from snapshots */
     return () => {
       props.unsubscribeAll();
       props.clearUnsubscribers();
@@ -70,6 +76,7 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
     };
   }, [dispatch, requestOptions.sortTarget]);
 
+  /** Get next part of planets when scroll scroll at the bottom */
   useEffect(() => {
     if (isScrollEnd && isHaveMoreData) {
       dispatch(getNextPlanets(requestOptions)).then(({ payload }) => {
@@ -78,7 +85,7 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
     }
   }, [dispatch, isScrollEnd]);
 
-  const onScroll = () => {
+  const scrollHandler = () => {
     if (
       Math.ceil((scroll.current?.offsetHeight as number) + (scroll.current?.scrollTop as number)) >=
       (scroll.current?.scrollHeight as number)
@@ -90,8 +97,8 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
   };
 
   return (
-    <div ref={scroll} className={classes.list} onScroll={onScroll}>
-      <SearchForm getInitialPlanets={planetsRequset} getPlanetByName={getPlanetBySearch} />
+    <div ref={scroll} className={classes.list} onScroll={scrollHandler}>
+      <SearchForm getInitialItems={planetsRequset} getItemByName={getPlanetBySearch} />
       <SortMenu
         index={sortOptions.indexOf(requestOptions.sortTarget)}
         options={sortOptions}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { List, ListItem, ListItemText, CircularProgress } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { Redirect, useLocation, useRouteMatch } from 'react-router';
+import { Redirect, useRouteMatch } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { Unsubscribe } from 'redux';
 import { withSubscription } from '../../hocs/withSubscription';
@@ -21,16 +21,20 @@ import {
 } from '../../store/Characters/charactersThunks/apiThunks';
 import { clearRootContent, setRootContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
-import { asideListClasses } from '../../styles/AsideList';
+import { asideListClasses } from '../../styles/AsideListStyles';
 import { SearchForm } from '../SearchForm/SearchForm';
 import { SortMenu } from '../SortMenu/SortMenu';
 
 type props = {
+  /** Push unsubscribe function in array */
   pushUnsubscriber(unsubscribe: Unsubscribe): void;
+  /** Call all unsubscribe functions */
   unsubscribeAll(): void;
+  /** Clear unsubscribe array */
   clearUnsubscribers(): void;
 };
 
+/** List of characters */
 function CharactersListWithSubscription(props: props): JSX.Element {
   const dispatch = useThunkDispatch();
   const classes = asideListClasses();
@@ -46,7 +50,8 @@ function CharactersListWithSubscription(props: props): JSX.Element {
   const [isScrollEnd, setIsScrollEnd] = useState(false);
   const sortOptions = ['Default', 'Name'];
 
-  const charactersRequset = () => {
+  /** Get initial list of characters */
+  const initialCharactersRequset = () => {
     dispatch(clearCharactersList());
     props.unsubscribeAll();
     props.clearUnsubscribers();
@@ -56,34 +61,40 @@ function CharactersListWithSubscription(props: props): JSX.Element {
     dispatch(setRootContent('characters list'));
   };
 
+  /** Set sort state and get initial sorted list of characters */
   const sortBySelectedOption = (selected: number) => {
     dispatch(setCharactersSortTarget(sortOptions[selected]));
   };
 
+  /** Get character by name from input */
   const getCharacterBySearch = (name: string): void => {
     dispatch(getCharacterByName(name));
   };
 
+  /** Get initial list of characters after component loading */
   useEffect(() => {
-    charactersRequset();
+    initialCharactersRequset();
 
+    /** Unsubscribe from snapshots */
     return () => {
       props.unsubscribeAll();
       props.clearUnsubscribers();
 
       dispatch(clearRootContent());
     };
-  }, [dispatch, requestOptions.sortTarget]);
+  }, [requestOptions.sortTarget]);
 
+  /** Get next part of characters when scroll scroll at the bottom */
   useEffect(() => {
     if (isScrollEnd && isHaveMoreData) {
       dispatch(getNextCharacters(requestOptions)).then(({ payload }) => {
         props.pushUnsubscriber(payload as Unsubscribe);
       });
     }
-  }, [dispatch, isScrollEnd]);
+  }, [isScrollEnd]);
 
-  const onScroll = () => {
+  /** Listen for scroll state */
+  const scrollHandler = () => {
     if (
       Math.ceil((scroll.current?.offsetHeight as number) + (scroll.current?.scrollTop as number)) >=
       (scroll.current?.scrollHeight as number)
@@ -95,8 +106,8 @@ function CharactersListWithSubscription(props: props): JSX.Element {
   };
 
   return (
-    <div ref={scroll} className={classes.list} onScroll={onScroll}>
-      <SearchForm getInitialPlanets={charactersRequset} getPlanetByName={getCharacterBySearch} />
+    <div ref={scroll} className={classes.list} onScroll={scrollHandler}>
+      <SearchForm getInitialItems={initialCharactersRequset} getItemByName={getCharacterBySearch} />
       <SortMenu
         index={sortOptions.indexOf(requestOptions.sortTarget)}
         options={sortOptions}
@@ -104,9 +115,9 @@ function CharactersListWithSubscription(props: props): JSX.Element {
       />
 
       <List>
-        {characters.map((planet: Character) => (
-          <ListItem key={planet.pk} component={NavLink} to={`${url}/${planet.id}/details`} button>
-            <ListItemText primary={planet.name} />
+        {characters.map((character: Character) => (
+          <ListItem key={character.pk} component={NavLink} to={`${url}/${character.id}/details`} button>
+            <ListItemText primary={character.name} />
           </ListItem>
         ))}
         <ListItem className={classes.circularProgress}>

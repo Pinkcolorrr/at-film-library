@@ -6,10 +6,10 @@ type converter<T> = {
   fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot) => T;
 };
 
+/** Converter for typing data from firestore */
 export function firebaseConverter<T>(): converter<T> {
   return {
     toFirestore: (doc: T): T => doc,
-    fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot): T =>
-      snap.data() as T,
+    fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot): T => snap.data() as T,
   };
 }

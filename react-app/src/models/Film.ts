@@ -1,74 +1,44 @@
-/**
- * Interface for film DOM
- */
+/** Film model */
 export interface Film {
-  /**
-   * Film id
-   */
+  /** Film id */
   readonly id: string;
 
-  /**
-   * Personal key
-   */
+  /** Personal key */
   readonly pk: string;
 
-  /**
-   * Film title
-   */
+  /** Film title */
   readonly title: string;
 
-  /**
-   * Film director
-   */
+  /** Film director */
   readonly director: string;
 
-  /**
-   * Film release date
-   */
+  /** Film release date */
   readonly releaseDate: string;
 
-  /**
-   * Film episode Id
-   */
+  /** Film episode Id */
   readonly episodeId: number;
 
-  /**
-   * Film producer
-   */
+  /** Film producer */
   readonly producer: string;
 
-  /**
-   * Film opening crawl
-   */
+  /** Film opening crawl */
   readonly openingCrawl: string;
 
-  /**
-   * When note about film was created
-   */
+  /** When note about film was created */
   readonly created: Date;
 
-  /**
-   * Array of personal keys related characters
-   */
+  /** Array of personal keys related characters */
   readonly charactersPk: string[];
 
-  /**
-   * Array of personal keys related planets
-   */
+  /** Array of personal keys related planets */
   readonly planetsPk: string[];
 
-  /**
-   * Array of personal keys related species
-   */
+  /** Array of personal keys related species */
   readonly speciesPk: string[];
 
-  /**
-   * Array of personal keys related starships
-   */
+  /** Array of personal keys related starships */
   readonly starshipsPk: string[];
 
-  /**
-   * Array of personal keys related vehicles
-   */
+  /** Array of personal keys related vehicles */
   readonly vehiclesPk: string[];
 }

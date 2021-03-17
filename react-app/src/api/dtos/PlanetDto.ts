@@ -1,60 +1,34 @@
-/* have to use camel_case here, because DTO */
+/* Have to use camel_case here, because DTO */
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable camelcase */
 
 import { FirebaseDTO } from './FirebaseDto';
 
-/**
- * Interface for planet DTO
- */
+/** Interface for planet DTO */
 export interface PlanetDTO extends FirebaseDTO {
-  /**
-   * Main object fields
-   */
+  /** Main object fields */
   readonly fields: {
-    /**
-     * Planet climate
-     */
+    /** Planet climate */
     readonly climate: string;
-    /**
-     * Planet diameter
-     */
+    /** Planet diameter */
     readonly diameter: string;
-    /**
-     * When note was created
-     */
+    /** When note was created */
     readonly created: string;
-    /**
-     * When note was edited last time
-     */
+    /** When note was edited last time */
     readonly edited: string;
-    /**
-     * Planet gravity
-     */
+    /** Planet gravity */
     readonly gravity: string;
-    /**
-     * Planet name
-     */
+    /** Planet name */
     readonly name: string;
-    /**
-     * Planet orbital period
-     */
+    /** Planet orbital period */
     readonly orbital_period: string;
-    /**
-     * Planet population
-     */
+    /** Planet population */
     readonly population: string;
-    /**
-     * Planet rotation period
-     */
+    /** Planet rotation period */
     readonly rotation_period: string;
-    /**
-     * Planet surface water
-     */
+    /** Planet surface water */
     readonly surface_water: string;
-    /**
-     * Planet terrain
-     */
+    /** Planet terrain */
     readonly terrain: string;
   };
 }

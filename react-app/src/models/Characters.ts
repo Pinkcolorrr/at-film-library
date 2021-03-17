@@ -1,55 +1,41 @@
-/**
- * Interface for character DOM
- */
+/** Character model */
 export interface Character {
+  /** Id of character */
   readonly id: string;
-  /**
-   * Personal key of character
-   */
+
+  /** Personal key of character */
   readonly pk: string;
-  /**
-   * Charater birth year
-   */
+
+  /** Charater birth year */
   readonly birthYear: string;
-  /**
-   * When note was created
-   */
+
+  /** When note was created */
   readonly created: Date;
-  /**
-   * Charater eye color
-   */
+
+  /** Charater eye color */
   readonly eyeColor: string;
-  /**
-   * Charater gender
-   */
+
+  /** Charater gender */
   readonly gender: string;
-  /**
-   * Charater hair color
-   */
+
+  /** Charater hair color */
   readonly hairColor: string;
-  /**
-   *Charater height
-   */
+
+  /** Charater height */
   readonly height: string;
-  /**
-   * Link to charater image
-   */
+
+  /** Link to charater image */
   readonly image: string;
-  /**
-   * Charater mass
-   */
+
+  /** Charater mass */
   readonly mass: string;
-  /**
-   * Charater name
-   */
+
+  /** Charater name */
   readonly name: string;
-  /**
-   * Charater skin color
-   */
+
+  /** Charater skin color */
   readonly skinColor: string;
-  /**
-   * Charater homeworld
-   * Related data. Personal key of planet
-   */
+
+  /** Charater homeworld Related data. PK of planet */
   readonly homeworld: number;
 }

@@ -1,8 +1,8 @@
+import React, { useEffect } from 'react';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  makeStyles,
   TableContainer,
   Paper,
   Table,
@@ -15,13 +15,8 @@ import {
   ListItem,
   ListItemText,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { Maybe } from 'yup/lib/types';
-import { Character } from '../../models/Characters';
-import { Film } from '../../models/Film';
-import { Planet } from '../../models/Planet';
+import { NavLink, RouteComponentProps } from 'react-router-dom';
 import { tableRows } from '../../models/TableRows';
 import { getCharactersByPk } from '../../store/Characters/charactersThunks/apiThunks';
 import {
@@ -29,46 +24,41 @@ import {
   setAdditionalContent,
   setRootContent,
 } from '../../store/CurrentContent/currentContentSlice';
-import { selectCurrentFilm, selectRelatedPlanets, selectRelatedCharacters } from '../../store/Films/filmSelectors';
+import {
+  selectCurrentFilm,
+  selectRelatedPlanets,
+  selectRelatedCharacters,
+  selectRejectedFilmMsg,
+} from '../../store/Films/filmSelectors';
 import { getFilmById } from '../../store/Films/filmsThunks/apiThunks';
 import { getPlanetsByPk } from '../../store/Planets/planetsThunks/apiThunks';
 import { useThunkDispatch } from '../../store/store';
+import { detailsPageClasses } from '../../styles/DetailPageStyles';
 
 type props = {
-  match: { params: { id: string } };
+  /** Film ID */
+  id: string;
 };
 
-const useStyles = makeStyles((theme) => ({
-  table: {
-    tableLayout: 'fixed',
-  },
-  tableHeaer: {
-    backgroundColor: theme.palette.grey[300],
-  },
-  tableHeaderCell: {
-    fontWeight: 'bold',
-  },
-  circularProgress: {
-    marginTop: '20px',
-    textAlign: 'center',
-  },
-  fullWidth: {
-    width: '100%',
-  },
-}));
-
-export function FilmDetails(props: props): JSX.Element {
-  const classes = useStyles();
+/** Displaying table with film information */
+export function FilmDetails(props: RouteComponentProps<props>): JSX.Element {
+  const classes = detailsPageClasses();
   const { id } = props.match.params;
   const dispatch = useThunkDispatch();
-  const film: Maybe<Film> = useSelector(selectCurrentFilm);
-  const planets: Planet[] = useSelector(selectRelatedPlanets);
-  const characters: Character[] = useSelector(selectRelatedCharacters);
+  const film = useSelector(selectCurrentFilm);
+  const planets = useSelector(selectRelatedPlanets);
+  const characters = useSelector(selectRelatedCharacters);
+  const rejectedMsg = useSelector(selectRejectedFilmMsg);
 
+  /** Get film  */
   useEffect(() => {
     dispatch(getFilmById(id));
-  }, [dispatch, id]);
+  }, [id]);
 
+  /**
+   * Set content for aside title
+   * Get related data, when film loaded
+   */
   useEffect(() => {
     if (film) {
       dispatch(getCharactersByPk(film.charactersPk));
@@ -79,7 +69,7 @@ export function FilmDetails(props: props): JSX.Element {
     return () => {
       dispatch(clearAdditionalContent());
     };
-  }, [dispatch, film]);
+  }, [film]);
 
   return film && film.id === id ? (
     (() => {
@@ -191,6 +181,6 @@ export function FilmDetails(props: props): JSX.Element {
       );
     })()
   ) : (
-    <CircularProgress />
+    <div>{rejectedMsg || <CircularProgress />}</div>
   );
 }

@@ -23,17 +23,27 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type props = {
+  /** Accordion title */
   title: string;
-  array: string[];
+  /** Array with all list options */
+  listOptions: string[];
+  /** Array with selected list options */
   selected: string[];
+  /** Set state on dirty, if list was touched */
   setDirty?(): void;
+  /** Get all checked values */
   getCheckedValues(value: string[]): void;
 };
 
+/** Unite accordion and check list from react-ui in one component */
 export function AccordionCheckList(props: props): JSX.Element {
   const classes = useStyles();
   const [checked, setChecked] = useState([] as string[]);
 
+  /**
+   * Handler for check list states
+   * Push marked items in checked array
+   */
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -50,10 +60,12 @@ export function AccordionCheckList(props: props): JSX.Element {
     setChecked(newChecked);
   };
 
+  /** Raises the state of marked items */
   useEffect(() => {
     props.getCheckedValues(checked);
   }, [checked]);
 
+  /** Set selected items, after component loading */
   useEffect(() => {
     setChecked(props.selected);
   }, [props.selected]);
@@ -63,7 +75,7 @@ export function AccordionCheckList(props: props): JSX.Element {
       <AccordionSummary>{props.title}</AccordionSummary>
       <AccordionDetails>
         <List className={classes.root}>
-          {props.array.map((value: string) => {
+          {props.listOptions.map((value: string) => {
             const labelId = `checkbox-list-label-${value}`;
 
             return (

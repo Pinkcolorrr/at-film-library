@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
   TableContainer,
   Paper,
@@ -8,33 +9,38 @@ import {
   TableBody,
   CircularProgress,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Maybe } from 'yup/lib/types';
+import { RouteComponentProps } from 'react-router';
 import { Character } from '../../models/Characters';
 import { tableRows } from '../../models/TableRows';
-import { selectCurrentCharacter } from '../../store/Characters/characterSelectors';
+import { selectCurrentCharacter, selectRejectedCharacterMsg } from '../../store/Characters/characterSelectors';
 import { getCharacterById } from '../../store/Characters/charactersThunks/apiThunks';
 import { setAdditionalContent, clearAdditionalContent, setRootContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
-import { detailsPageClasses } from '../../styles/DetailPage';
+import { detailsPageClasses } from '../../styles/DetailPageStyles';
 
 type props = {
-  match: { params: { id: string } };
+  /** Character ID */
+  id: string;
 };
 
-export function CharacterDetails(props: props): JSX.Element {
-  const classes = detailsPageClasses();
+/** Displaying table with character information */
+export function CharacterDetails(props: RouteComponentProps<props>): JSX.Element {
   const { id } = props.match.params;
+  const classes = detailsPageClasses();
   const dispatch = useThunkDispatch();
   const character: Maybe<Character> = useSelector(selectCurrentCharacter);
+  const rejectedMsg = useSelector(selectRejectedCharacterMsg);
 
+  /** Get character if it isn't in the store or store have different character */
   useEffect(() => {
     if (!character || character.id !== id) {
       dispatch(getCharacterById(id));
     }
-  }, [dispatch, id]);
+  }, [id]);
 
+  /** Set content for aside title */
   useEffect(() => {
     if (character) {
       dispatch(setAdditionalContent(character.name));
@@ -43,7 +49,7 @@ export function CharacterDetails(props: props): JSX.Element {
     return () => {
       dispatch(clearAdditionalContent());
     };
-  }, [dispatch, character]);
+  }, [character]);
 
   return character && character.id === id ? (
     (() => {
@@ -104,6 +110,6 @@ export function CharacterDetails(props: props): JSX.Element {
       );
     })()
   ) : (
-    <CircularProgress />
+    <div>{rejectedMsg || <CircularProgress />}</div>
   );
 }

@@ -10,5 +10,9 @@ export const store = configureStore({
     }),
 });
 
+/**
+ * AppDispatch type is necessary for correct typing of dispatch
+ * Without it imposible to use then after dispatch
+ */
 export type AppDispatch = typeof store.dispatch;
 export const useThunkDispatch = (): AppDispatch => useDispatch<AppDispatch>();

@@ -1,11 +1,10 @@
-/* no-param-reassign was disabled, because redux-toolkit use immer and don't mutate state */
+/* No-param-reassign was disabled, because redux-toolkit use immer and don't mutate state */
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
 import { Planet } from '../../models/Planet';
 import { RequestOptions } from '../../models/RequestOptions';
-import { getAllPlanets, getPlanetById, getPlanetByName } from './planetsThunks/apiThunks';
 import {
   pushPlanetsInStore,
   setPlanetsInStore,
@@ -13,21 +12,32 @@ import {
   setIsHaveMorePlanets,
   setLastPlanetId,
 } from './planetsThunks/storeThunks';
+import { getAllPlanets, getPlanetById, getPlanetByName } from './planetsThunks/apiThunks';
 
 type planets = {
+  /** List of all loaded planets */
   planetList: Planet[];
+  /** Current planet */
   currentPlanet: {
+    /** Msg if failed to get planet */
+    rejectedMsg: string;
+    /** Information about planet */
     planetInfo: Maybe<Planet>;
   };
+  /** Id of last loaded planet */
   lastDocId: string;
+  /** Option for server request */
   requestOptions: RequestOptions;
+  /** Is db have more data to load */
   isHaveMoreData: boolean;
+  /** Msg, that will display, when user hit the bottom of data */
   endDataMsg: string;
 };
 
 const initialState: planets = {
   planetList: [],
   currentPlanet: {
+    rejectedMsg: '',
     planetInfo: null,
   },
   requestOptions: {
@@ -39,17 +49,24 @@ const initialState: planets = {
   endDataMsg: 'You hit the bottom',
 };
 
+/**
+ * Contain all data about planets
+ * And methods to work with that data
+ */
 const planetsSlice = createSlice({
   name: 'planets',
   initialState,
   reducers: {
+    /** Clear loaded characters */
     clearPlanetsList(state) {
       state.planetList = [];
     },
+    /** Set sort target */
     setPlanetsSortTarget(state, action) {
       state.requestOptions.sortTarget = action.payload;
     },
   },
+  /** Extra reducers for proccesing thunks results */
   extraReducers: (builder) => {
     builder
       .addCase(pushPlanetsInStore.fulfilled, (state, action) => {
@@ -98,6 +115,9 @@ const planetsSlice = createSlice({
       })
       .addCase(setIsHaveMorePlanets.fulfilled, (state, action) => {
         state.isHaveMoreData = action.payload;
+      })
+      .addCase(getPlanetById.rejected, (state) => {
+        state.currentPlanet.rejectedMsg = 'Failed to get planet';
       });
   },
 });

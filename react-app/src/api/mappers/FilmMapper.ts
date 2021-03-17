@@ -1,20 +1,14 @@
 import { Film } from '../../models/Film';
 import { FilmDTO } from '../dtos/FilmDto';
 
-/**
- * Mapping film data before send or accept
- */
+/** Mapping film data before send or accep */
 export const FilmMapper = {
-  /**
-   * Transoform film DTO array to object model array
-   */
+  /** Transoform film DTO array to object model array */
   transformArrayResponse(filmData: FilmDTO[], id: string[]): Film[] {
     return filmData.map((film, index) => this.transformResponse(film, id[index]));
   },
 
-  /**
-   * Remove useless data from filmDTO object
-   */
+  /** Remove useless data from filmDTO object */
   transformResponse(film: FilmDTO, filmID: string): Film {
     return {
       title: film.fields.title || 'Unknown',
@@ -34,6 +28,7 @@ export const FilmMapper = {
     };
   },
 
+  /** Transofrm data to server format */
   transformRequset(film: Film): FilmDTO {
     return {
       fields: {

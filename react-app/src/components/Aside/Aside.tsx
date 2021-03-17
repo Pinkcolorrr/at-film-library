@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, makeStyles, Tab, Divider, Tabs } from '@material-ui/core';
+import { Drawer, Tab, Divider, Tabs } from '@material-ui/core';
 
 import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { CharactersList } from '../Characters/CharactersList';
@@ -7,24 +7,13 @@ import { FilmsList } from '../Films/FilmsList';
 import { PlanetsList } from '../Planets/PlanestsList';
 import { getStringSecondPart } from '../../utils/utils';
 import { AsideTitle } from './AsideTitle';
-import { wrapperStyles } from '../../styles/wrapperStyles';
+import { wrapperStyles } from '../../styles/WrapperStyles';
 import { ProcessingButtons } from '../ProcessingButtons/ProcessingButtons';
+import { asideClasses } from './AsideStyles';
 
-const useStyles = makeStyles(() => ({
-  asideContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    height: '100%',
-  },
-  tabs: {
-    height: '100%',
-    alignItems: 'center',
-  },
-}));
-
+/** Aside bar */
 export function Aside(props: wrapperStyles): JSX.Element {
-  const classes = useStyles();
+  const classes = asideClasses();
   const location = useLocation();
   const pathname = getStringSecondPart(location.pathname, '/');
 

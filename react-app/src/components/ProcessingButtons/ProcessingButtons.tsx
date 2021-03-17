@@ -1,40 +1,44 @@
-import React from 'react';
-import { makeStyles, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Button } from '@material-ui/core';
+import { Link, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectAdditionalContent, selectRootContent } from '../../store/CurrentContent/currentContentSelectors';
 import { selectCurrentFilm } from '../../store/Films/filmSelectors';
+import { processingButtonsStyles } from './ProcessingButtonsStyles';
+import { useThunkDispatch } from '../../store/store';
+import { ConfirmDialog } from '../ConfirmDialog/ConfirmDialog';
+import { removeFilmFromDb } from '../../store/Films/filmsThunks/apiThunks';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    width: '100%',
-    padding: theme.spacing(2, 4),
-    justifyContent: 'space-between',
-
-    button: {
-      marginRight: '10px',
-    },
-  },
-  link: {
-    width: '100%',
-    textDecoration: 'none',
-  },
-}));
-
+/** Buttons for control navigation under films processing pages  */
 export function ProcessingButtons(): JSX.Element {
-  const classes = useStyles();
+  const classes = processingButtonsStyles();
+
+  const [redirect, setRedirect] = useState(false);
+
   const additionalContent = useSelector(selectAdditionalContent);
   const rootContent = useSelector(selectRootContent);
   const film = useSelector(selectCurrentFilm);
+  const dispatch = useThunkDispatch();
+
+  /** Remove film after dialog confirm  */
+  const removeFilm = () => {
+    if (film) {
+      dispatch(removeFilmFromDb(film.id));
+      setRedirect(true);
+    }
+  };
 
   return (
     <div className={classes.root}>
       {rootContent === 'films list' && additionalContent ? (
         <>
-          <Button color="secondary" variant="contained" fullWidth>
-            Remove film
-          </Button>
+          <ConfirmDialog
+            agreeAction={removeFilm}
+            buttonText="Remove film"
+            dialogText={`Are you sure you want to remove ${film?.title}`}
+            dialogTitle="Remove film?"
+          />
+
           <Link className={classes.link} to={`/films/${film?.id}/edit`}>
             <Button color="primary" variant="contained" fullWidth>
               Edit film
@@ -42,7 +46,6 @@ export function ProcessingButtons(): JSX.Element {
           </Link>
         </>
       ) : null}
-
       {rootContent === 'films list' ? (
         <Link className={classes.link} to="/films/add">
           <Button color="primary" variant="contained" fullWidth>
@@ -50,6 +53,7 @@ export function ProcessingButtons(): JSX.Element {
           </Button>
         </Link>
       ) : null}
+      {redirect ? <Redirect to="/films" exact /> : null}
     </div>
   );
 }
