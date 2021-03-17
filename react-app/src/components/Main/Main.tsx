@@ -5,6 +5,7 @@ import { FilmDetails } from '../Films/FilmDetails';
 import { PlanetDetails } from '../Planets/PlanetDetails';
 import { wrapperStyles } from '../../styles/wrapperStyles';
 import { CharacterDetails } from '../Characters/CharacterDetails';
+import { FilmEditing } from '../Films/FilmEditing';
 
 export function Main(props: wrapperStyles): JSX.Element {
   return (
@@ -14,6 +15,7 @@ export function Main(props: wrapperStyles): JSX.Element {
       <Switch>
         <Route component={FilmAdding} path="/films/add" />
         <Route component={FilmDetails} path="/films/:id/details" />
+        <Route component={FilmEditing} path="/films/:id/edit" />
         <Route component={PlanetDetails} path="/planets/:id/details" />
         <Route component={CharacterDetails} path="/characters/:id/details" />
       </Switch>

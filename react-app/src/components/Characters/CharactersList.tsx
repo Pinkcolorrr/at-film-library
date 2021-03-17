@@ -35,7 +35,6 @@ function CharactersListWithSubscription(props: props): JSX.Element {
   const dispatch = useThunkDispatch();
   const classes = asideListClasses();
   const { url } = useRouteMatch();
-  const location = useLocation();
 
   const characters = useSelector(selectAllCharacters);
   const isHaveMoreData = useSelector(selectIsHaveMoreCharacters);
@@ -54,7 +53,7 @@ function CharactersListWithSubscription(props: props): JSX.Element {
     dispatch(getInitialCharacters(requestOptions)).then(({ payload }) => {
       props.pushUnsubscriber(payload as Unsubscribe);
     });
-    dispatch(setRootContent('Characters list'));
+    dispatch(setRootContent('characters list'));
   };
 
   const sortBySelectedOption = (selected: number) => {
@@ -114,9 +113,7 @@ function CharactersListWithSubscription(props: props): JSX.Element {
           {isHaveMoreData ? <CircularProgress /> : <ListItemText primary={endDataMsg} />}
         </ListItem>
       </List>
-      {currentCharacter && !location.pathname.includes('details') ? (
-        <Redirect from="/characters" to={`/characters/${currentCharacter.id}/details`} />
-      ) : null}
+      {currentCharacter ? <Redirect from="/characters" to={`/characters/${currentCharacter.id}/details`} /> : null}
     </div>
   );
 }

@@ -4,23 +4,24 @@ import 'firebase/auth';
 import { AnyAction, Unsubscribe } from 'redux';
 import { UserAuthData } from '../../models/UserAuthData';
 import { addUserInStore, removeUserFromStore } from '../../store/User/userThunks/storeThunks';
+import { auth } from '../firebase-config';
 import { UserMapper } from '../mappers/userMapper';
 
 export const UserApi = {
   async signInByEmailAndPassword(user: UserAuthData): Promise<firebase.auth.UserCredential> {
-    return firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+    return auth.signInWithEmailAndPassword(user.email, user.password);
   },
 
   async registerByEmailAndPassword(user: UserAuthData): Promise<firebase.auth.UserCredential> {
-    return firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
+    return auth.createUserWithEmailAndPassword(user.email, user.password);
   },
 
   async signOut(): Promise<void> {
-    return firebase.auth().signOut();
+    return auth.signOut();
   },
 
   observeUser(dispatch: ThunkDispatch<unknown, unknown, AnyAction>): Unsubscribe {
-    return firebase.auth().onAuthStateChanged((user: firebase.User | null): void => {
+    return auth.onAuthStateChanged((user: firebase.User | null): void => {
       if (user) {
         dispatch(addUserInStore(UserMapper.transformResponse(user)));
       } else {

@@ -1,9 +1,19 @@
-export const firebaseConfig = {
-  apiKey: 'AIzaSyCrCU4Lg5n6k0eXmJAEnLnRTmdpZxDq0cc',
-  authDomain: 'js-camp-pr.firebaseapp.com',
-  databaseURL: 'https://js-camp-pr-default-rtdb.firebaseio.com',
-  projectId: 'js-camp-pr',
-  storageBucket: 'js-camp-pr.appspot.com',
-  messagingSenderId: '502014543669',
-  appId: '1:502014543669:web:bf98bd05a11c982b25ae7c',
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
+
+const app = firebase.initializeApp(firebaseConfig);
+
+export const firestore = app.firestore();
+
+export const auth = app.auth();

@@ -43,6 +43,11 @@ export const getCharacterById: AsyncThunk<Character, string, Record<string, neve
   async (id: string): Promise<Character> => CharacterAPI.getCharacterById(id),
 );
 
+export const getAllCharacters: AsyncThunk<Character[], void, Record<string, never>> = createAsyncThunk(
+  'characters/getAllCharacters',
+  async (): Promise<Character[]> => CharacterAPI.getAllCharacters(),
+);
+
 export const getCharactersByPk: AsyncThunk<Character[], string[], Record<string, never>> = createAsyncThunk(
   'films/getCharactersByPk',
   async (pkArray: string[]): Promise<Character[]> =>

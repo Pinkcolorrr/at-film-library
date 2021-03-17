@@ -19,7 +19,7 @@ export const FilmMapper = {
     return {
       title: film.fields.title || 'Unknown',
       episodeId: film.fields.episode_id || NaN,
-      releaseDate: film.fields.release_date || 'Unknown',
+      releaseDate: film.fields.release_date,
       director: film.fields.director || 'Unknown',
       producer: film.fields.producer || 'Unknown',
       openingCrawl: film.fields.opening_crawl || 'Unknown',
@@ -31,6 +31,28 @@ export const FilmMapper = {
       vehiclesPk: film.fields.vehicles.map((item) => String(item)),
       pk: String(film.pk),
       id: filmID,
+    };
+  },
+
+  transformRequset(film: Film): FilmDTO {
+    return {
+      fields: {
+        title: film.title,
+        episode_id: film.episodeId,
+        release_date: film.releaseDate,
+        director: film.director,
+        producer: film.producer,
+        opening_crawl: film.openingCrawl,
+        created: new Date(film.created).toISOString(),
+        edited: new Date().toISOString(),
+        planets: film.planetsPk,
+        characters: film.charactersPk,
+        species: film.speciesPk,
+        starships: film.starshipsPk,
+        vehicles: film.vehiclesPk,
+      },
+      pk: film.pk,
+      model: 'resources.film',
     };
   },
 };

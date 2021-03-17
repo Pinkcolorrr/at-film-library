@@ -42,6 +42,11 @@ export const getPlanetById: AsyncThunk<Planet, string, Record<string, never>> = 
   async (id: string): Promise<Planet> => PlanetAPI.getPlanetById(id),
 );
 
+export const getAllPlanets: AsyncThunk<Planet[], void, Record<string, never>> = createAsyncThunk(
+  'planets/getAllPlanets',
+  async (): Promise<Planet[]> => PlanetAPI.getAllPlanets(),
+);
+
 export const getPlanetsByPk: AsyncThunk<Planet[], string[], Record<string, never>> = createAsyncThunk(
   'films/getPlanetsByPk',
   async (pkArray: string[]): Promise<Planet[]> => PlanetAPI.getPlanetsByPk(pkArray.map((pk) => Number(pk) || pk)),

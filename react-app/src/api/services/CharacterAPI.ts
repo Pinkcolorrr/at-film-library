@@ -14,6 +14,7 @@ import {
 import { firebaseConverter } from '../../utils/FirebaseConverters';
 import { getChunkedArray } from '../../utils/utils';
 import { CharacterDTO } from '../dtos/CharactersDto';
+import { firestore } from '../firebase-config';
 import { CharacterMapper } from '../mappers/CharactersMapper';
 
 function snapshotResponse(
@@ -66,15 +67,13 @@ export const CharacterAPI = {
       const charactersData: Character[][] & Character[] = [];
 
       for (let i = 0; i < chunkedArr.length; i++) {
-        // eslint-disable-next-line no-await-in-loop
         charactersData.push(await this.getCharactersByPk(chunkedArr[i]));
       }
 
       return charactersData.flat(Infinity);
     }
 
-    return firebase
-      .firestore()
+    return firestore
       .collection('people')
       .where('pk', 'in', pkArray)
       .withConverter(firebaseConverter<CharacterDTO>())
@@ -85,8 +84,7 @@ export const CharacterAPI = {
   },
 
   async getCharacterById(id: string): Promise<Character> {
-    return firebase
-      .firestore()
+    return firestore
       .collection('people')
       .withConverter(firebaseConverter<CharacterDTO>())
       .doc(id)
@@ -95,8 +93,7 @@ export const CharacterAPI = {
   },
 
   async getCharacterByName(name: string): Promise<Character> {
-    return firebase
-      .firestore()
+    return firestore
       .collection('people')
       .withConverter(firebaseConverter<CharacterDTO>())
       .where('fields.name', '==', name)
@@ -108,8 +105,7 @@ export const CharacterAPI = {
     { chunkSize, sortTarget }: RequestOptions,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
   ): Unsubscribe {
-    return firebase
-      .firestore()
+    return firestore
       .collection('people')
       .withConverter(firebaseConverter<CharacterDTO>())
       .orderBy(sortTarget)
@@ -124,10 +120,9 @@ export const CharacterAPI = {
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
     lastDocId: string,
   ): Promise<Unsubscribe> {
-    const characterDoc = await firebase.firestore().collection('people').doc(lastDocId).get();
+    const characterDoc = await firestore.collection('people').doc(lastDocId).get();
 
-    return firebase
-      .firestore()
+    return firestore
       .collection('people')
       .withConverter(firebaseConverter<CharacterDTO>())
       .orderBy(sortTarget)
@@ -136,5 +131,15 @@ export const CharacterAPI = {
       .onSnapshot((doc: firebase.firestore.QuerySnapshot<CharacterDTO>) => {
         snapshotResponse(doc, dispatch);
       });
+  },
+
+  async getAllCharacters(): Promise<Character[]> {
+    return firestore
+      .collection('people')
+      .withConverter(firebaseConverter<CharacterDTO>())
+      .get()
+      .then((characters) =>
+        characters.docs.map((character) => CharacterMapper.transformResponse(character.data(), character.id)),
+      );
   },
 };

@@ -15,7 +15,7 @@ import { Character } from '../../models/Characters';
 import { tableRows } from '../../models/TableRows';
 import { selectCurrentCharacter } from '../../store/Characters/characterSelectors';
 import { getCharacterById } from '../../store/Characters/charactersThunks/apiThunks';
-import { setAdditionalContent, clearAdditionalContent } from '../../store/CurrentContent';
+import { setAdditionalContent, clearAdditionalContent, setRootContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
 import { detailsPageClasses } from '../../styles/DetailPage';
 
@@ -38,6 +38,7 @@ export function CharacterDetails(props: props): JSX.Element {
   useEffect(() => {
     if (character) {
       dispatch(setAdditionalContent(character.name));
+      dispatch(setRootContent('characters list'));
     }
     return () => {
       dispatch(clearAdditionalContent());

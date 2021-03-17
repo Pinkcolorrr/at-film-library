@@ -14,6 +14,7 @@ import {
 import { firebaseConverter } from '../../utils/FirebaseConverters';
 import { getChunkedArray } from '../../utils/utils';
 import { PlanetDTO } from '../dtos/PlanetDto';
+import { firestore } from '../firebase-config';
 import { PlanetMapper } from '../mappers/PlanetMapper';
 
 function snapshotResponse(
@@ -73,8 +74,7 @@ export const PlanetAPI = {
       return planetsData.flat(Infinity);
     }
 
-    return firebase
-      .firestore()
+    return firestore
       .collection('planets')
       .where('pk', 'in', pkArray)
       .withConverter(firebaseConverter<PlanetDTO>())
@@ -83,8 +83,7 @@ export const PlanetAPI = {
   },
 
   async getPlanetById(id: string): Promise<Planet> {
-    return firebase
-      .firestore()
+    return firestore
       .collection('planets')
       .withConverter(firebaseConverter<PlanetDTO>())
       .doc(id)
@@ -93,8 +92,7 @@ export const PlanetAPI = {
   },
 
   async getPlanetByName(name: string): Promise<Planet> {
-    return firebase
-      .firestore()
+    return firestore
       .collection('planets')
       .withConverter(firebaseConverter<PlanetDTO>())
       .where('fields.name', '==', name)
@@ -106,8 +104,7 @@ export const PlanetAPI = {
     { chunkSize, sortTarget }: RequestOptions,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
   ): Unsubscribe {
-    return firebase
-      .firestore()
+    return firestore
       .collection('planets')
       .withConverter(firebaseConverter<PlanetDTO>())
       .orderBy(sortTarget)
@@ -122,10 +119,9 @@ export const PlanetAPI = {
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
     lastDocId: string,
   ): Promise<Unsubscribe> {
-    const planetDoc = await firebase.firestore().collection('planets').doc(lastDocId).get();
+    const planetDoc = await firestore.collection('planets').doc(lastDocId).get();
 
-    return firebase
-      .firestore()
+    return firestore
       .collection('planets')
       .withConverter(firebaseConverter<PlanetDTO>())
       .orderBy(sortTarget)
@@ -134,5 +130,13 @@ export const PlanetAPI = {
       .onSnapshot((doc: firebase.firestore.QuerySnapshot<PlanetDTO>) => {
         snapshotResponse(doc, dispatch);
       });
+  },
+
+  async getAllPlanets(): Promise<Planet[]> {
+    return firestore
+      .collection('planets')
+      .withConverter(firebaseConverter<PlanetDTO>())
+      .get()
+      .then((planets) => planets.docs.map((planet) => PlanetMapper.transformResponse(planet.data(), planet.id)));
   },
 };

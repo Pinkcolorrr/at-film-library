@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
 import { Planet } from '../../models/Planet';
 import { RequestOptions } from '../../models/RequestOptions';
-import { getPlanetById, getPlanetByName } from './planetsThunks/apiThunks';
+import { getAllPlanets, getPlanetById, getPlanetByName } from './planetsThunks/apiThunks';
 import {
   pushPlanetsInStore,
   setPlanetsInStore,
@@ -64,11 +64,15 @@ const planetsSlice = createSlice({
         state.endDataMsg = 'All results loaded';
         state.planetList = [action.payload];
       })
+      .addCase(getAllPlanets.fulfilled, (state, action) => {
+        state.planetList = action.payload;
+      })
       .addCase(getPlanetByName.rejected, (state) => {
         state.planetList = [];
         state.isHaveMoreData = false;
         state.endDataMsg = 'Not found';
       })
+
       .addCase(setLastPlanetId.fulfilled, (state, action) => {
         state.lastDocId = action.payload;
       })

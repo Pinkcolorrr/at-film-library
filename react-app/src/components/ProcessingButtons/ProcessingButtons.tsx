@@ -1,67 +1,54 @@
 import React from 'react';
 import { makeStyles, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectAdditionalContent, selectRootContent } from '../../store/CurrentContent/currentContentSelectors';
+import { selectCurrentFilm } from '../../store/Films/filmSelectors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    height: '100%',
-    flexDirection: 'column',
-  },
-
-  filmsList: {
-    overflowY: 'scroll',
-    flexGrow: 1,
-  },
-  link: {
-    textDecoration: 'none',
-  },
-  activeLink: {
-    backgroundColor: theme.palette.grey[300],
-    textAlign: 'center',
-  },
-  transparentColor: {
-    color: 'transparent',
-  },
-
-  processingButtons: {
-    display: 'flex',
     width: '100%',
     padding: theme.spacing(2, 4),
     justifyContent: 'space-between',
-  },
 
-  editButtons: {
-    display: 'flex',
-
-    '&>:first-child': {
+    button: {
       marginRight: '10px',
     },
   },
+  link: {
+    width: '100%',
+    textDecoration: 'none',
+  },
 }));
 
-export function ProcessingButtons(props: any): JSX.Element {
+export function ProcessingButtons(): JSX.Element {
   const classes = useStyles();
+  const additionalContent = useSelector(selectAdditionalContent);
+  const rootContent = useSelector(selectRootContent);
+  const film = useSelector(selectCurrentFilm);
 
   return (
-    <div className={classes.processingButtons}>
-      <Link className={classes.link} to="/films/add">
-        <Button color="primary" variant="contained">
-          Add film
-        </Button>
-      </Link>
-
-      {props.id ? (
-        <div className={classes.editButtons}>
-          <Button color="secondary" variant="contained">
+    <div className={classes.root}>
+      {rootContent === 'films list' && additionalContent ? (
+        <>
+          <Button color="secondary" variant="contained" fullWidth>
             Remove film
           </Button>
-          <Link className={classes.link} to={`/films/${props.id}/edit`}>
-            <Button color="primary" variant="contained">
+          <Link className={classes.link} to={`/films/${film?.id}/edit`}>
+            <Button color="primary" variant="contained" fullWidth>
               Edit film
             </Button>
           </Link>
-        </div>
+        </>
+      ) : null}
+
+      {rootContent === 'films list' ? (
+        <Link className={classes.link} to="/films/add">
+          <Button color="primary" variant="contained" fullWidth>
+            Add film
+          </Button>
+        </Link>
       ) : null}
     </div>
   );

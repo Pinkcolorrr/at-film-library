@@ -1,33 +1,46 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { Maybe } from 'yup/lib/types';
+
+type rootContent = 'films list' | 'add film' | 'edit film' | 'planets list' | 'characters list' | '';
 
 type currentContent = {
-  rootContent: Maybe<string>;
-  additionalContent: Maybe<string>;
+  rootContent: rootContent;
+  additionalContent: string;
 };
 
 const initialState: currentContent = {
-  rootContent: null,
-  additionalContent: null,
+  rootContent: '',
+  additionalContent: '',
 };
 
 const currentContentSlice = createSlice({
   name: 'currentContent',
   initialState,
   reducers: {
-    setRootContent(state, action) {
+    setRootContent(
+      state,
+      action: {
+        payload: rootContent;
+        type: string;
+      },
+    ) {
       state.rootContent = action.payload;
     },
     clearRootContent(state) {
-      state.rootContent = null;
+      state.rootContent = '';
     },
-    setAdditionalContent(state, action) {
+    setAdditionalContent(
+      state,
+      action: {
+        payload: string;
+        type: string;
+      },
+    ) {
       state.additionalContent = action.payload;
     },
     clearAdditionalContent(state) {
-      state.additionalContent = null;
+      state.additionalContent = '';
     },
   },
 });

@@ -8,6 +8,7 @@ import { PlanetsList } from '../Planets/PlanestsList';
 import { getStringSecondPart } from '../../utils/utils';
 import { AsideTitle } from './AsideTitle';
 import { wrapperStyles } from '../../styles/wrapperStyles';
+import { ProcessingButtons } from '../ProcessingButtons/ProcessingButtons';
 
 const useStyles = makeStyles(() => ({
   asideContent: {
@@ -20,7 +21,6 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     alignItems: 'center',
   },
-  tab: {},
 }));
 
 export function Aside(props: wrapperStyles): JSX.Element {
@@ -39,7 +39,7 @@ export function Aside(props: wrapperStyles): JSX.Element {
     >
       <div className={props.classes.toolbar}>
         <Tabs className={classes.tabs} value={pathname} variant="fullWidth">
-          <Tab className={classes.tab} component={NavLink} label="films" to="/films" value="films" />
+          <Tab component={NavLink} label="films" to="/films" value="films" />
           <Tab component={NavLink} label="planets" to="/planets" value="planets" />
           <Tab component={NavLink} label="characters" to="/characters" value="characters" />
         </Tabs>
@@ -50,11 +50,12 @@ export function Aside(props: wrapperStyles): JSX.Element {
 
       <div className={classes.asideContent}>
         <Switch>
-          <Route component={FilmsList} path="/films" />
+          <Route path="/films" render={() => <FilmsList />} />
           <Route path="/planets" render={() => <PlanetsList />} />
           <Route path="/characters" render={() => <CharactersList />} />
         </Switch>
         <Divider />
+        <ProcessingButtons />
       </div>
     </Drawer>
   );

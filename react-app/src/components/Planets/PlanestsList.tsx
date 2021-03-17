@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CircularProgress, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
+import { CircularProgress, List, ListItem, ListItemText } from '@material-ui/core';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { NavLink, Redirect, useLocation, useRouteMatch } from 'react-router-dom';
@@ -30,7 +30,6 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
   const dispatch = useThunkDispatch();
   const classes = asideListClasses();
   const { url } = useRouteMatch();
-  const location = useLocation();
 
   const currentPlanet = useSelector(selectCurrentPlanet);
   const planets = useSelector(selectAllPlanets);
@@ -49,7 +48,7 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
     dispatch(getInitialPlanets(requestOptions)).then(({ payload }) => {
       props.pushUnsubscriber(payload as Unsubscribe);
     });
-    dispatch(setRootContent('Planets list'));
+    dispatch(setRootContent('planets list'));
   };
 
   const sortBySelectedOption = (selected: number) => {
@@ -109,9 +108,7 @@ function PlanetsListWithSubscription(props: props): JSX.Element {
           {isHaveMoreData ? <CircularProgress /> : <ListItemText primary={endDataMsg} />}
         </ListItem>
       </List>
-      {currentPlanet && !location.pathname.includes('details') ? (
-        <Redirect from="/planets" to={`/planets/${currentPlanet.id}/details`} />
-      ) : null}
+      {currentPlanet ? <Redirect from="/planets" to={`/planets/${currentPlanet.id}/details`} exact /> : null}
     </div>
   );
 }

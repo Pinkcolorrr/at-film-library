@@ -24,7 +24,11 @@ import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
 import { tableRows } from '../../models/TableRows';
 import { getCharactersByPk } from '../../store/Characters/charactersThunks/apiThunks';
-import { clearAdditionalContent, setAdditionalContent } from '../../store/CurrentContent/currentContentSlice';
+import {
+  clearAdditionalContent,
+  setAdditionalContent,
+  setRootContent,
+} from '../../store/CurrentContent/currentContentSlice';
 import { selectCurrentFilm, selectRelatedPlanets, selectRelatedCharacters } from '../../store/Films/filmSelectors';
 import { getFilmById } from '../../store/Films/filmsThunks/apiThunks';
 import { getPlanetsByPk } from '../../store/Planets/planetsThunks/apiThunks';
@@ -62,9 +66,7 @@ export function FilmDetails(props: props): JSX.Element {
   const characters: Character[] = useSelector(selectRelatedCharacters);
 
   useEffect(() => {
-    if (!film || film.id !== id) {
-      dispatch(getFilmById(id));
-    }
+    dispatch(getFilmById(id));
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -72,6 +74,7 @@ export function FilmDetails(props: props): JSX.Element {
       dispatch(getCharactersByPk(film.charactersPk));
       dispatch(getPlanetsByPk(film.planetsPk));
       dispatch(setAdditionalContent(film.title));
+      dispatch(setRootContent('films list'));
     }
     return () => {
       dispatch(clearAdditionalContent());

@@ -13,7 +13,11 @@ import { useSelector } from 'react-redux';
 import { Maybe } from 'yup/lib/types';
 import { Planet } from '../../models/Planet';
 import { tableRows } from '../../models/TableRows';
-import { setAdditionalContent, clearAdditionalContent } from '../../store/CurrentContent/currentContentSlice';
+import {
+  setAdditionalContent,
+  clearAdditionalContent,
+  setRootContent,
+} from '../../store/CurrentContent/currentContentSlice';
 import { selectCurrentPlanet } from '../../store/Planets/planetSelectors';
 import { getPlanetById } from '../../store/Planets/planetsThunks/apiThunks';
 import { useThunkDispatch } from '../../store/store';
@@ -40,6 +44,7 @@ export function PlanetDetails(props: props): JSX.Element {
   useEffect(() => {
     if (planet) {
       dispatch(setAdditionalContent(planet.name));
+      dispatch(setRootContent('planets list'));
     }
     return () => {
       dispatch(clearAdditionalContent());

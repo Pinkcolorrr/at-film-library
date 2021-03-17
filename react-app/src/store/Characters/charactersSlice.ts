@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Maybe } from 'yup/lib/types';
 import { Character } from '../../models/Characters';
 import { RequestOptions } from '../../models/RequestOptions';
-import { getCharacterById, getCharacterByName } from './charactersThunks/apiThunks';
+import { getAllCharacters, getCharacterById, getCharacterByName } from './charactersThunks/apiThunks';
 import {
   pushCharactersInStore,
   removeCharactersFromStore,
@@ -63,6 +63,9 @@ const charactersSlise = createSlice({
         state.isHaveMoreData = false;
         state.endDataMsg = 'All results loaded';
         state.characterList = [action.payload];
+      })
+      .addCase(getAllCharacters.fulfilled, (state, action) => {
+        state.characterList = action.payload;
       })
       .addCase(getCharacterByName.rejected, (state) => {
         state.characterList = [];

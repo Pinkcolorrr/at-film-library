@@ -23,7 +23,7 @@ export interface FilmDTO extends FirebaseDTO {
     /**
      * Film release date
      */
-    readonly release_date: Date;
+    readonly release_date: string;
     /**
      * Film episode Id
      */

@@ -25,7 +25,7 @@ export interface Film {
   /**
    * Film release date
    */
-  readonly releaseDate: Date;
+  readonly releaseDate: string;
 
   /**
    * Film episode Id
