@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { AnyAction, Unsubscribe } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Character } from '../../models/Characters';
+import { Character } from '../../models/Character';
 import { RequestOptions } from '../../models/RequestOptions';
 import {
   pushCharactersInStore,

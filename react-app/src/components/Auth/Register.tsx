@@ -37,57 +37,55 @@ export function Register(): JSX.Element {
       }}
       validationSchema={authSchema}
     >
-      {() => (
-        <Form className={classes.root}>
-          <h3 className={classes.formLabel}>register</h3>
+      <Form className={classes.root}>
+        <h3 className={classes.formLabel}>register</h3>
 
-          <FormGroup className={classes.emailGroup}>
-            <Field name="email">
-              {({ field, meta }: FieldProps) => (
-                <TextField
-                  autoComplete="true"
-                  error={meta.touched && Boolean(meta.error)}
-                  helperText={meta.touched && meta.error}
-                  label="Email"
-                  fullWidth
-                  {...field}
-                />
-              )}
-            </Field>
-          </FormGroup>
+        <FormGroup className={classes.emailGroup}>
+          <Field name="email">
+            {({ field, meta }: FieldProps) => (
+              <TextField
+                autoComplete="true"
+                error={meta.touched && Boolean(meta.error)}
+                helperText={meta.touched && meta.error}
+                label="Email"
+                fullWidth
+                {...field}
+              />
+            )}
+          </Field>
+        </FormGroup>
 
-          <FormGroup className={classes.passwordGroup}>
-            <Field name="password">
-              {({ field, meta }: FieldProps) => (
-                <TextField
-                  autoComplete="true"
-                  error={meta.touched && Boolean(meta.error)}
-                  helperText={meta.touched && meta.error}
-                  label="Password"
-                  type="password"
-                  fullWidth
-                  {...field}
-                />
-              )}
-            </Field>
-          </FormGroup>
+        <FormGroup className={classes.passwordGroup}>
+          <Field name="password">
+            {({ field, meta }: FieldProps) => (
+              <TextField
+                autoComplete="true"
+                error={meta.touched && Boolean(meta.error)}
+                helperText={meta.touched && meta.error}
+                label="Password"
+                type="password"
+                fullWidth
+                {...field}
+              />
+            )}
+          </Field>
+        </FormGroup>
 
-          <FormGroup>
-            <Button color="primary" type="submit" variant="contained">
-              Submit form
-            </Button>
-          </FormGroup>
+        <FormGroup>
+          <Button color="primary" type="submit" variant="contained">
+            Submit form
+          </Button>
+        </FormGroup>
 
-          {errorMsg ? (
-            <Alert className={classes.errorMsg} severity="error">
-              {errorMsg}
-            </Alert>
-          ) : null}
-          <div className={classes.registerText}>
-            Already have an account? <Link to="/login">Login in</Link>
-          </div>
-        </Form>
-      )}
+        {errorMsg ? (
+          <Alert className={classes.errorMsg} severity="error">
+            {errorMsg}
+          </Alert>
+        ) : null}
+        <div className={classes.registerText}>
+          Already have an account? <Link to="/login">Login in</Link>
+        </div>
+      </Form>
     </Formik>
   );
 }

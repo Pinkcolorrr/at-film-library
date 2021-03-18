@@ -1,10 +1,10 @@
-import { Maybe } from 'yup/lib/types';
 import { Planet } from '../../models/Planet';
 import { RequestOptions } from '../../models/RequestOptions';
+import { PossiblyNull } from '../../utils/types';
 import { RootState } from '../rootReducer';
 
 /** Select current planet, saved in store */
-export const selectCurrentPlanet = (state: RootState): Maybe<Planet> => state.planets.currentPlanet.planetInfo;
+export const selectCurrentPlanet = (state: RootState): PossiblyNull<Planet> => state.planets.currentPlanet.planetInfo;
 
 /** Select all planets,that has in store */
 export const selectAllPlanets = (state: RootState): Planet[] => state.planets.planetList;

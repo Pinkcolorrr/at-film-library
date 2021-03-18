@@ -42,6 +42,6 @@ export interface CharacterDTO extends FirebaseDTO {
     readonly skin_color: string;
 
     /** Charater homeworld */
-    readonly homeworld: number;
+    readonly homeworld: string;
   };
 }

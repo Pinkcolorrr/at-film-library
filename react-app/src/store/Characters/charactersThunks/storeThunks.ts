@@ -3,7 +3,7 @@
  *  So every time, when you want to dipatch something from API, you have to use createAsyncThunk and extraReducers
  */
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { Character } from '../../../models/Characters';
+import { Character } from '../../../models/Character';
 
 /** Set information about is there any data left on the server in store */
 export const setIsHaveMoreCharacters: AsyncThunk<boolean, boolean, Record<string, never>> = createAsyncThunk(

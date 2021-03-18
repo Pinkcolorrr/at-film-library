@@ -13,3 +13,5 @@ export function firebaseConverter<T>(): converter<T> {
     fromFirestore: (snap: firebase.firestore.QueryDocumentSnapshot): T => snap.data() as T,
   };
 }
+
+export const fromFirestore = <T>(snap: firebase.firestore.QueryDocumentSnapshot): T => snap.data() as T;

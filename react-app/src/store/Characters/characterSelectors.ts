@@ -1,10 +1,10 @@
-import { Maybe } from 'yup/lib/types';
-import { Character } from '../../models/Characters';
+import { Character } from '../../models/Character';
 import { RequestOptions } from '../../models/RequestOptions';
+import { PossiblyNull } from '../../utils/types';
 import { RootState } from '../rootReducer';
 
 /** Select current character, saved in store */
-export const selectCurrentCharacter = (state: RootState): Maybe<Character> =>
+export const selectCurrentCharacter = (state: RootState): PossiblyNull<Character> =>
   state.characters.currentCharacter.characterInfo;
 
 /** Select all characters,that has in store */

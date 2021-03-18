@@ -3,16 +3,16 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-type rootContent = 'films list' | 'add film' | 'edit film' | 'planets list' | 'characters list' | '';
+type RootContent = 'films list' | 'add film' | 'edit film' | 'planets list' | 'characters list' | '';
 
-type currentContent = {
+interface CurrentContentState {
   /** Root content type, displaying in app */
-  rootContent: rootContent;
+  rootContent: RootContent;
   /** Additional content type, displaying in app */
   additionalContent: string;
-};
+}
 
-const initialState: currentContent = {
+const initialState: CurrentContentState = {
   rootContent: '',
   additionalContent: '',
 };
@@ -26,7 +26,7 @@ const currentContentSlice = createSlice({
     setRootContent(
       state,
       action: {
-        payload: rootContent;
+        payload: RootContent;
         type: string;
       },
     ) {

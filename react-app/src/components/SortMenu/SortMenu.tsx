@@ -2,19 +2,23 @@ import React, { useState } from 'react';
 import { List, ListItem, ListItemText, Menu, MenuItem } from '@material-ui/core';
 import { sortMenuClasses } from './SortMenuStyles';
 
-type props = {
+interface Props {
   /** Menu options */
   options: string[];
   /** Start selected index */
   index: number;
   /** Call function for sorting in parent component */
   sortBySelectedOption(selected: number): void;
-};
+}
 
 /** Menu for select sort option */
-export function SortMenu(props: props): JSX.Element {
+export function SortMenu(props: Props): JSX.Element {
   const classes = sortMenuClasses();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  /**
+   * In case when anchorEl === null menu will be closed
+   * In case when anchorEl === HTMLElement menu will be opened
+   */
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(props.index);
 
   /** Open menu */
@@ -23,7 +27,7 @@ export function SortMenu(props: props): JSX.Element {
   };
 
   /** Set current selected item */
-  const setSelectedItem = (_event: React.MouseEvent<HTMLElement>, index: number) => {
+  const setSelectedItem = (index: number) => {
     setSelectedIndex(index);
     props.sortBySelectedOption(index);
     setAnchorEl(null);
@@ -48,7 +52,7 @@ export function SortMenu(props: props): JSX.Element {
           <MenuItem
             key={option}
             disabled={index === selectedIndex}
-            onClick={(event) => setSelectedItem(event, index)}
+            onClick={() => setSelectedItem(index)}
             selected={index === selectedIndex}
           >
             {option}

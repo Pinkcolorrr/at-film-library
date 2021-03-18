@@ -1,11 +1,11 @@
-import { ThunkDispatch } from '@reduxjs/toolkit';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import { ThunkDispatch } from '@reduxjs/toolkit';
 import { AnyAction, Unsubscribe } from 'redux';
 import { UserAuthData } from '../../models/UserAuthData';
 import { addUserInStore, removeUserFromStore } from '../../store/User/userThunks/storeThunks';
 import { auth } from '../firebase-config';
-import { UserMapper } from '../mappers/userMapper';
+import { UserMapper } from '../mappers/UserMapper';
 
 /** Object for work with user API */
 export const UserApi = {

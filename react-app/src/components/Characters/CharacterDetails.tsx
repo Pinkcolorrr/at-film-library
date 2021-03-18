@@ -10,27 +10,20 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { Maybe } from 'yup/lib/types';
-import { RouteComponentProps } from 'react-router';
-import { Character } from '../../models/Characters';
-import { tableRows } from '../../models/TableRows';
+import { useParams } from 'react-router';
+import { TableRows } from '../../models/TableRows';
 import { selectCurrentCharacter, selectRejectedCharacterMsg } from '../../store/Characters/characterSelectors';
 import { getCharacterById } from '../../store/Characters/charactersThunks/apiThunks';
 import { setAdditionalContent, clearAdditionalContent, setRootContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
 import { detailsPageClasses } from '../../styles/DetailPageStyles';
 
-type props = {
-  /** Character ID */
-  id: string;
-};
-
 /** Displaying table with character information */
-export function CharacterDetails(props: RouteComponentProps<props>): JSX.Element {
-  const { id } = props.match.params;
+export function CharacterDetails(): JSX.Element {
+  const { id } = useParams<{ id: string }>();
   const classes = detailsPageClasses();
   const dispatch = useThunkDispatch();
-  const character: Maybe<Character> = useSelector(selectCurrentCharacter);
+  const character = useSelector(selectCurrentCharacter);
   const rejectedMsg = useSelector(selectRejectedCharacterMsg);
 
   /** Get character if it isn't in the store or store have different character */
@@ -51,9 +44,8 @@ export function CharacterDetails(props: RouteComponentProps<props>): JSX.Element
     };
   }, [character]);
 
-  return character && character.id === id ? (
-    (() => {
-      const rows: tableRows[] = [
+  const rows: TableRows[] = character
+    ? [
         {
           key: 'Name',
           value: character.name,
@@ -77,38 +69,38 @@ export function CharacterDetails(props: RouteComponentProps<props>): JSX.Element
         },
         {
           key: 'Height',
-          value: character.height,
+          value: String(character.height || 'Unknown'),
         },
         {
           key: 'Mass',
-          value: character.mass,
+          value: String(character.mass || 'Unknown'),
         },
         {
           key: 'Skin color',
           value: character.skinColor,
         },
-      ];
-      return (
-        <TableContainer component={Paper} elevation={0}>
-          <Table className={classes.table}>
-            <TableHead className={classes.tableHeaer}>
-              <TableRow>
-                <TableCell className={classes.tableHeaderCell}>Key</TableCell>
-                <TableCell className={classes.tableHeaderCell}>Value</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((item) => (
-                <TableRow key={item.key}>
-                  <TableCell>{item.key}</TableCell>
-                  <TableCell>{item.value}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      );
-    })()
+      ]
+    : [];
+
+  return character && character.id === id ? (
+    <TableContainer component={Paper} elevation={0}>
+      <Table className={classes.table}>
+        <TableHead className={classes.tableHeaer}>
+          <TableRow>
+            <TableCell className={classes.tableHeaderCell}>Key</TableCell>
+            <TableCell className={classes.tableHeaderCell}>Value</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((item) => (
+            <TableRow key={item.key}>
+              <TableCell>{item.key}</TableCell>
+              <TableCell>{item.value}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   ) : (
     <div>{rejectedMsg || <CircularProgress />}</div>
   );

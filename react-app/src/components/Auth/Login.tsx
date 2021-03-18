@@ -77,11 +77,11 @@ export function Login(): JSX.Element {
           </Button>
         </FormGroup>
 
-        {errorMsg ? (
+        {Boolean(errorMsg) && (
           <Alert className={classes.errorMsg} severity="error">
             {errorMsg}
           </Alert>
-        ) : null}
+        )}
         <div className={classes.registerText}>
           Don&apos;t have an account yet? <Link to="/register">Register</Link>
         </div>

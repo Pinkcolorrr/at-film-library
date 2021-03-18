@@ -2,25 +2,25 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { Maybe } from 'yup/lib/types';
 import { UserInfo } from '../../models/UserInfo';
+import { PossiblyNull } from '../../utils/types';
 import { signInByEmailAndPassword, registerByEmailAndPassword } from './userThunks/apiThunks';
 import { addUserInStore, removeUserFromStore } from './userThunks/storeThunks';
 
-export type user = {
+interface UserState {
   /** Information about user */
-  readonly info: Maybe<UserInfo>;
+  readonly info: PossiblyNull<UserInfo>;
   /** Errors from server during authorization */
-  readonly errorMsg: Maybe<string>;
+  readonly errorMsg?: string;
   /** User login state */
   readonly logged: boolean;
   /** Is user pending */
   readonly isPending: boolean;
-};
+}
 
-const initialState: user = {
+const initialState: UserState = {
   info: null,
-  errorMsg: null,
+  errorMsg: '',
   logged: false,
   isPending: true,
 };
@@ -34,7 +34,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     removeErrorMsg(state) {
-      state.errorMsg = null;
+      state.errorMsg = '';
     },
   },
   extraReducers: (builder) => {

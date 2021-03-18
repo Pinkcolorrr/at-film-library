@@ -11,18 +11,18 @@ export const PlanetMapper = {
   /** Remove useless data from planetDTO object */
   transformResponse(planet: PlanetDTO, planetId: string): Planet {
     return {
-      climate: planet.fields.climate || 'Unknown',
-      created: new Date(planet.fields.created),
-      diameter: planet.fields.diameter || 'Unknown',
-      gravity: planet.fields.gravity || 'Unknown',
-      name: planet.fields.name || 'Unknown',
-      orbitalPeriod: planet.fields.orbital_period || 'Unknown',
-      population: planet.fields.population || 'Unknown',
-      rotationPeriod: planet.fields.rotation_period || 'Unknown',
-      surfaceWater: planet.fields.surface_water || 'Unknown',
-      terrain: planet.fields.terrain || 'Unknown',
       pk: String(planet.pk),
       id: planetId,
+      name: planet.fields.name,
+      surfaceWater: planet.fields.surface_water,
+      terrain: planet.fields.terrain,
+      climate: planet.fields.climate,
+      created: new Date(planet.fields.created),
+      gravity: planet.fields.gravity,
+      diameter: Number.isNaN(planet.fields.diameter) ? undefined : Number(planet.fields.diameter),
+      orbitalPeriod: Number.isNaN(planet.fields.orbital_period) ? undefined : Number(planet.fields.orbital_period),
+      population: Number.isNaN(planet.fields.population) ? undefined : Number(planet.fields.population),
+      rotationPeriod: Number.isNaN(planet.fields.rotation_period) ? undefined : Number(planet.fields.rotation_period),
     };
   },
 };

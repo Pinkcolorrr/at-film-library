@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Film } from '../../models/Film';
 import { FilmDTO } from '../dtos/FilmDto';
 
@@ -11,12 +12,12 @@ export const FilmMapper = {
   /** Remove useless data from filmDTO object */
   transformResponse(film: FilmDTO, filmID: string): Film {
     return {
-      title: film.fields.title || 'Unknown',
-      episodeId: film.fields.episode_id || NaN,
-      releaseDate: film.fields.release_date,
-      director: film.fields.director || 'Unknown',
-      producer: film.fields.producer || 'Unknown',
-      openingCrawl: film.fields.opening_crawl || 'Unknown',
+      title: film.fields.title,
+      episodeId: film.fields.episode_id,
+      releaseDate: moment(film.fields.release_date).toDate(),
+      director: film.fields.director,
+      producer: film.fields.producer,
+      openingCrawl: film.fields.opening_crawl,
       created: new Date(film.fields.created),
       planetsPk: film.fields.planets.map((item) => String(item)),
       charactersPk: film.fields.characters.map((item) => String(item)),
@@ -34,11 +35,11 @@ export const FilmMapper = {
       fields: {
         title: film.title,
         episode_id: film.episodeId,
-        release_date: film.releaseDate,
-        director: film.director,
-        producer: film.producer,
-        opening_crawl: film.openingCrawl,
-        created: new Date(film.created).toISOString(),
+        release_date: moment(film.releaseDate).format('YYYY-MM-DD'),
+        director: film.director || 'Unknown',
+        producer: film.producer || 'Unknown',
+        opening_crawl: film.openingCrawl || 'Unknown',
+        created: film.created.toISOString(),
         edited: new Date().toISOString(),
         planets: film.planetsPk,
         characters: film.charactersPk,

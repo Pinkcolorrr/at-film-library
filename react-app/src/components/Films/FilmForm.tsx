@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
-import { getNamesByPk } from '../../utils/utils';
-import { Character } from '../../models/Characters';
+import { getNamesByPk, getPkByNames } from '../../utils/utils';
+import { Character } from '../../models/Character';
 import { useThunkDispatch } from '../../store/store';
 import { selectAllPlanets } from '../../store/Planets/planetSelectors';
 import { getAllPlanets } from '../../store/Planets/planetsThunks/apiThunks';
@@ -19,16 +19,18 @@ import { addFilmInDb, editFilmIdDb } from '../../store/Films/filmsThunks/apiThun
 import { filmFormStyles } from './FilmFormStyles';
 import { filmSchema } from '../../utils/validateSchemas';
 
-type props = {
+interface FormData {
+  title: string;
+  episodeId: string;
+  releaseDate: string;
+  director: string;
+  producer: string;
+  openingCrawl: string;
+}
+
+interface Props {
   /** Initial form data */
-  initData: {
-    title: string;
-    episodeId: string;
-    releaseDate: string;
-    director: string;
-    producer: string;
-    openingCrawl: string;
-  };
+  initData: FormData;
   /** Film id, if forType is edit */
   filmId?: string;
   /** Type of form */
@@ -37,10 +39,10 @@ type props = {
   selectedPlanetsPk: string[];
   /** List of related characters keys */
   selectedCharactersPk: string[];
-};
+}
 
 /** Form for proccesing film */
-export function FilmForm(props: props): JSX.Element {
+export function FilmForm(props: Props): JSX.Element {
   const classes = filmFormStyles();
   const dispatch = useThunkDispatch();
 
@@ -60,27 +62,13 @@ export function FilmForm(props: props): JSX.Element {
   }, []);
 
   /** Set checked planets PK in array */
-  const getCheckedPlanets = (value: string[]) => {
-    checkedPlanetsPk = [];
-    planetsList.forEach((planet) => {
-      value.forEach((item) => {
-        if (planet.name === item) {
-          checkedPlanetsPk.push(planet.pk);
-        }
-      });
-    });
+  const getCheckedPlanets = (values: string[]) => {
+    checkedPlanetsPk = getPkByNames<Planet>(planetsList, values);
   };
 
   /** Set checked charactgers PK in array */
-  const getCheckedCharacters = (value: string[]) => {
-    checkedCharactersPk = [];
-    charactersList.forEach((character) => {
-      value.forEach((item) => {
-        if (character.name === item) {
-          checkedCharactersPk.push(character.pk);
-        }
-      });
-    });
+  const getCheckedCharacters = (values: string[]) => {
+    checkedCharactersPk = getPkByNames<Character>(charactersList, values);
   };
 
   /** Set dirty, if check list was touched */
@@ -88,34 +76,33 @@ export function FilmForm(props: props): JSX.Element {
     setCanDeactivate(false);
   };
 
+  const handleSubmit = (values: FormData) => {
+    const film: Film = {
+      title: values.title,
+      releaseDate: new Date(values.releaseDate),
+      episodeId: Number(values.episodeId),
+      director: values.director,
+      producer: values.producer,
+      openingCrawl: values.openingCrawl,
+      created: new Date(),
+      planetsPk: checkedPlanetsPk,
+      charactersPk: checkedCharactersPk,
+      speciesPk: [],
+      starshipsPk: [],
+      vehiclesPk: [],
+      pk: uuidv4(),
+      id: props.filmId || '',
+    };
+
+    dispatch(props.formType === 'add' ? addFilmInDb(film) : editFilmIdDb(film)).then(() => {
+      setCanDeactivate(true);
+      setRedirect(true);
+    });
+  };
+
   return (
     <Paper className={classes.root} elevation={0}>
-      <Formik
-        initialValues={props.initData}
-        onSubmit={(values) => {
-          const film: Film = {
-            title: values.title,
-            releaseDate: values.releaseDate,
-            episodeId: Number(values.episodeId),
-            director: values.director,
-            producer: values.producer,
-            openingCrawl: values.openingCrawl,
-            created: new Date(),
-            planetsPk: checkedPlanetsPk,
-            charactersPk: checkedCharactersPk,
-            speciesPk: [],
-            starshipsPk: [],
-            vehiclesPk: [],
-            pk: uuidv4(),
-            id: props.filmId || '',
-          };
-          dispatch(props.formType === 'add' ? addFilmInDb(film) : editFilmIdDb(film)).then(() => {
-            setCanDeactivate(true);
-            setRedirect(true);
-          });
-        }}
-        validationSchema={filmSchema}
-      >
+      <Formik initialValues={props.initData} onSubmit={handleSubmit} validationSchema={filmSchema}>
         <Form
           onChange={() => {
             setCanDeactivate(false);

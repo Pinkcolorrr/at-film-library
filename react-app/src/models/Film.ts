@@ -13,7 +13,7 @@ export interface Film {
   readonly director: string;
 
   /** Film release date */
-  readonly releaseDate: string;
+  readonly releaseDate: Date;
 
   /** Film episode Id */
   readonly episodeId: number;

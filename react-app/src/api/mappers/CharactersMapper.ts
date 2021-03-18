@@ -1,4 +1,4 @@
-import { Character } from '../../models/Characters';
+import { Character } from '../../models/Character';
 import { CharacterDTO } from '../dtos/CharactersDto';
 
 /** Mapping character data before send or accept */
@@ -11,19 +11,19 @@ export const CharacterMapper = {
   /** Remove useless data from characterDTO */
   transformResponse(character: CharacterDTO, characterId: string): Character {
     return {
-      birthYear: character.fields.birth_year,
       created: new Date(character.fields.created),
-      eyeColor: character.fields.eye_color,
-      gender: character.fields.gender,
-      hairColor: character.fields.hair_color,
-      height: character.fields.height,
-      homeworld: character.fields.homeworld,
-      image: character.fields.image,
-      mass: character.fields.mass,
-      name: character.fields.name,
-      skinColor: character.fields.skin_color,
       pk: String(character.pk),
       id: characterId,
+      birthYear: character.fields.birth_year,
+      eyeColor: character.fields.eye_color,
+      name: character.fields.name,
+      gender: character.fields.gender,
+      hairColor: character.fields.hair_color,
+      height: Number.isNaN(character.fields.height) ? undefined : Number(character.fields.height),
+      mass: Number.isNaN(character.fields.mass) ? undefined : Number(character.fields.mass),
+      homeworld: character.fields.homeworld,
+      image: character.fields.image,
+      skinColor: character.fields.skin_color,
     };
   },
 };

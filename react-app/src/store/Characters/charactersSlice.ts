@@ -2,8 +2,7 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { Maybe } from 'yup/lib/types';
-import { Character } from '../../models/Characters';
+import { Character } from '../../models/Character';
 import { RequestOptions } from '../../models/RequestOptions';
 import {
   pushCharactersInStore,
@@ -12,9 +11,11 @@ import {
   setIsHaveMoreCharacters,
   setLastCharacterId,
 } from './charactersThunks/storeThunks';
+// eslint-disable-next-line import/no-cycle
 import { getAllCharacters, getCharacterById, getCharacterByName } from './charactersThunks/apiThunks';
+import { PossiblyNull } from '../../utils/types';
 
-type characters = {
+interface CharactersState {
   /** List of all loaded characters */
   characterList: Character[];
   /** Current character */
@@ -22,7 +23,7 @@ type characters = {
     /** Msg if failed to get character */
     rejectedMsg: string;
     /** Information about character */
-    characterInfo: Maybe<Character>;
+    characterInfo: PossiblyNull<Character>;
   };
   /** Id of last loaded character */
   lastDocId: string;
@@ -32,9 +33,9 @@ type characters = {
   isHaveMoreData: boolean;
   /** Msg, that will display, when user hit the bottom of data */
   endDataMsg: string;
-};
+}
 
-const initialState: characters = {
+const initialState: CharactersState = {
   characterList: [],
   currentCharacter: {
     rejectedMsg: '',

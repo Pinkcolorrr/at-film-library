@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-type props = {
+interface Props {
   /** Accordion title */
   title: string;
   /** Array with all list options */
@@ -33,12 +33,12 @@ type props = {
   setDirty?(): void;
   /** Get all checked values */
   getCheckedValues(value: string[]): void;
-};
+}
 
 /** Unite accordion and check list from react-ui in one component */
-export function AccordionCheckList(props: props): JSX.Element {
+export function AccordionCheckList(props: Props): JSX.Element {
   const classes = useStyles();
-  const [checked, setChecked] = useState([] as string[]);
+  const [checked, setChecked] = useState<string[]>([]);
 
   /**
    * Handler for check list states
@@ -70,30 +70,29 @@ export function AccordionCheckList(props: props): JSX.Element {
     setChecked(props.selected);
   }, [props.selected]);
 
+  const listItems = props.listOptions.map((value: string) => {
+    const labelId = `checkbox-list-label-${value}`;
+    return (
+      <ListItem key={value} onClick={handleToggle(value)} role={undefined} button dense>
+        <ListItemIcon>
+          <Checkbox
+            checked={checked.indexOf(value) !== -1}
+            edge="start"
+            inputProps={{ 'aria-labelledby': labelId }}
+            tabIndex={-1}
+            disableRipple
+          />
+        </ListItemIcon>
+        <ListItemText id={labelId} primary={value} />
+      </ListItem>
+    );
+  });
+
   return (
     <Accordion>
       <AccordionSummary>{props.title}</AccordionSummary>
       <AccordionDetails>
-        <List className={classes.root}>
-          {props.listOptions.map((value: string) => {
-            const labelId = `checkbox-list-label-${value}`;
-
-            return (
-              <ListItem key={value} onClick={handleToggle(value)} role={undefined} button dense>
-                <ListItemIcon>
-                  <Checkbox
-                    checked={checked.indexOf(value) !== -1}
-                    edge="start"
-                    inputProps={{ 'aria-labelledby': labelId }}
-                    tabIndex={-1}
-                    disableRipple
-                  />
-                </ListItemIcon>
-                <ListItemText id={labelId} primary={value} />
-              </ListItem>
-            );
-          })}
-        </List>
+        <List className={classes.root}>{listItems}</List>
       </AccordionDetails>
     </Accordion>
   );

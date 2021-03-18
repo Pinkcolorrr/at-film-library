@@ -30,13 +30,13 @@ export function ProcessingButtons(): JSX.Element {
 
   return (
     <div className={classes.root}>
-      {rootContent === 'films list' && additionalContent ? (
+      {rootContent === 'films list' && additionalContent && (
         <>
           <ConfirmDialog
-            agreeAction={removeFilm}
             buttonText="Remove film"
             dialogText={`Are you sure you want to remove ${film?.title}`}
             dialogTitle="Remove film?"
+            onAgreeAction={removeFilm}
           />
 
           <Link className={classes.link} to={`/films/${film?.id}/edit`}>
@@ -45,14 +45,14 @@ export function ProcessingButtons(): JSX.Element {
             </Button>
           </Link>
         </>
-      ) : null}
-      {rootContent === 'films list' ? (
+      )}
+      {rootContent === 'films list' && (
         <Link className={classes.link} to="/films/add">
           <Button color="primary" variant="contained" fullWidth>
             Add film
           </Button>
         </Link>
-      ) : null}
+      )}
       {redirect ? <Redirect to="/films" exact /> : null}
     </div>
   );

@@ -2,7 +2,6 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { Maybe } from 'yup/lib/types';
 import { Planet } from '../../models/Planet';
 import { RequestOptions } from '../../models/RequestOptions';
 import {
@@ -13,8 +12,9 @@ import {
   setLastPlanetId,
 } from './planetsThunks/storeThunks';
 import { getAllPlanets, getPlanetById, getPlanetByName } from './planetsThunks/apiThunks';
+import { PossiblyNull } from '../../utils/types';
 
-type planets = {
+interface PlanetsState {
   /** List of all loaded planets */
   planetList: Planet[];
   /** Current planet */
@@ -22,7 +22,7 @@ type planets = {
     /** Msg if failed to get planet */
     rejectedMsg: string;
     /** Information about planet */
-    planetInfo: Maybe<Planet>;
+    planetInfo: PossiblyNull<Planet>;
   };
   /** Id of last loaded planet */
   lastDocId: string;
@@ -32,9 +32,9 @@ type planets = {
   isHaveMoreData: boolean;
   /** Msg, that will display, when user hit the bottom of data */
   endDataMsg: string;
-};
+}
 
-const initialState: planets = {
+const initialState: PlanetsState = {
   planetList: [],
   currentPlanet: {
     rejectedMsg: '',

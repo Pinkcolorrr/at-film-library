@@ -1,4 +1,4 @@
-import { Maybe } from 'yup/lib/types';
+import { PossiblyNull } from '../../utils/types';
 import { RootState } from '../rootReducer';
 
 /**
@@ -9,10 +9,10 @@ import { RootState } from '../rootReducer';
 export const selectAuthState = (state: RootState): boolean => state.user.logged;
 
 /** Select error msg from server */
-export const selectErrorMsg = (state: RootState): Maybe<string> => state.user.errorMsg;
+export const selectErrorMsg = (state: RootState): PossiblyNull<string> | undefined => state.user.errorMsg;
 
 /** Select user email */
-export const selectUserEmail = (state: RootState): Maybe<string> => state.user.info?.email;
+export const selectUserEmail = (state: RootState): PossiblyNull<string> | undefined => state.user.info?.email;
 
 /** Select is pending state */
 export const selectIsUserPending = (state: RootState): boolean => state.user.isPending;

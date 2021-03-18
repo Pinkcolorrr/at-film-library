@@ -5,7 +5,7 @@ import { Redirect, useRouteMatch } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { Unsubscribe } from 'redux';
 import { withSubscription } from '../../hocs/withSubscription';
-import { Character } from '../../models/Characters';
+import { Character } from '../../models/Character';
 import { clearCharactersList, setCharactersSortTarget } from '../../store/Characters';
 import {
   selectAllCharacters,
@@ -25,17 +25,17 @@ import { asideListClasses } from '../../styles/AsideListStyles';
 import { SearchForm } from '../SearchForm/SearchForm';
 import { SortMenu } from '../SortMenu/SortMenu';
 
-type props = {
+interface Props {
   /** Push unsubscribe function in array */
   pushUnsubscriber(unsubscribe: Unsubscribe): void;
   /** Call all unsubscribe functions */
   unsubscribeAll(): void;
   /** Clear unsubscribe array */
   clearUnsubscribers(): void;
-};
+}
 
 /** List of characters */
-function CharactersListWithSubscription(props: props): JSX.Element {
+function CharactersListWithSubscription(props: Props): JSX.Element {
   const dispatch = useThunkDispatch();
   const classes = asideListClasses();
   const { url } = useRouteMatch();

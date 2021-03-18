@@ -6,7 +6,7 @@ import { UserInfo } from '../../models/UserInfo';
 export const UserMapper = {
   transformResponse(user: firebase.User): UserInfo {
     return {
-      email: user.email,
+      email: user.email || undefined,
     };
   },
 };

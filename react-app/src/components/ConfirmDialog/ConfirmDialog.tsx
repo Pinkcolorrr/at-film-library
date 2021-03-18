@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-type props = {
+interface Props {
   /** Open dialog button text */
   buttonText: string;
   /** Title of dialog */
@@ -14,10 +14,10 @@ type props = {
   /** Body text of dialog */
   dialogText: string;
   /** Function, that will be call after click agree button */
-  agreeAction(): void;
-};
+  onAgreeAction(): void;
+}
 
-export function ConfirmDialog(props: props): JSX.Element {
+export function ConfirmDialog(props: Props): JSX.Element {
   const [open, setOpen] = useState(false);
 
   /** Open dialog */
@@ -48,7 +48,7 @@ export function ConfirmDialog(props: props): JSX.Element {
             color="primary"
             onClick={() => {
               handleClose();
-              props.agreeAction();
+              props.onAgreeAction();
             }}
             autoFocus
           >

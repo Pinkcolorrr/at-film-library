@@ -2,21 +2,21 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { Maybe } from 'yup/lib/types';
-import { Character } from '../../models/Characters';
+import { Character } from '../../models/Character';
 import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
 import { getFilmById } from './filmsThunks/apiThunks';
 import { addFilmsInStore } from './filmsThunks/storeThunks';
 import { getPlanetsByPk } from '../Planets/planetsThunks/apiThunks';
 import { getCharactersByPk } from '../Characters/charactersThunks/apiThunks';
+import { PossiblyNull } from '../../utils/types';
 
-export type films = {
+interface FilmsState {
   /** List of all loaded films */
   filmsList: Film[];
   currentFilm: {
     /** Information about planet */
-    filmInfo: Maybe<Film>;
+    filmInfo: PossiblyNull<Film>;
     /** Msg if failed to get movie */
     rejectedMsg: string;
     /** Data, that relate with film */
@@ -27,9 +27,9 @@ export type films = {
       characters: Character[];
     };
   };
-};
+}
 
-const initialState: films = {
+const initialState: FilmsState = {
   filmsList: [],
   currentFilm: {
     filmInfo: null,

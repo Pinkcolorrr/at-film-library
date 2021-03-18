@@ -1,5 +1,5 @@
 /** Вescribes rows in films/planets/characters tables */
-export interface tableRows {
+export interface TableRows {
   /** Key of row */
   readonly key: string;
 

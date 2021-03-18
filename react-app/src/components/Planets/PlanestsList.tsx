@@ -20,14 +20,14 @@ import {
 } from '../../store/Planets/planetSelectors';
 import { asideListClasses } from '../../styles/AsideListStyles';
 
-type props = {
+interface Props {
   pushUnsubscriber(unsubscribe: Unsubscribe): void;
   unsubscribeAll(): void;
   clearUnsubscribers(): void;
-};
+}
 
 /** List of planets */
-function PlanetsListWithSubscription(props: props): JSX.Element {
+function PlanetsListWithSubscription(props: Props): JSX.Element {
   const dispatch = useThunkDispatch();
   const classes = asideListClasses();
   const { url } = useRouteMatch();

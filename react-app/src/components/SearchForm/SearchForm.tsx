@@ -3,15 +3,15 @@ import { IconButton, TextField } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 import { searchFormStyles } from './SearchFormStyles';
 
-type props = {
+interface Props {
   /** Call function for searching in parent component */
   getItemByName(name: string): void;
   /** Call function for getting initial items in parent component */
   getInitialItems(): void;
-};
+}
 
 /** Form for searching items */
-export function SearchForm(props: props): JSX.Element {
+export function SearchForm(props: Props): JSX.Element {
   const classes = searchFormStyles();
   const [searchValue, setSearchValue] = useState('');
 

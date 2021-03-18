@@ -1,7 +1,7 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { Unsubscribe } from 'redux';
 import { RequestOptionsMapper } from '../../../api/mappers/RequestOptionsMapper';
-import { Character } from '../../../models/Characters';
+import { Character } from '../../../models/Character';
 import { RequestOptions } from '../../../models/RequestOptions';
 import { setIsHaveMoreCharacters } from './storeThunks';
 import { CharacterAPI } from '../../../api/services/CharacterAPI';

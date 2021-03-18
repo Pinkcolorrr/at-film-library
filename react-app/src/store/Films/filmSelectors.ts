@@ -1,11 +1,11 @@
-import { Maybe } from 'yup/lib/types';
-import { Character } from '../../models/Characters';
+import { Character } from '../../models/Character';
 import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
+import { PossiblyNull } from '../../utils/types';
 import { RootState } from '../rootReducer';
 
 /** Select current film */
-export const selectCurrentFilm = (state: RootState): Maybe<Film> => state.films.currentFilm.filmInfo;
+export const selectCurrentFilm = (state: RootState): PossiblyNull<Film> => state.films.currentFilm.filmInfo;
 
 /** Select all loaded films */
 export const selectAllFilms = (state: RootState): Film[] => state.films.filmsList;

@@ -1,20 +1,17 @@
 import React, { useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router';
+import moment from 'moment';
 import { selectCurrentFilm } from '../../store/Films/filmSelectors';
 import { getFilmById } from '../../store/Films/filmsThunks/apiThunks';
 import { useThunkDispatch } from '../../store/store';
 import { FilmForm } from './FilmForm';
 import { setAdditionalContent, setRootContent } from '../../store/CurrentContent';
 
-type props = {
-  /** Film ID */
-  id: string;
-};
 /** Component for editing films */
-export function FilmEditing(props: RouteComponentProps<props>): JSX.Element {
-  const { id } = props.match.params;
+export function FilmEditing(): JSX.Element {
+  const { id } = useParams<{ id: string }>();
   const film = useSelector(selectCurrentFilm);
   const dispatch = useThunkDispatch();
 
@@ -34,7 +31,7 @@ export function FilmEditing(props: RouteComponentProps<props>): JSX.Element {
       initData={{
         title: film.title,
         episodeId: String(film.episodeId),
-        releaseDate: film.releaseDate,
+        releaseDate: moment(film.releaseDate).format('YYYY-MM-DD'),
         director: film.director,
         producer: film.producer,
         openingCrawl: film.openingCrawl,
