@@ -1,4 +1,5 @@
 import { Planet } from '../../models/Planet';
+import { getNumberFromString } from '../../utils/utils';
 import { PlanetDTO } from '../dtos/PlanetDto';
 
 /**  Mapping planet data before send or accept */
@@ -19,10 +20,10 @@ export const PlanetMapper = {
       climate: planet.fields.climate,
       created: new Date(planet.fields.created),
       gravity: planet.fields.gravity,
-      diameter: Number.isNaN(planet.fields.diameter) ? undefined : Number(planet.fields.diameter),
-      orbitalPeriod: Number.isNaN(planet.fields.orbital_period) ? undefined : Number(planet.fields.orbital_period),
-      population: Number.isNaN(planet.fields.population) ? undefined : Number(planet.fields.population),
-      rotationPeriod: Number.isNaN(planet.fields.rotation_period) ? undefined : Number(planet.fields.rotation_period),
+      diameter: getNumberFromString(planet.fields.diameter),
+      orbitalPeriod: getNumberFromString(planet.fields.orbital_period),
+      population: getNumberFromString(planet.fields.population),
+      rotationPeriod: getNumberFromString(planet.fields.rotation_period),
     };
   },
 };

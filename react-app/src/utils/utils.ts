@@ -32,3 +32,7 @@ export const getNamesByPk = <T extends { pk: string; name: string }>(dataList: T
  */
 export const getPkByNames = <T extends { name: string; pk: string }>(dataList: T[], nameList: string[]): string[] =>
   dataList.filter((data) => nameList.includes(data.name)).map((d) => d.pk);
+
+/** Convert string to number, but if conversion is not possible, returned undefined instead NaN */
+export const getNumberFromString = (string: string): number | undefined =>
+  Number.isNaN(string) ? undefined : Number(string);

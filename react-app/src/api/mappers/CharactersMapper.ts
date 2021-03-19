@@ -1,4 +1,5 @@
 import { Character } from '../../models/Character';
+import { getNumberFromString } from '../../utils/utils';
 import { CharacterDTO } from '../dtos/CharactersDto';
 
 /** Mapping character data before send or accept */
@@ -19,8 +20,8 @@ export const CharacterMapper = {
       name: character.fields.name,
       gender: character.fields.gender,
       hairColor: character.fields.hair_color,
-      height: Number.isNaN(character.fields.height) ? undefined : Number(character.fields.height),
-      mass: Number.isNaN(character.fields.mass) ? undefined : Number(character.fields.mass),
+      height: getNumberFromString(character.fields.height),
+      mass: getNumberFromString(character.fields.mass),
       homeworld: character.fields.homeworld,
       image: character.fields.image,
       skinColor: character.fields.skin_color,

@@ -22,7 +22,10 @@ export interface Character {
   /** Charater eye color */
   readonly eyeColor: string;
 
-  /** Charater gender */
+  /**
+   * Charater gender.
+   * Type string uses here because we can't predict all genders from star wars.
+   */
   readonly gender: string;
 
   /** Charater hair color */

@@ -39,7 +39,6 @@ export function Login(): JSX.Element {
     >
       <Form className={classes.root}>
         <h3 className={classes.formLabel}>Login</h3>
-
         <FormGroup className={classes.emailGroup}>
           <Field name="email">
             {({ field, meta }: FieldProps) => (
@@ -54,7 +53,6 @@ export function Login(): JSX.Element {
             )}
           </Field>
         </FormGroup>
-
         <FormGroup className={classes.passwordGroup}>
           <Field name="password">
             {({ field, meta }: FieldProps) => (
@@ -70,14 +68,12 @@ export function Login(): JSX.Element {
             )}
           </Field>
         </FormGroup>
-
         <FormGroup>
           <Button color="primary" type="submit" variant="contained">
             Submit form
           </Button>
         </FormGroup>
-
-        {Boolean(errorMsg) && (
+        {errorMsg && (
           <Alert className={classes.errorMsg} severity="error">
             {errorMsg}
           </Alert>

@@ -77,11 +77,11 @@ export function Register(): JSX.Element {
           </Button>
         </FormGroup>
 
-        {errorMsg ? (
+        {errorMsg && (
           <Alert className={classes.errorMsg} severity="error">
             {errorMsg}
           </Alert>
-        ) : null}
+        )}
         <div className={classes.registerText}>
           Already have an account? <Link to="/login">Login in</Link>
         </div>
