@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { TableRows } from '../../models/TableRows';
 import { selectCurrentCharacter, selectRejectedCharacterMsg } from '../../store/Characters/characterSelectors';
-import { getCharacterById } from '../../store/Characters/charactersThunks/apiThunks';
+import { getCharacterById } from '../../store/Characters/charactersThunks/combinedThunks';
 import { setAdditionalContent, clearAdditionalContent, setRootContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
 import { detailsPageClasses } from '../../styles/DetailPageStyles';

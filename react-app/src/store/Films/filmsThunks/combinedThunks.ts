@@ -1,3 +1,7 @@
+/**
+ * Thunks, that add data to the store from API functions, that can return a value after fulfilled promise.
+ */
+
 import { AsyncThunk, createAsyncThunk, Unsubscribe } from '@reduxjs/toolkit';
 import { FilmMapper } from '../../../api/mappers/FilmMapper';
 import { FilmAPI } from '../../../api/services/FilmAPI';

@@ -14,11 +14,8 @@ import {
   selectIsHaveMoreCharacters,
   selectLastCharactersMsg,
 } from '../../store/Characters/characterSelectors';
-import {
-  getCharacterByName,
-  getInitialCharacters,
-  getNextCharacters,
-} from '../../store/Characters/charactersThunks/apiThunks';
+import { getCharacterByName } from '../../store/Characters/charactersThunks/combinedThunks';
+import { getInitialCharacters, getNextCharacters } from '../../store/Characters/charactersThunks/apiThunks';
 import { clearRootContent, setRootContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
 import { asideListClasses } from '../../styles/AsideListStyles';

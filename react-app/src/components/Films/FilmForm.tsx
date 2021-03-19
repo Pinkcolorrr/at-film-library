@@ -11,13 +11,13 @@ import { getNamesByPk, getPkByNames } from '../../utils/utils';
 import { Character } from '../../models/Character';
 import { useThunkDispatch } from '../../store/store';
 import { selectAllPlanets } from '../../store/Planets/planetSelectors';
-import { getAllPlanets } from '../../store/Planets/planetsThunks/apiThunks';
 import { AccordionCheckList } from '../AccordionCheckList/AccordionCheckList';
 import { selectAllCharacters } from '../../store/Characters/characterSelectors';
-import { getAllCharacters } from '../../store/Characters/charactersThunks/apiThunks';
-import { addFilmInDb, editFilmIdDb } from '../../store/Films/filmsThunks/apiThunks';
+import { addFilmInDb, editFilmIdDb } from '../../store/Films/filmsThunks/combinedThunks';
 import { filmFormStyles } from './FilmFormStyles';
 import { filmSchema } from '../../utils/validateSchemas';
+import { getAllCharacters } from '../../store/Characters/charactersThunks/combinedThunks';
+import { getAllPlanets } from '../../store/Planets/planetsThunks/combinedThunks';
 
 interface FormData {
   title: string;

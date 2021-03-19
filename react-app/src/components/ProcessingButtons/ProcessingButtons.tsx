@@ -7,7 +7,7 @@ import { selectCurrentFilm } from '../../store/Films/filmSelectors';
 import { processingButtonsStyles } from './ProcessingButtonsStyles';
 import { useThunkDispatch } from '../../store/store';
 import { ConfirmDialog } from '../ConfirmDialog/ConfirmDialog';
-import { removeFilmFromDb } from '../../store/Films/filmsThunks/apiThunks';
+import { removeFilmFromDb } from '../../store/Films/filmsThunks/combinedThunks';
 
 /** Buttons for control navigation under films processing pages  */
 export function ProcessingButtons(): JSX.Element {

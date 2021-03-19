@@ -1,6 +1,24 @@
-import { AsyncThunk, createAsyncThunk, Unsubscribe } from '@reduxjs/toolkit';
+/**
+ * Thunks, that call API functions, that can't return value right after the calling.
+ * For example, this thunks call observers functions.
+ *
+ * 'API' and 'combined' thunks was divided to avoid cyclic dependencies.
+ */
+
+import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { Unsubscribe } from 'redux';
 import { UserApi } from '../../../api/services/UserAPI';
 import { UserAuthData } from '../../../models/UserAuthData';
+
+/**
+ * Subscribe for user update
+ * If user is logged in, API will call "addUserInStore" thunk
+ * If user is logged out, API will call "removeUserFromStore" thunk
+ */
+export const observeUser: AsyncThunk<Unsubscribe, void, Record<string, never>> = createAsyncThunk(
+  'user/observeUser',
+  async (_: void, thunkAPI): Promise<Unsubscribe> => UserApi.observeUser(thunkAPI.dispatch),
+);
 
 /** Thunk for login user in system */
 export const signInByEmailAndPassword: AsyncThunk<void, UserAuthData, Record<string, never>> = createAsyncThunk(
@@ -24,14 +42,4 @@ export const signOut: AsyncThunk<void, void, Record<string, never>> = createAsyn
   async (): Promise<void> => {
     await UserApi.signOut();
   },
-);
-
-/**
- * Subscribe for user update
- * If user is logged in, API will call "addUserInStore" thunk
- * If user is logged out, API will call "removeUserFromStore" thunk
- */
-export const observeUser: AsyncThunk<Unsubscribe, void, Record<string, never>> = createAsyncThunk(
-  'user/observeUser',
-  async (_: void, thunkAPI): Promise<Unsubscribe> => UserApi.observeUser(thunkAPI.dispatch),
 );

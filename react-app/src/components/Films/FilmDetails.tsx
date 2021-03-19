@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { TableRows } from '../../models/TableRows';
-import { getCharactersByPk } from '../../store/Characters/charactersThunks/apiThunks';
+import { getCharactersByPk } from '../../store/Characters/charactersThunks/combinedThunks';
 import {
   clearAdditionalContent,
   setAdditionalContent,
@@ -31,8 +31,8 @@ import {
   selectRelatedCharacters,
   selectRejectedFilmMsg,
 } from '../../store/Films/filmSelectors';
-import { getFilmById } from '../../store/Films/filmsThunks/apiThunks';
-import { getPlanetsByPk } from '../../store/Planets/planetsThunks/apiThunks';
+import { getFilmById } from '../../store/Films/filmsThunks/combinedThunks';
+import { getPlanetsByPk } from '../../store/Planets/planetsThunks/combinedThunks';
 import { useThunkDispatch } from '../../store/store';
 import { detailsPageClasses } from '../../styles/DetailPageStyles';
 

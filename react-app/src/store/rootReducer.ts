@@ -1,9 +1,9 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import { currentContentReducer } from './CurrentContent';
+import { userReducer } from './User';
 import { charactersReducer } from './Characters';
 import { filmsReducer } from './Films';
 import { planetsReducer } from './Planets';
-import { userReducer } from './User';
 
 /** Root reducer, that combine all other reducers */
 export const rootReducer = combineReducers({

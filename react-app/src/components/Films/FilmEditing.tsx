@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import moment from 'moment';
 import { selectCurrentFilm } from '../../store/Films/filmSelectors';
-import { getFilmById } from '../../store/Films/filmsThunks/apiThunks';
+import { getFilmById } from '../../store/Films/filmsThunks/combinedThunks';
 import { useThunkDispatch } from '../../store/store';
 import { FilmForm } from './FilmForm';
 import { setAdditionalContent, setRootContent } from '../../store/CurrentContent';

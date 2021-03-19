@@ -11,9 +11,8 @@ import {
   setIsHaveMoreCharacters,
   setLastCharacterId,
 } from './charactersThunks/storeThunks';
-// eslint-disable-next-line import/no-cycle
-import { getAllCharacters, getCharacterById, getCharacterByName } from './charactersThunks/apiThunks';
 import { PossiblyNull } from '../../utils/types';
+import { getCharacterById, getCharacterByName, getAllCharacters } from './charactersThunks/combinedThunks';
 
 interface CharactersState {
   /** List of all loaded characters */

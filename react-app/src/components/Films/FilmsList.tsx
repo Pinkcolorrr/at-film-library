@@ -7,7 +7,7 @@ import { CircularProgress, ListItem, ListItemText } from '@material-ui/core';
 import { Film } from '../../models/Film';
 import { useThunkDispatch } from '../../store/store';
 import { selectCurrentFilm, selectAllFilms } from '../../store/Films/filmSelectors';
-import { getAllFilms } from '../../store/Films/filmsThunks/apiThunks';
+import { getAllFilms } from '../../store/Films/filmsThunks/combinedThunks';
 import { clearRootContent, setRootContent } from '../../store/CurrentContent/currentContentSlice';
 import { asideListClasses } from '../../styles/AsideListStyles';
 

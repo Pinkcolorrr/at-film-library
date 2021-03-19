@@ -11,8 +11,8 @@ import {
   setIsHaveMorePlanets,
   setLastPlanetId,
 } from './planetsThunks/storeThunks';
-import { getAllPlanets, getPlanetById, getPlanetByName } from './planetsThunks/apiThunks';
 import { PossiblyNull } from '../../utils/types';
+import { getAllPlanets, getPlanetById, getPlanetByName } from './planetsThunks/combinedThunks';
 
 interface PlanetsState {
   /** List of all loaded planets */

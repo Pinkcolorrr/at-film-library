@@ -18,7 +18,7 @@ import {
   setRootContent,
 } from '../../store/CurrentContent/currentContentSlice';
 import { selectCurrentPlanet, selectRejectedPlentMsg } from '../../store/Planets/planetSelectors';
-import { getPlanetById } from '../../store/Planets/planetsThunks/apiThunks';
+import { getPlanetById } from '../../store/Planets/planetsThunks/combinedThunks';
 import { useThunkDispatch } from '../../store/store';
 import { detailsPageClasses } from '../../styles/DetailPageStyles';
 

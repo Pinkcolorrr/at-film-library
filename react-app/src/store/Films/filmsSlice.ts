@@ -5,11 +5,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Character } from '../../models/Character';
 import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
-import { getFilmById } from './filmsThunks/apiThunks';
+import { getFilmById } from './filmsThunks/combinedThunks';
 import { addFilmsInStore } from './filmsThunks/storeThunks';
-import { getPlanetsByPk } from '../Planets/planetsThunks/apiThunks';
-import { getCharactersByPk } from '../Characters/charactersThunks/apiThunks';
 import { PossiblyNull } from '../../utils/types';
+import { getCharactersByPk } from '../Characters/charactersThunks/combinedThunks';
+import { getPlanetsByPk } from '../Planets/planetsThunks/combinedThunks';
 
 interface FilmsState {
   /** List of all loaded films */
