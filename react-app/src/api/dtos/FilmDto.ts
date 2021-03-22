@@ -1,4 +1,4 @@
-/* Have to use camel_case here, because DTO */
+/* Camel_case used here because this is a DTO */
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable camelcase */
 
@@ -24,15 +24,15 @@ export interface FilmDTO extends FirebaseDTO {
     readonly created: string;
     /** When note was last time edited */
     readonly edited: string;
-    /**  Array of related data about planets */
-    readonly planets: (number | string)[];
+    /** Array of related data about planets. */
+    readonly planets: string[];
     /** Array of related data about species */
-    readonly species: (number | string)[];
+    readonly species: string[];
     /** Array of related data about starships */
-    readonly starships: (number | string)[];
+    readonly starships: string[];
     /** Array of related data about characters */
-    readonly characters: (number | string)[];
+    readonly characters: string[];
     /** Array of related data about vehicles */
-    readonly vehicles: (number | string)[];
+    readonly vehicles: string[];
   };
 }

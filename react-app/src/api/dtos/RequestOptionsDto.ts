@@ -1,9 +1,9 @@
-import { sortTargets } from '../utils/types';
+import { sortTargetDto } from '../../utils/types';
 
 /** Options for requset list of film/planets/characters */
-export interface RequestOptions {
+export interface RequestOptionsDTO {
   /** Number of loaded data */
   chunkSize: number;
   /** How data will be sorted */
-  sortTarget: sortTargets;
+  sortTarget: sortTargetDto;
 }

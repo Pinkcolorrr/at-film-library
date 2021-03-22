@@ -1,4 +1,4 @@
-/* Have to use camel_case here, because DTO */
+/* Camel_case used here because this is a DTO */
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable camelcase */
 

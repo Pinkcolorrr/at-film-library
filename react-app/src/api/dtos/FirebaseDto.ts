@@ -4,6 +4,9 @@ export interface FirebaseDTO {
   readonly fields: Record<string, unknown>;
   /** Type of object */
   readonly model: string;
-  /** Personal key */
+  /**
+   * Personal key
+   * Used for assign related data.
+   */
   readonly pk: number | string;
 }

@@ -3,7 +3,6 @@ import 'firebase/firestore';
 import { AnyAction, Unsubscribe } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Planet } from '../../models/Planet';
-import { RequestOptions } from '../../models/RequestOptions';
 import {
   setIsHaveMorePlanets,
   pushPlanetsInStore,
@@ -14,6 +13,7 @@ import {
 import { firebaseConverter } from '../../utils/FirebaseConverters';
 import { getChunkedArray } from '../../utils/utils';
 import { PlanetDTO } from '../dtos/PlanetDto';
+import { RequestOptionsDTO } from '../dtos/RequestOptionsDto';
 import { firestore } from '../firebase-config';
 import { PlanetMapper } from '../mappers/PlanetMapper';
 
@@ -77,7 +77,7 @@ export const PlanetAPI = {
    * Planets will be sorted by @sortTarget
    */
   getInitialPlanets(
-    { chunkSize, sortTarget }: RequestOptions,
+    { chunkSize, sortTarget }: RequestOptionsDTO,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
   ): Unsubscribe {
     return firestore
@@ -92,7 +92,7 @@ export const PlanetAPI = {
 
   /** Get planets startAfter lastDoc from store and subscribe to their updates */
   async getNextPlanets(
-    { chunkSize, sortTarget }: RequestOptions,
+    { chunkSize, sortTarget }: RequestOptionsDTO,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
     lastDocId: string,
   ): Promise<Unsubscribe> {

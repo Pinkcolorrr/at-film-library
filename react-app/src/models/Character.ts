@@ -1,9 +1,15 @@
 /** Character model */
 export interface Character {
-  /** Id of character */
+  /**
+   * Id of character
+   * Used for get/edit/add character.
+   */
   readonly id: string;
 
-  /** Personal key of character */
+  /**
+   * Personal key of character.
+   * Used for assign related data.
+   */
   readonly pk: string;
 
   /** When note was created */
@@ -40,9 +46,15 @@ export interface Character {
   /** Charater homeworld Related data. PK of planet */
   readonly homeworld: string;
 
-  /** Charater height */
+  /**
+   * Charater height
+   * Measured in centimeters.
+   */
   readonly height?: number;
 
-  /** Charater mass */
+  /**
+   * Charater mass.
+   * Measured in kilograms.
+   */
   readonly mass?: number;
 }

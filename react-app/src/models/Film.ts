@@ -1,9 +1,15 @@
 /** Film model */
 export interface Film {
-  /** Film id */
+  /**
+   * Film id.
+   * Used for get/edit/add film.
+   */
   readonly id: string;
 
-  /** Personal key */
+  /**
+   * Personal key.
+   * Used for assign related data.
+   */
   readonly pk: string;
 
   /** Film title */

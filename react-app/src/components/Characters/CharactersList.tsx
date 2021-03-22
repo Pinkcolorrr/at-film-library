@@ -21,6 +21,7 @@ import { useThunkDispatch } from '../../store/store';
 import { asideListClasses } from '../../styles/AsideListStyles';
 import { SearchForm } from '../SearchForm/SearchForm';
 import { SortMenu } from '../SortMenu/SortMenu';
+import { sortTargets } from '../../utils/types';
 
 interface Props {
   /** Push unsubscribe function in array */
@@ -45,7 +46,7 @@ function CharactersListWithSubscription(props: Props): JSX.Element {
 
   const scroll = useRef<HTMLDivElement>(null);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
-  const sortOptions = ['Default', 'Name'];
+  const sortOptions: sortTargets[] = ['Default', 'Name'];
 
   /** Get initial list of characters */
   const initialCharactersRequset = () => {

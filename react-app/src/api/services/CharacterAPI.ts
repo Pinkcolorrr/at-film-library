@@ -3,7 +3,6 @@ import 'firebase/firestore';
 import { AnyAction, Unsubscribe } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Character } from '../../models/Character';
-import { RequestOptions } from '../../models/RequestOptions';
 import {
   pushCharactersInStore,
   removeCharactersFromStore,
@@ -14,6 +13,7 @@ import {
 import { firebaseConverter } from '../../utils/FirebaseConverters';
 import { getChunkedArray } from '../../utils/utils';
 import { CharacterDTO } from '../dtos/CharactersDto';
+import { RequestOptionsDTO } from '../dtos/RequestOptionsDto';
 import { firestore } from '../firebase-config';
 import { CharacterMapper } from '../mappers/CharactersMapper';
 
@@ -79,7 +79,7 @@ export const CharacterAPI = {
    * Sorted by @sortTarget
    */
   getInitialCharacters(
-    { chunkSize, sortTarget }: RequestOptions,
+    { chunkSize, sortTarget }: RequestOptionsDTO,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
   ): Unsubscribe {
     return firestore
@@ -94,7 +94,7 @@ export const CharacterAPI = {
 
   /** Get characters startAfter lastDoc from store and subscribe to their updates */
   async getNextCharacters(
-    { chunkSize, sortTarget }: RequestOptions,
+    { chunkSize, sortTarget }: RequestOptionsDTO,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
     lastDocId: string,
   ): Promise<Unsubscribe> {
