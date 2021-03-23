@@ -14,40 +14,37 @@ interface Props {
 /** Menu for select sort option */
 export function SortMenu(props: Props): JSX.Element {
   const classes = sortMenuClasses();
-  /**
-   * In case when anchorEl === null menu will be closed
-   * In case when anchorEl === HTMLElement menu will be opened
-   */
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState(props.index);
 
-  /** Open menu */
-  const openListMenu = (event: React.MouseEvent<HTMLElement>) => {
+  /** Open sort menu and assign anchor element */
+  const openMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setIsOpen(true);
     setAnchorEl(event.currentTarget);
+  };
+
+  /** Close sort menu and remove anchor element */
+  const closeMenu = () => {
+    setIsOpen(false);
+    setAnchorEl(null);
   };
 
   /** Set current selected item */
   const setSelectedItem = (index: number) => {
     setSelectedIndex(index);
     props.sortBySelectedOption(index);
-    setAnchorEl(null);
+    closeMenu();
   };
 
   return (
     <div className={classes.root}>
       <List>
-        <ListItem onClick={openListMenu} button>
+        <ListItem onClick={openMenu} button>
           <ListItemText primary="Sorted by" secondary={props.options[selectedIndex]} />
         </ListItem>
       </List>
-      <Menu
-        anchorEl={anchorEl}
-        onClose={() => {
-          setAnchorEl(null);
-        }}
-        open={Boolean(anchorEl)}
-        keepMounted
-      >
+      <Menu anchorEl={anchorEl} onClose={closeMenu} open={isOpen} keepMounted>
         {props.options.map((option, index) => (
           <MenuItem
             key={option}

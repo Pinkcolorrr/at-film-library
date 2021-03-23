@@ -72,41 +72,27 @@ export const PlanetAPI = {
       .then((planets) => planets.docs.map((planet) => PlanetMapper.transformResponse(planet.data(), planet.id)));
   },
 
-  /**
-   * Get first part of planets and subscribe to their updates
-   * Planets will be sorted by @sortTarget
-   */
-  getInitialPlanets(
+  /** Get planets and subscribe to their updates */
+  async getPlanets(
     { chunkSize, sortTarget }: RequestOptionsDTO,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-  ): Unsubscribe {
-    return firestore
-      .collection('planets')
-      .withConverter(firebaseConverter<PlanetDTO>())
-      .orderBy(sortTarget)
-      .limit(chunkSize)
-      .onSnapshot((doc: firebase.firestore.QuerySnapshot<PlanetDTO>) => {
-        snapshotResponse(doc, dispatch);
-      });
-  },
-
-  /** Get planets startAfter lastDoc from store and subscribe to their updates */
-  async getNextPlanets(
-    { chunkSize, sortTarget }: RequestOptionsDTO,
-    dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-    lastDocId: string,
+    lastDocId?: string,
   ): Promise<Unsubscribe> {
     const planetDoc = await firestore.collection('planets').doc(lastDocId).get();
 
-    return firestore
+    const requset = firestore
       .collection('planets')
       .withConverter(firebaseConverter<PlanetDTO>())
       .orderBy(sortTarget)
-      .startAfter(planetDoc)
-      .limit(chunkSize)
-      .onSnapshot((doc: firebase.firestore.QuerySnapshot<PlanetDTO>) => {
-        snapshotResponse(doc, dispatch);
-      });
+      .limit(chunkSize);
+
+    return planetDoc.data()
+      ? requset.startAfter(planetDoc).onSnapshot((doc: firebase.firestore.QuerySnapshot<PlanetDTO>) => {
+          snapshotResponse(doc, dispatch);
+        })
+      : requset.onSnapshot((doc: firebase.firestore.QuerySnapshot<PlanetDTO>) => {
+          snapshotResponse(doc, dispatch);
+        });
   },
 
   /**

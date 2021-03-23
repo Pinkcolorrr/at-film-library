@@ -4,12 +4,18 @@ import { Field, FieldProps, Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
+import * as yup from 'yup';
 import { UserAuthData } from '../../models/UserAuthData';
 import { removeErrorMsg } from '../../store/User/userSlice';
 import { signInByEmailAndPassword } from '../../store/User/userThunks/apiThunks';
 import { selectErrorMsg } from '../../store/User/userSelectors';
 import { authFormStyles } from './AuthFormStyles';
-import { authSchema } from '../../utils/validateSchemas';
+
+/** Validate schema for auth form */
+export const loginSchema = yup.object({
+  email: yup.string().email('Enter a valid email').required('Email is required'),
+  password: yup.string().min(6, 'Password should be of minimum 6 characters length').required('Password is required'),
+});
 
 /** Login form */
 export function Login(): JSX.Element {
@@ -35,7 +41,7 @@ export function Login(): JSX.Element {
       onSubmit={(values) => {
         dispatch(signInByEmailAndPassword(values));
       }}
-      validationSchema={authSchema}
+      validationSchema={loginSchema}
     >
       <Form className={classes.root}>
         <h3 className={classes.formLabel}>Login</h3>

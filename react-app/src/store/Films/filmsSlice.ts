@@ -2,30 +2,19 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { Character } from '../../models/Character';
 import { Film } from '../../models/Film';
-import { Planet } from '../../models/Planet';
 import { getFilmById } from './filmsThunks/combinedThunks';
 import { addFilmsInStore } from './filmsThunks/storeThunks';
-import { PossiblyNull } from '../../utils/types';
-import { getCharactersByPk } from '../Characters/charactersThunks/combinedThunks';
-import { getPlanetsByPk } from '../Planets/planetsThunks/combinedThunks';
 
 interface FilmsState {
   /** List of all loaded films */
   filmsList: Film[];
   currentFilm: {
     /** Information about planet */
-    filmInfo: PossiblyNull<Film>;
-    /** Msg if failed to get movie */
-    rejectedMsg: string;
+    filmInfo: Film | null;
+    /** Check, if failed to get film */
+    isRejected: boolean;
     /** Data, that relate with film */
-    relatedData: {
-      /** Array with related planets */
-      planets: Planet[];
-      /** Array with related characters */
-      characters: Character[];
-    };
   };
 }
 
@@ -33,11 +22,7 @@ const initialState: FilmsState = {
   filmsList: [],
   currentFilm: {
     filmInfo: null,
-    rejectedMsg: '',
-    relatedData: {
-      planets: [],
-      characters: [],
-    },
+    isRejected: false,
   },
 };
 
@@ -53,15 +38,10 @@ const filmsSlice = createSlice({
       })
       .addCase(getFilmById.fulfilled, (state, action) => {
         state.currentFilm.filmInfo = action.payload;
-      })
-      .addCase(getPlanetsByPk.fulfilled, (state, action) => {
-        state.currentFilm.relatedData.planets = action.payload;
-      })
-      .addCase(getCharactersByPk.fulfilled, (state, action) => {
-        state.currentFilm.relatedData.characters = action.payload;
+        state.currentFilm.isRejected = false;
       })
       .addCase(getFilmById.rejected, (state) => {
-        state.currentFilm.rejectedMsg = 'Failed to get movie';
+        state.currentFilm.isRejected = true;
       });
   },
 });

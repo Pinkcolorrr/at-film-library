@@ -50,11 +50,11 @@ export interface Character {
    * Charater height
    * Measured in centimeters.
    */
-  readonly height?: number;
+  readonly height: number;
 
   /**
    * Charater mass.
    * Measured in kilograms.
    */
-  readonly mass?: number;
+  readonly mass: number;
 }

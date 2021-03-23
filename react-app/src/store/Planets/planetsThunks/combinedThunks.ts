@@ -28,6 +28,6 @@ export const getAllPlanets: AsyncThunk<Planet[], void, Record<string, never>> = 
 
 /** Get planet by PK from API */
 export const getPlanetsByPk: AsyncThunk<Planet[], string[], Record<string, never>> = createAsyncThunk(
-  'films/getPlanetsByPk',
+  'planets/getPlanetsByPk',
   async (pkArray: string[]): Promise<Planet[]> => PlanetAPI.getPlanetsByPk(pkArray.map((pk) => Number(pk) || pk)),
 );

@@ -11,18 +11,22 @@ import {
   setIsHaveMoreCharacters,
   setLastCharacterId,
 } from './charactersThunks/storeThunks';
-import { PossiblyNull } from '../../utils/types';
-import { getCharacterById, getCharacterByName, getAllCharacters } from './charactersThunks/combinedThunks';
+import {
+  getCharacterById,
+  getCharacterByName,
+  getAllCharacters,
+  getCharactersByPk,
+} from './charactersThunks/combinedThunks';
 
 interface CharactersState {
   /** List of all loaded characters */
   characterList: Character[];
   /** Current character */
   currentCharacter: {
-    /** Msg if failed to get character */
-    rejectedMsg: string;
+    /** Check, if failed to get character */
+    isRejected: boolean;
     /** Information about character */
-    characterInfo: PossiblyNull<Character>;
+    characterInfo: Character | null;
   };
   /** Id of last loaded character */
   lastDocId: string;
@@ -31,13 +35,12 @@ interface CharactersState {
   /** Is db have more data to load */
   isHaveMoreData: boolean;
   /** Msg, that will display, when user hit the bottom of data */
-  endDataMsg: string;
 }
 
 const initialState: CharactersState = {
   characterList: [],
   currentCharacter: {
-    rejectedMsg: '',
+    isRejected: false,
     characterInfo: null,
   },
   requestOptions: {
@@ -46,7 +49,6 @@ const initialState: CharactersState = {
   },
   lastDocId: '',
   isHaveMoreData: true,
-  endDataMsg: 'You hit the bottom',
 };
 
 /**
@@ -70,15 +72,14 @@ const charactersSlise = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(pushCharactersInStore.fulfilled, (state, action) => {
-        state.endDataMsg = 'You hit the bottom';
         state.characterList = state.characterList.concat(action.payload);
       })
       .addCase(getCharacterById.fulfilled, (state, action) => {
         state.currentCharacter.characterInfo = action.payload;
+        state.currentCharacter.isRejected = false;
       })
       .addCase(getCharacterByName.fulfilled, (state, action) => {
         state.isHaveMoreData = false;
-        state.endDataMsg = 'All results loaded';
         state.characterList = [action.payload];
       })
       .addCase(getAllCharacters.fulfilled, (state, action) => {
@@ -110,13 +111,15 @@ const charactersSlise = createSlice({
       .addCase(setIsHaveMoreCharacters.fulfilled, (state, action) => {
         state.isHaveMoreData = action.payload;
       })
+      .addCase(getCharactersByPk.fulfilled, (state, action) => {
+        state.characterList = action.payload;
+      })
       .addCase(getCharacterByName.rejected, (state) => {
         state.characterList = [];
         state.isHaveMoreData = false;
-        state.endDataMsg = 'Not found';
       })
       .addCase(getCharacterById.rejected, (state) => {
-        state.currentCharacter.rejectedMsg = 'Failed to get character';
+        state.currentCharacter.isRejected = true;
       });
   },
 });

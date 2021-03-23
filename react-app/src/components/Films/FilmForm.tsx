@@ -5,6 +5,7 @@ import { Prompt, Redirect } from 'react-router';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import * as yup from 'yup';
 import { Film } from '../../models/Film';
 import { Planet } from '../../models/Planet';
 import { getNamesByPk, getPkByNames } from '../../utils/utils';
@@ -15,9 +16,15 @@ import { AccordionCheckList } from '../AccordionCheckList/AccordionCheckList';
 import { selectAllCharacters } from '../../store/Characters/characterSelectors';
 import { addFilmInDb, editFilmIdDb } from '../../store/Films/filmsThunks/combinedThunks';
 import { filmFormStyles } from './FilmFormStyles';
-import { filmSchema } from '../../utils/validateSchemas';
 import { getAllCharacters } from '../../store/Characters/charactersThunks/combinedThunks';
 import { getAllPlanets } from '../../store/Planets/planetsThunks/combinedThunks';
+
+/** Validate schema for film form */
+export const filmSchema = yup.object({
+  title: yup.string().required('title is required'),
+  episodeId: yup.string().required('episodeId is required'),
+  releaseDate: yup.string().required('releaseDate is required'),
+});
 
 interface FormData {
   title: string;

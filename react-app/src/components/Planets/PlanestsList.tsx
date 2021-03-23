@@ -16,7 +16,6 @@ import {
   selectAllPlanets,
   selectCurrentPlanet,
   selectIsHaveMorePlanets,
-  selectLastPlanetsMsg,
   selectPlanetsRequestOptions,
 } from '../../store/Planets/planetSelectors';
 import { asideListClasses } from '../../styles/AsideListStyles';
@@ -37,7 +36,6 @@ function PlanetsListWithSubscription(props: Props): JSX.Element {
   const currentPlanet = useSelector(selectCurrentPlanet);
   const planets = useSelector(selectAllPlanets);
   const isHaveMoreData = useSelector(selectIsHaveMorePlanets);
-  const endDataMsg = useSelector(selectLastPlanetsMsg);
   const requestOptions = useSelector(selectPlanetsRequestOptions);
 
   const scroll = useRef<HTMLDivElement>(null);
@@ -114,7 +112,7 @@ function PlanetsListWithSubscription(props: Props): JSX.Element {
           </ListItem>
         ))}
         <ListItem className={classes.circularProgress}>
-          {isHaveMoreData ? <CircularProgress /> : <ListItemText primary={endDataMsg} />}
+          {isHaveMoreData ? <CircularProgress /> : <ListItemText primary="You hit the bottom" />}
         </ListItem>
       </List>
       {currentPlanet ? <Redirect from="/planets" to={`/planets/${currentPlanet.id}/details`} exact /> : null}

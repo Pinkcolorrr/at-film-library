@@ -1,21 +1,11 @@
-import { Character } from '../../models/Character';
 import { Film } from '../../models/Film';
-import { Planet } from '../../models/Planet';
-import { PossiblyNull } from '../../utils/types';
 import { RootState } from '../rootReducer';
 
 /** Select current film */
-export const selectCurrentFilm = (state: RootState): PossiblyNull<Film> => state.films.currentFilm.filmInfo;
+export const selectCurrentFilm = (state: RootState): Film | null => state.films.currentFilm.filmInfo;
 
 /** Select all loaded films */
 export const selectAllFilms = (state: RootState): Film[] => state.films.filmsList;
 
-/** Select planets, that related with film */
-export const selectRelatedPlanets = (state: RootState): Planet[] => state.films.currentFilm.relatedData.planets;
-
-/** Select characters, that related with film */
-export const selectRelatedCharacters = (state: RootState): Character[] =>
-  state.films.currentFilm.relatedData.characters;
-
 /** Select message if failed to get a movie */
-export const selectRejectedFilmMsg = (state: RootState): string => state.films.currentFilm.rejectedMsg;
+export const selectIsFilmRejected = (state: RootState): boolean => state.films.currentFilm.isRejected;

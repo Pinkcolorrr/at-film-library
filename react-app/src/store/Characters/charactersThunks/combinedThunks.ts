@@ -28,7 +28,7 @@ export const getAllCharacters: AsyncThunk<Character[], void, Record<string, neve
 
 /** Get character by PK from API */
 export const getCharactersByPk: AsyncThunk<Character[], string[], Record<string, never>> = createAsyncThunk(
-  'films/getCharactersByPk',
+  'characters/getCharactersByPk',
   async (pkArray: string[]): Promise<Character[]> =>
     CharacterAPI.getCharactersByPk(pkArray.map((pk) => Number(pk) || pk)),
 );

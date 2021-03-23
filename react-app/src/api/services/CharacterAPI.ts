@@ -74,41 +74,27 @@ export const CharacterAPI = {
       );
   },
 
-  /**
-   * Get first part of characters and subscribe to their updates
-   * Sorted by @sortTarget
-   */
-  getInitialCharacters(
+  /** Get characters and subscribe to their updates */
+  async getCharacters(
     { chunkSize, sortTarget }: RequestOptionsDTO,
     dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-  ): Unsubscribe {
-    return firestore
-      .collection('people')
-      .withConverter(firebaseConverter<CharacterDTO>())
-      .orderBy(sortTarget)
-      .limit(chunkSize)
-      .onSnapshot((doc: firebase.firestore.QuerySnapshot<CharacterDTO>) => {
-        snapshotResponse(doc, dispatch);
-      });
-  },
-
-  /** Get characters startAfter lastDoc from store and subscribe to their updates */
-  async getNextCharacters(
-    { chunkSize, sortTarget }: RequestOptionsDTO,
-    dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-    lastDocId: string,
+    lastDocId?: string,
   ): Promise<Unsubscribe> {
     const characterDoc = await firestore.collection('people').doc(lastDocId).get();
 
-    return firestore
+    const requset = firestore
       .collection('people')
       .withConverter(firebaseConverter<CharacterDTO>())
       .orderBy(sortTarget)
-      .startAfter(characterDoc)
-      .limit(chunkSize)
-      .onSnapshot((doc: firebase.firestore.QuerySnapshot<CharacterDTO>) => {
-        snapshotResponse(doc, dispatch);
-      });
+      .limit(chunkSize);
+
+    return characterDoc.data()
+      ? requset.startAfter(characterDoc).onSnapshot((doc: firebase.firestore.QuerySnapshot<CharacterDTO>) => {
+          snapshotResponse(doc, dispatch);
+        })
+      : requset.onSnapshot((doc: firebase.firestore.QuerySnapshot<CharacterDTO>) => {
+          snapshotResponse(doc, dispatch);
+        });
   },
 
   /**

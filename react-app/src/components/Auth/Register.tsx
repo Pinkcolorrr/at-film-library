@@ -4,12 +4,18 @@ import { Field, FieldProps, Form, Formik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import Alert from '@material-ui/lab/Alert';
 import { Link } from 'react-router-dom';
+import * as yup from 'yup';
 import { UserAuthData } from '../../models/UserAuthData';
 import { removeErrorMsg } from '../../store/User/userSlice';
 import { selectErrorMsg } from '../../store/User/userSelectors';
 import { registerByEmailAndPassword } from '../../store/User/userThunks/apiThunks';
 import { authFormStyles } from './AuthFormStyles';
-import { authSchema } from '../../utils/validateSchemas';
+
+/** Validate schema for auth form */
+export const registerSchema = yup.object({
+  email: yup.string().email('Enter a valid email').required('Email is required'),
+  password: yup.string().min(6, 'Password should be of minimum 6 characters length').required('Password is required'),
+});
 
 /** Register form */
 export function Register(): JSX.Element {
@@ -35,7 +41,7 @@ export function Register(): JSX.Element {
       onSubmit={(values) => {
         dispatch(registerByEmailAndPassword(values));
       }}
-      validationSchema={authSchema}
+      validationSchema={registerSchema}
     >
       <Form className={classes.root}>
         <h3 className={classes.formLabel}>register</h3>

@@ -12,7 +12,6 @@ import {
   selectCharactersRequestOptions,
   selectCurrentCharacter,
   selectIsHaveMoreCharacters,
-  selectLastCharactersMsg,
 } from '../../store/Characters/characterSelectors';
 import { getCharacterByName } from '../../store/Characters/charactersThunks/combinedThunks';
 import { getInitialCharacters, getNextCharacters } from '../../store/Characters/charactersThunks/apiThunks';
@@ -40,7 +39,6 @@ function CharactersListWithSubscription(props: Props): JSX.Element {
 
   const characters = useSelector(selectAllCharacters);
   const isHaveMoreData = useSelector(selectIsHaveMoreCharacters);
-  const endDataMsg = useSelector(selectLastCharactersMsg);
   const requestOptions = useSelector(selectCharactersRequestOptions);
   const currentCharacter = useSelector(selectCurrentCharacter);
 
@@ -119,7 +117,7 @@ function CharactersListWithSubscription(props: Props): JSX.Element {
           </ListItem>
         ))}
         <ListItem className={classes.circularProgress}>
-          {isHaveMoreData ? <CircularProgress /> : <ListItemText primary={endDataMsg} />}
+          {isHaveMoreData ? <CircularProgress /> : <ListItemText primary="You hit the bottom" />}
         </ListItem>
       </List>
       {currentCharacter ? <Redirect from="/characters" to={`/characters/${currentCharacter.id}/details`} /> : null}

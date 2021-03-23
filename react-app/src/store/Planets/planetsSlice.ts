@@ -11,8 +11,7 @@ import {
   setIsHaveMorePlanets,
   setLastPlanetId,
 } from './planetsThunks/storeThunks';
-import { PossiblyNull } from '../../utils/types';
-import { getAllPlanets, getPlanetById, getPlanetByName } from './planetsThunks/combinedThunks';
+import { getAllPlanets, getPlanetById, getPlanetByName, getPlanetsByPk } from './planetsThunks/combinedThunks';
 
 interface PlanetsState {
   /** List of all loaded planets */
@@ -20,9 +19,9 @@ interface PlanetsState {
   /** Current planet */
   currentPlanet: {
     /** Msg if failed to get planet */
-    rejectedMsg: string;
+    isRejected: boolean;
     /** Information about planet */
-    planetInfo: PossiblyNull<Planet>;
+    planetInfo: Planet | null;
   };
   /** Id of last loaded planet */
   lastDocId: string;
@@ -30,14 +29,12 @@ interface PlanetsState {
   requestOptions: RequestOptions;
   /** Is db have more data to load */
   isHaveMoreData: boolean;
-  /** Msg, that will display, when user hit the bottom of data */
-  endDataMsg: string;
 }
 
 const initialState: PlanetsState = {
   planetList: [],
   currentPlanet: {
-    rejectedMsg: '',
+    isRejected: false,
     planetInfo: null,
   },
   requestOptions: {
@@ -46,7 +43,6 @@ const initialState: PlanetsState = {
   },
   lastDocId: '',
   isHaveMoreData: true,
-  endDataMsg: 'You hit the bottom',
 };
 
 /**
@@ -70,26 +66,16 @@ const planetsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(pushPlanetsInStore.fulfilled, (state, action) => {
-        state.endDataMsg = 'You hit the bottom';
         state.planetList = state.planetList.concat(action.payload);
       })
       .addCase(getPlanetById.fulfilled, (state, action) => {
         state.currentPlanet.planetInfo = action.payload;
+        state.currentPlanet.isRejected = false;
       })
       .addCase(getPlanetByName.fulfilled, (state, action) => {
         state.isHaveMoreData = false;
-        state.endDataMsg = 'All results loaded';
         state.planetList = [action.payload];
       })
-      .addCase(getAllPlanets.fulfilled, (state, action) => {
-        state.planetList = action.payload;
-      })
-      .addCase(getPlanetByName.rejected, (state) => {
-        state.planetList = [];
-        state.isHaveMoreData = false;
-        state.endDataMsg = 'Not found';
-      })
-
       .addCase(setLastPlanetId.fulfilled, (state, action) => {
         state.lastDocId = action.payload;
       })
@@ -116,8 +102,18 @@ const planetsSlice = createSlice({
       .addCase(setIsHaveMorePlanets.fulfilled, (state, action) => {
         state.isHaveMoreData = action.payload;
       })
+      .addCase(getAllPlanets.fulfilled, (state, action) => {
+        state.planetList = action.payload;
+      })
+      .addCase(getPlanetsByPk.fulfilled, (state, action) => {
+        state.planetList = action.payload;
+      })
       .addCase(getPlanetById.rejected, (state) => {
-        state.currentPlanet.rejectedMsg = 'Failed to get planet';
+        state.currentPlanet.isRejected = true;
+      })
+      .addCase(getPlanetByName.rejected, (state) => {
+        state.planetList = [];
+        state.isHaveMoreData = false;
       });
   },
 });

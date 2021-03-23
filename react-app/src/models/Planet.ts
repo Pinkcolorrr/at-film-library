@@ -27,9 +27,6 @@ export interface Planet {
   /** Planet terrain. */
   readonly terrain: string;
 
-  /** Planet population. */
-  readonly population?: number;
-
   /**
    * Planet gravity.
    * Measured in relation to standard gravity.
@@ -37,23 +34,26 @@ export interface Planet {
    */
   readonly gravity: string;
 
+  /** Planet population. */
+  readonly population: number;
+
   /**
    * Planet diameter
    * Measured in kilometers.
    */
-  readonly diameter?: number;
+  readonly diameter: number;
 
   /**
    * Planet orbital period.
    * Measured in standard days.
    * 1 standard day is equivalent to 1 earth day.
    */
-  readonly orbitalPeriod?: number;
+  readonly orbitalPeriod: number;
 
   /**
    * Planet rotation period.
    * Measured in standard hours.
    * 1 standard hour is equivalent to 1 earth hour.
    */
-  readonly rotationPeriod?: number;
+  readonly rotationPeriod: number;
 }

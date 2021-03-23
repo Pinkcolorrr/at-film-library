@@ -17,7 +17,7 @@ import {
   clearAdditionalContent,
   setRootContent,
 } from '../../store/CurrentContent/currentContentSlice';
-import { selectCurrentPlanet, selectRejectedPlentMsg } from '../../store/Planets/planetSelectors';
+import { selectCurrentPlanet, selectIsPlanetRejected } from '../../store/Planets/planetSelectors';
 import { getPlanetById } from '../../store/Planets/planetsThunks/combinedThunks';
 import { useThunkDispatch } from '../../store/store';
 import { detailsPageClasses } from '../../styles/DetailPageStyles';
@@ -28,7 +28,7 @@ export function PlanetDetails(): JSX.Element {
   const classes = detailsPageClasses();
   const dispatch = useThunkDispatch();
   const planet = useSelector(selectCurrentPlanet);
-  const rejectedMsg = useSelector(selectRejectedPlentMsg);
+  const isRejected = useSelector(selectIsPlanetRejected);
 
   /** Get planet if it isn't in the store or store have different planet */
   useEffect(() => {
@@ -109,6 +109,6 @@ export function PlanetDetails(): JSX.Element {
       </Table>
     </TableContainer>
   ) : (
-    <div>{rejectedMsg || <CircularProgress />}</div>
+    <div>{isRejected ? 'Faild to get planet' : <CircularProgress />}</div>
   );
 }

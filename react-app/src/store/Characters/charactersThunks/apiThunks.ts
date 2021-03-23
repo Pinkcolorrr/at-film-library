@@ -18,7 +18,7 @@ export const getInitialCharacters: AsyncThunk<Unsubscribe, RequestOptions, Recor
   'characters/getInitialCharacters',
   async (options: RequestOptions, thunkAPI): Promise<Unsubscribe> => {
     thunkAPI.dispatch(setIsHaveMoreCharacters(true));
-    return CharacterAPI.getInitialCharacters(RequestOptionsMapper.transofrmRequest(options), thunkAPI.dispatch);
+    return CharacterAPI.getCharacters(RequestOptionsMapper.transofrmRequest(options), thunkAPI.dispatch);
   },
 );
 
@@ -32,7 +32,7 @@ export const getNextCharacters: AsyncThunk<
 > = createAsyncThunk(
   'characters/getNextCharacters',
   async (options: RequestOptions, thunkAPI): Promise<Unsubscribe> =>
-    CharacterAPI.getNextCharacters(
+    CharacterAPI.getCharacters(
       RequestOptionsMapper.transofrmRequest(options),
       thunkAPI.dispatch,
       thunkAPI.getState().characters.lastDocId,

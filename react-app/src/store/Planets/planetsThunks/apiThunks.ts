@@ -17,7 +17,7 @@ export const getInitialPlanets: AsyncThunk<Unsubscribe, RequestOptions, Record<s
   'planets/getInitialPlanets',
   async (options: RequestOptions, thunkAPI): Promise<Unsubscribe> => {
     thunkAPI.dispatch(setIsHaveMorePlanets(true));
-    return PlanetAPI.getInitialPlanets(RequestOptionsMapper.transofrmRequest(options), thunkAPI.dispatch);
+    return PlanetAPI.getPlanets(RequestOptionsMapper.transofrmRequest(options), thunkAPI.dispatch);
   },
 );
 
@@ -31,7 +31,7 @@ export const getNextPlanets: AsyncThunk<
 > = createAsyncThunk(
   'planets/getNextPlanets',
   async (options: RequestOptions, thunkAPI): Promise<Unsubscribe> =>
-    PlanetAPI.getNextPlanets(
+    PlanetAPI.getPlanets(
       RequestOptionsMapper.transofrmRequest(options),
       thunkAPI.dispatch,
       thunkAPI.getState().planets.lastDocId,

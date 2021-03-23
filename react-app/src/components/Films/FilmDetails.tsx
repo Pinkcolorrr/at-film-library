@@ -25,16 +25,15 @@ import {
   setAdditionalContent,
   setRootContent,
 } from '../../store/CurrentContent/currentContentSlice';
-import {
-  selectCurrentFilm,
-  selectRelatedPlanets,
-  selectRelatedCharacters,
-  selectRejectedFilmMsg,
-} from '../../store/Films/filmSelectors';
+import { selectCurrentFilm, selectIsFilmRejected } from '../../store/Films/filmSelectors';
 import { getFilmById } from '../../store/Films/filmsThunks/combinedThunks';
 import { getPlanetsByPk } from '../../store/Planets/planetsThunks/combinedThunks';
 import { useThunkDispatch } from '../../store/store';
 import { detailsPageClasses } from '../../styles/DetailPageStyles';
+import { selectAllPlanets } from '../../store/Planets/planetSelectors';
+import { clearPlanetsList } from '../../store/Planets';
+import { clearCharactersList } from '../../store/Characters';
+import { selectAllCharacters } from '../../store/Characters/characterSelectors';
 
 /** Displaying table with film information */
 export function FilmDetails(): JSX.Element {
@@ -42,9 +41,9 @@ export function FilmDetails(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useThunkDispatch();
   const film = useSelector(selectCurrentFilm);
-  const planets = useSelector(selectRelatedPlanets);
-  const characters = useSelector(selectRelatedCharacters);
-  const rejectedMsg = useSelector(selectRejectedFilmMsg);
+  const planets = useSelector(selectAllPlanets);
+  const characters = useSelector(selectAllCharacters);
+  const isRejected = useSelector(selectIsFilmRejected);
 
   /** Get film  */
   useEffect(() => {
@@ -64,6 +63,8 @@ export function FilmDetails(): JSX.Element {
     }
     return () => {
       dispatch(clearAdditionalContent());
+      dispatch(clearPlanetsList());
+      dispatch(clearCharactersList());
     };
   }, [film]);
 
@@ -175,6 +176,6 @@ export function FilmDetails(): JSX.Element {
       </Table>
     </TableContainer>
   ) : (
-    <div>{rejectedMsg || <CircularProgress />}</div>
+    <div>{isRejected ? 'Faild to get film' : <CircularProgress />}</div>
   );
 }

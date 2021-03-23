@@ -3,13 +3,12 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import { UserInfo } from '../../models/UserInfo';
-import { PossiblyNull } from '../../utils/types';
 import { signInByEmailAndPassword, registerByEmailAndPassword } from './userThunks/apiThunks';
 import { addUserInStore, removeUserFromStore } from './userThunks/storeThunks';
 
 interface UserState {
   /** Information about user */
-  readonly info: PossiblyNull<UserInfo>;
+  readonly info: UserInfo | null;
   /** Errors from server during authorization */
   readonly errorMsg?: string;
   /** User login state */

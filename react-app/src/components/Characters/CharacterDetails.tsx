@@ -12,7 +12,7 @@ import {
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { TableRows } from '../../models/TableRows';
-import { selectCurrentCharacter, selectRejectedCharacterMsg } from '../../store/Characters/characterSelectors';
+import { selectCurrentCharacter, selectIsCharacterRejected } from '../../store/Characters/characterSelectors';
 import { getCharacterById } from '../../store/Characters/charactersThunks/combinedThunks';
 import { setAdditionalContent, clearAdditionalContent, setRootContent } from '../../store/CurrentContent';
 import { useThunkDispatch } from '../../store/store';
@@ -24,7 +24,7 @@ export function CharacterDetails(): JSX.Element {
   const classes = detailsPageClasses();
   const dispatch = useThunkDispatch();
   const character = useSelector(selectCurrentCharacter);
-  const rejectedMsg = useSelector(selectRejectedCharacterMsg);
+  const isRejected = useSelector(selectIsCharacterRejected);
 
   /** Get character if it isn't in the store or store have different character */
   useEffect(() => {
@@ -102,6 +102,6 @@ export function CharacterDetails(): JSX.Element {
       </Table>
     </TableContainer>
   ) : (
-    <div>{rejectedMsg || <CircularProgress />}</div>
+    <div>{isRejected ? 'Faild to get character' : <CircularProgress />}</div>
   );
 }
