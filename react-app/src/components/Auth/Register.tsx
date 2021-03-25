@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { FormGroup, Button, TextField } from '@material-ui/core';
-import { Field, FieldProps, Form, Formik } from 'formik';
+import { FormGroup, Button } from '@material-ui/core';
+import { Form, Formik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import Alert from '@material-ui/lab/Alert';
 import { Link } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { removeErrorMsg } from '../../store/User/userSlice';
 import { selectErrorMsg } from '../../store/User/userSelectors';
 import { registerByEmailAndPassword } from '../../store/User/userThunks/apiThunks';
 import { authFormStyles } from './AuthFormStyles';
+import { CustomFormField } from '../CustomFormField/CustomFormField';
 
 /** Validate schema for auth form */
 export const registerSchema = yup.object({
@@ -45,44 +46,17 @@ export function Register(): JSX.Element {
     >
       <Form className={classes.root}>
         <h3 className={classes.formLabel}>register</h3>
-
         <FormGroup className={classes.emailGroup}>
-          <Field name="email">
-            {({ field, meta }: FieldProps) => (
-              <TextField
-                autoComplete="true"
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched && meta.error}
-                label="Email"
-                fullWidth
-                {...field}
-              />
-            )}
-          </Field>
+          <CustomFormField label="Email" name="email" type="email" />
         </FormGroup>
-
-        <FormGroup className={classes.passwordGroup}>
-          <Field name="password">
-            {({ field, meta }: FieldProps) => (
-              <TextField
-                autoComplete="true"
-                error={meta.touched && Boolean(meta.error)}
-                helperText={meta.touched && meta.error}
-                label="Password"
-                type="password"
-                fullWidth
-                {...field}
-              />
-            )}
-          </Field>
+        <FormGroup className={classes.emailGroup}>
+          <CustomFormField label="Password" name="password" type="password" />
         </FormGroup>
-
         <FormGroup>
           <Button color="primary" type="submit" variant="contained">
             Submit form
           </Button>
         </FormGroup>
-
         {errorMsg && (
           <Alert className={classes.errorMsg} severity="error">
             {errorMsg}

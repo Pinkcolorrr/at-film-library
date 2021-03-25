@@ -19,7 +19,7 @@ import {
   selectPlanetsRequestOptions,
 } from '../../store/Planets/planetSelectors';
 import { asideListClasses } from '../../styles/AsideListStyles';
-import { sortTargets } from '../../utils/types';
+import { SortTargets } from '../../utils/types';
 
 interface Props {
   pushUnsubscriber(unsubscribe: Unsubscribe): void;
@@ -40,7 +40,7 @@ function PlanetsListWithSubscription(props: Props): JSX.Element {
 
   const scroll = useRef<HTMLDivElement>(null);
   const [isScrollEnd, setIsScrollEnd] = useState(false);
-  const sortOptions: sortTargets[] = ['Default', 'Name'];
+  const sortOptions: SortTargets[] = ['Default', 'Name'];
 
   /** Get initial list of planets */
   const planetsRequset = () => {

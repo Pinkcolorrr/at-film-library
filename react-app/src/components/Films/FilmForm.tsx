@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, FormGroup, TextField, Button } from '@material-ui/core';
-import { Formik, Form, Field, FieldProps } from 'formik';
+import { Paper, FormGroup, Button } from '@material-ui/core';
+import { Formik, Form } from 'formik';
 import { Prompt, Redirect } from 'react-router';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
@@ -18,9 +18,10 @@ import { addFilmInDb, editFilmIdDb } from '../../store/Films/filmsThunks/combine
 import { filmFormStyles } from './FilmFormStyles';
 import { getAllCharacters } from '../../store/Characters/charactersThunks/combinedThunks';
 import { getAllPlanets } from '../../store/Planets/planetsThunks/combinedThunks';
+import { CustomFormField } from '../CustomFormField/CustomFormField';
 
 /** Validate schema for film form */
-export const filmSchema = yup.object({
+const filmSchema = yup.object({
   title: yup.string().required('title is required'),
   episodeId: yup.string().required('episodeId is required'),
   releaseDate: yup.string().required('releaseDate is required'),
@@ -116,75 +117,40 @@ export function FilmForm(props: Props): JSX.Element {
           }}
         >
           <FormGroup className={classes.formGroup}>
-            <Field name="title">
-              {({ field, meta }: FieldProps) => (
-                <TextField
-                  label="Film title"
-                  type="text"
-                  variant="outlined"
-                  fullWidth
-                  {...field}
-                  error={meta.touched && Boolean(meta.error)}
-                  helperText={meta.touched && meta.error}
-                />
-              )}
-            </Field>
+            <CustomFormField autoComplete="true" label="Film title" name="title" type="text" variant="outlined" />
           </FormGroup>
           <FormGroup className={classes.formGroup}>
-            <Field name="episodeId">
-              {({ field, meta }: FieldProps) => (
-                <TextField
-                  label="Episode id"
-                  type="number"
-                  variant="outlined"
-                  fullWidth
-                  {...field}
-                  error={meta.touched && Boolean(meta.error)}
-                  helperText={meta.touched && meta.error}
-                />
-              )}
-            </Field>
+            <CustomFormField label="Episode id" name="episodeId" type="number" variant="outlined" />
           </FormGroup>
 
           <FormGroup className={classes.formGroup}>
-            <Field name="releaseDate">
-              {({ field, meta }: FieldProps) => (
-                <TextField
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Release date"
-                  type="date"
-                  variant="outlined"
-                  {...field}
-                  error={meta.touched && Boolean(meta.error)}
-                  helperText={meta.touched && meta.error}
-                />
-              )}
-            </Field>
+            <CustomFormField
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label="Release date"
+              name="releaseDate"
+              type="date"
+              variant="outlined"
+            />
           </FormGroup>
 
           <FormGroup className={classes.formGroup}>
-            <Field name="director">
-              {({ field }: FieldProps) => (
-                <TextField label="Director" type="text" variant="outlined" fullWidth {...field} />
-              )}
-            </Field>
+            <CustomFormField label="Director" name="director" type="text" variant="outlined" />
           </FormGroup>
 
           <FormGroup className={classes.formGroup}>
-            <Field name="producer">
-              {({ field }: FieldProps) => (
-                <TextField label="Producer" type="text" variant="outlined" fullWidth {...field} />
-              )}
-            </Field>
+            <CustomFormField label="Producer" name="producer" type="text" variant="outlined" />
           </FormGroup>
           <FormGroup className={classes.formGroup}>
-            <Field name="openingCrawl">
-              {({ field }: FieldProps) => (
-                <TextField label="Opening crawl" rows={5} variant="outlined" multiline {...field} />
-              )}
-            </Field>
+            <CustomFormField
+              label="Opening crawl"
+              name="openingCrawl"
+              rows={5}
+              type="text"
+              variant="outlined"
+              multiline
+            />
           </FormGroup>
           <AccordionCheckList
             getCheckedValues={getCheckedPlanets}

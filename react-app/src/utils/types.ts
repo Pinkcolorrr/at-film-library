@@ -1,3 +1,3 @@
-export type sortTargets = 'Default' | 'Name';
+export type SortTargets = 'Default' | 'Name';
 
-export type sortTargetDto = 'pk' | `fields.name`;
+export type SortTargetDto = 'pk' | `fields.name`;
